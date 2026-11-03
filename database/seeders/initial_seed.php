@@ -5,7 +5,8 @@ declare(strict_types=1);
 /**
  * Initial Seeder - CamHub
  * 
- * Populates master data and mockup reference products into MySQL.
+ * Populates master data, default test accounts (admin:admin, user:user, mitra:mitra),
+ * and mockup reference products into MySQL.
  * Usage: php database/seeders/initial_seed.php
  */
 
@@ -68,35 +69,41 @@ try {
 
     $catIds = $pdo->query("SELECT slug, id FROM categories")->fetchAll(PDO::FETCH_KEY_PAIR);
 
-    // 3. SEED USERS (Admin, Partner, Customer)
-    echo "[3/6] Seeding default users & stores...\n";
-    $passwordHash = password_hash('password123', PASSWORD_BCRYPT);
-
-    // 3.1 Admin User
+    // 3. SEED DEFAULT USERS (Admin, Partner, Customer)
+    echo "[3/6] Seeding default users (admin:admin, user:user, mitra:mitra)...\n";
+    
     $stmtUser = $pdo->prepare("
-        INSERT INTO users (role_id, full_name, email, phone, password_hash, status)
-        VALUES (:role_id, :full_name, :email, :phone, :password_hash, 'active')
-        ON DUPLICATE KEY UPDATE full_name = VALUES(full_name)
+        INSERT INTO users (role_id, username, full_name, email, phone, password_hash, status)
+        VALUES (:role_id, :username, :full_name, :email, :phone, :password_hash, 'active')
+        ON DUPLICATE KEY UPDATE 
+            username = VALUES(username),
+            full_name = VALUES(full_name),
+            password_hash = VALUES(password_hash),
+            phone = VALUES(phone),
+            status = 'active'
     ");
 
+    // 3.1 Admin User (admin:admin)
     $stmtUser->execute([
         'role_id' => $roleIds['admin'],
-        'full_name' => 'Admin CamHub',
+        'username' => 'admin',
+        'full_name' => 'Administrator CamHub',
         'email' => 'admin@camhub.id',
         'phone' => '081111111111',
-        'password_hash' => $passwordHash,
+        'password_hash' => password_hash('admin', PASSWORD_BCRYPT),
     ]);
-    $adminId = (int)$pdo->query("SELECT id FROM users WHERE email = 'admin@camhub.id'")->fetchColumn();
+    $adminId = (int)$pdo->query("SELECT id FROM users WHERE username = 'admin'")->fetchColumn();
 
-    // 3.2 Partner User & Store
+    // 3.2 Partner User & Store (mitra:mitra)
     $stmtUser->execute([
         'role_id' => $roleIds['partner'],
-        'full_name' => 'Yogi Ario',
-        'email' => 'yogi@camerastore.id',
+        'username' => 'mitra',
+        'full_name' => 'Yogi Ario (Mitra)',
+        'email' => 'mitra@camhub.id',
         'phone' => '082222222222',
-        'password_hash' => $passwordHash,
+        'password_hash' => password_hash('mitra', PASSWORD_BCRYPT),
     ]);
-    $partnerUserId = (int)$pdo->query("SELECT id FROM users WHERE email = 'yogi@camerastore.id'")->fetchColumn();
+    $partnerUserId = (int)$pdo->query("SELECT id FROM users WHERE username = 'mitra'")->fetchColumn();
 
     $stmtPartner = $pdo->prepare("
         INSERT INTO partners (user_id, business_name, status, commission_rate, verified_at)
@@ -123,15 +130,27 @@ try {
     ]);
     $storeId = (int)$pdo->query("SELECT id FROM partner_stores WHERE partner_id = {$partnerId}")->fetchColumn();
 
-    // 3.3 Customer User (from Dashboard Pelanggan Mockup)
+    // 3.3 Customer User (user:user)
     $stmtUser->execute([
         'role_id' => $roleIds['customer'],
+        'username' => 'user',
+        'full_name' => 'User Demo CamHub',
+        'email' => 'user@camhub.id',
+        'phone' => '083333333334',
+        'password_hash' => password_hash('user', PASSWORD_BCRYPT),
+    ]);
+    $customerId = (int)$pdo->query("SELECT id FROM users WHERE username = 'user'")->fetchColumn();
+
+    // 3.4 Prototype Customer User Regi (regi@camhub.id)
+    $stmtUser->execute([
+        'role_id' => $roleIds['customer'],
+        'username' => 'regi',
         'full_name' => 'Mohammad Regieyanto',
         'email' => 'regi@camhub.id',
         'phone' => '083333333333',
-        'password_hash' => $passwordHash,
+        'password_hash' => password_hash('user', PASSWORD_BCRYPT),
     ]);
-    $customerId = (int)$pdo->query("SELECT id FROM users WHERE email = 'regi@camhub.id'")->fetchColumn();
+    $regiId = (int)$pdo->query("SELECT id FROM users WHERE email = 'regi@camhub.id'")->fetchColumn();
 
     $stmtProfile = $pdo->prepare("
         INSERT INTO user_profiles (user_id, address, city)
@@ -143,7 +162,17 @@ try {
         'address' => 'Jl. Malioboro No. 12',
         'city' => 'Yogyakarta',
     ]);
-    echo "      Pengguna awal (Admin, Mitra Yogi Camera, Customer Regi) aktif.\n";
+    $stmtProfile->execute([
+        'user_id' => $regiId,
+        'address' => 'Jl. Kaliurang KM 7',
+        'city' => 'Yogyakarta',
+    ]);
+    $stmtProfile->execute([
+        'user_id' => $customerId,
+        'address' => 'Jl. Malioboro No. 12',
+        'city' => 'Yogyakarta',
+    ]);
+    echo "      Pengguna awal (admin:admin, user:user, mitra:mitra) aktif dan siap digunakan.\n";
 
     // 4. SEED PRODUCTS (6 Mockup Cameras)
     echo "[4/6] Seeding prototype reference cameras...\n";
@@ -283,4 +312,3 @@ try {
     echo "========================================================\n";
     exit(1);
 }
-

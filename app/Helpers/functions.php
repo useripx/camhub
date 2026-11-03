@@ -61,6 +61,26 @@ if (!function_exists('env')) {
     }
 }
 
+if (!function_exists('session_start_safe')) {
+    /**
+     * Start PHP session with secure cookie parameters if not active
+     */
+    function session_start_safe(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            if (!headers_sent()) {
+                session_start([
+                    'cookie_httponly' => true,
+                    'cookie_samesite' => 'Lax',
+                    'cookie_secure' => (bool) env('SESSION_SECURE', false),
+                ]);
+            } else {
+                @session_start();
+            }
+        }
+    }
+}
+
 if (!function_exists('base_url')) {
     /**
      * Generate a fully qualified URL to the application base or given path
@@ -139,3 +159,139 @@ if (!function_exists('redirect')) {
     }
 }
 
+/* =========================================================================
+ * AUTH, SESSION, AND CSRF HELPERS
+ * ========================================================================= */
+
+if (!function_exists('auth')) {
+    /**
+     * Get currently authenticated user array or null
+     */
+    function auth(): ?array
+    {
+        session_start_safe();
+        return $_SESSION['user'] ?? null;
+    }
+}
+
+if (!function_exists('auth_check')) {
+    /**
+     * Determine if current visitor is authenticated
+     */
+    function auth_check(): bool
+    {
+        session_start_safe();
+        return isset($_SESSION['user']) && !empty($_SESSION['user']['id']);
+    }
+}
+
+if (!function_exists('csrf_token')) {
+    /**
+     * Generate or retrieve active CSRF token
+     */
+    function csrf_token(): string
+    {
+        session_start_safe();
+        if (empty($_SESSION['_csrf_token'])) {
+            $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
+        }
+        return $_SESSION['_csrf_token'];
+    }
+}
+
+if (!function_exists('csrf_field')) {
+    /**
+     * Generate HTML hidden input for CSRF protection
+     */
+    function csrf_field(): string
+    {
+        $token = csrf_token();
+        return '<input type="hidden" name="_token" value="' . htmlspecialchars($token, ENT_QUOTES, 'UTF-8') . '">';
+    }
+}
+
+if (!function_exists('verify_csrf')) {
+    /**
+     * Verify CSRF token from POST request
+     */
+    function verify_csrf(?string $token = null): bool
+    {
+        session_start_safe();
+        $submittedToken = $token ?? $_POST['_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+        $sessionToken = $_SESSION['_csrf_token'] ?? '';
+
+        if (empty($submittedToken) || empty($sessionToken)) {
+            return false;
+        }
+
+        return hash_equals($sessionToken, $submittedToken);
+    }
+}
+
+if (!function_exists('flash')) {
+    /**
+     * Set or get a flash session message
+     */
+    function flash(string $key, mixed $value = null): mixed
+    {
+        session_start_safe();
+        if ($value !== null) {
+            $_SESSION['_flash'][$key] = $value;
+            return null;
+        }
+
+        if (isset($_SESSION['_flash'][$key])) {
+            $msg = $_SESSION['_flash'][$key];
+            unset($_SESSION['_flash'][$key]);
+            return $msg;
+        }
+
+        return null;
+    }
+}
+
+if (!function_exists('has_flash')) {
+    /**
+     * Check if a flash key exists
+     */
+    function has_flash(string $key): bool
+    {
+        session_start_safe();
+        return isset($_SESSION['_flash'][$key]);
+    }
+}
+
+if (!function_exists('old')) {
+    /**
+     * Retrieve old input flashed from previous form submission
+     */
+    function old(string $key, mixed $default = ''): mixed
+    {
+        session_start_safe();
+        return $_SESSION['_old_input'][$key] ?? $default;
+    }
+}
+
+if (!function_exists('flash_input')) {
+    /**
+     * Flash current request inputs for next request
+     */
+    function flash_input(array $input): void
+    {
+        session_start_safe();
+        // Do not preserve password in old input for security
+        unset($input['password'], $input['password_confirmation'], $input['_token']);
+        $_SESSION['_old_input'] = $input;
+    }
+}
+
+if (!function_exists('clear_old_input')) {
+    /**
+     * Clear previously flashed input
+     */
+    function clear_old_input(): void
+    {
+        session_start_safe();
+        unset($_SESSION['_old_input']);
+    }
+}

@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `role_id` INT NOT NULL,
+    `username` VARCHAR(50) NULL UNIQUE,
     `full_name` VARCHAR(150) NOT NULL,
     `email` VARCHAR(150) NOT NULL UNIQUE,
     `phone` VARCHAR(30) NOT NULL UNIQUE,

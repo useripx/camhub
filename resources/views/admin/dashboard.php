@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Administrator — CamHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; }
+        body { background:#0b192e; color:#ffffff; min-height:100vh; }
+        header { background:#112240; padding:16px 40px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #1e3a5f; }
+        .logo { font-size:20px; font-weight:800; color:#fff; text-decoration:none; }
+        .logo span { color:#fbbf24; }
+        .user-nav { display:flex; align-items:center; gap:16px; }
+        .role-badge { background:#d97706; color:#fff; font-size:12px; font-weight:700; padding:4px 10px; border-radius:20px; text-transform:uppercase; }
+        .btn-logout { background:#ef4444; color:#fff; text-decoration:none; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; transition:0.2s; border:none; cursor:pointer; }
+        .btn-logout:hover { background:#dc2626; }
+        main { max-width:1100px; margin:40px auto; padding:0 20px; }
+        .welcome-card { background:#132644; border:1px solid #1e3a5f; border-radius:16px; padding:32px; margin-bottom:28px; }
+        .welcome-card h1 { font-size:28px; margin-bottom:8px; }
+        .welcome-card h1 span { color:#fbbf24; }
+        .welcome-card p { color:#94a3b8; font-size:15px; }
+        .grid-stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:20px; margin-bottom:30px; }
+        .stat-card { background:#112240; border:1px solid #1e3a5f; border-radius:12px; padding:20px; }
+        .stat-label { font-size:13px; color:#94a3b8; margin-bottom:6px; }
+        .stat-value { font-size:24px; font-weight:800; color:#fbbf24; }
+        .action-row { display:flex; gap:14px; }
+        .btn-action { background:#d97706; color:#fff; text-decoration:none; padding:12px 24px; border-radius:10px; font-weight:700; font-size:14px; transition:0.2s; }
+        .btn-action:hover { background:#b45309; }
+        .btn-secondary { background:#1e293b; color:#cbd5e1; text-decoration:none; padding:12px 24px; border-radius:10px; font-weight:600; font-size:14px; border:1px solid #334155; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="<?= base_url() ?>" class="logo">Cam<span>Hub</span></a>
+    <div class="user-nav">
+        <span>🛡️ <?= htmlspecialchars(auth()['full_name'] ?? 'Administrator', ENT_QUOTES, 'UTF-8') ?></span>
+        <span class="role-badge">Super Admin</span>
+        <form action="<?= base_url('/logout') ?>" method="POST" style="margin:0;">
+            <?= csrf_field() ?>
+            <button type="submit" class="btn-logout">Keluar (Logout)</button>
+        </form>
+    </div>
+</header>
+
+<main>
+    <div class="welcome-card">
+        <h1>Dashboard Kontrol <span>Administrator</span></h1>
+        <p>Selamat datang, <strong><?= htmlspecialchars(auth()['full_name'] ?? 'Admin', ENT_QUOTES, 'UTF-8') ?></strong>. Anda memiliki kendali penuh atas sistem, verifikasi KYC pengguna, pengawasan transaksi escrow, dan log audit keamanan.</p>
+    </div>
+
+    <div class="grid-stats">
+        <div class="stat-card">
+            <div class="stat-label">Pengguna Terdaftar</div>
+            <div class="stat-value">3 Akun Aktif</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Antrean Verifikasi KYC</div>
+            <div class="stat-value" style="color:#f59e0b;">0 Tertunda</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total Escrow Platform</div>
+            <div class="stat-value">Rp 0</div>
+        </div>
+    </div>
+
+    <div class="action-row">
+        <a href="<?= base_url() ?>" class="btn-action">Lihat Beranda Publik</a>
+        <a href="<?= base_url('/logout') ?>" class="btn-secondary">Keluar dari Akun</a>
+    </div>
+</main>
+
+</body>
+</html>
