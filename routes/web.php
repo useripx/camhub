@@ -4,19 +4,23 @@ use App\Core\Router;
 use App\Controllers\AuthController;
 use App\Controllers\CustomerProfileController;
 use App\Controllers\KycController;
+use App\Controllers\HomeController;
+use App\Controllers\CatalogController;
+use App\Controllers\ProductDetailController;
 
 /**
  * Web Routes - CamHub
  */
 
-// 1. Halaman Utama / Fondasi Perdana
-Router::get('/', function () {
-    return view('welcome', [
-        'title' => 'CamHub — Platform Marketplace Kamera Terpercaya',
-        'appName' => 'CamHub',
-        'status' => 'Fondasi Siap',
-    ]);
-});
+// 1. Halaman Beranda Publik Dinamis (Tahap 05: Mockup Beranda.png)
+Router::get('/', [HomeController::class, 'index']);
+
+// 2. Katalog Produk & Filter Multi-Kriteria (Tahap 05: Mockup Katalog Produk.png)
+Router::get('/katalog', [CatalogController::class, 'index']);
+
+// 3. Detail Produk & Kalkulator Sewa Interaktif (Tahap 05: Mockup Detail Produk.png)
+Router::get('/produk/{slug}', [ProductDetailController::class, 'show']);
+Router::post('/api/rental/calculate', [ProductDetailController::class, 'calculateEstimate']);
 
 // 2. Endpoint Health Check API
 Router::get('/api/health', function () {
