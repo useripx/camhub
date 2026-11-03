@@ -70,3 +70,4 @@
 - `payment_status` (ENUM: 'unpaid', 'paid', 'refunded')
 - `rental_status` (ENUM: 'pending', 'confirmed', 'active', 'returned', 'completed', 'cancelled')
 - Index gabungan: `idx_bookings_dates` (`product_unit_id`, `start_date`, `end_date`) untuk optimasi kueri pencegahan double-booking.
+

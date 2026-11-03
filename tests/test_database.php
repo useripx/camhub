@@ -135,3 +135,4 @@ if ($testsPassed === $testsTotal && $testsTotal > 0) {
     echo "========================================================\n";
     exit(1);
 }
+
