@@ -271,3 +271,4 @@ echo "HASIL PENGUJIAN TAHAP 04: {$testsPassed}/{$testsTotal} BERHASIL (" . ($tes
 echo "========================================================\n";
 
 exit($testsFailed === 0 ? 0 : 1);
+

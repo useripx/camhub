@@ -54,3 +54,4 @@
      - `/profil` -> HTTP 200 (terotentikasi) / HTTP 302 (tamu)
      - `/kyc` -> HTTP 200 (terotentikasi) / HTTP 302 (tamu)
      - `/kyc/status` -> HTTP 200
+

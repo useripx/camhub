@@ -219,3 +219,4 @@ Gunakan urutan berbicara ini saat presentasi progres Tahap 04 di depan dosen/aud
 #### Q3: Mengapa pelanggan tidak boleh mengedit alamat email pada form edit profil?
 **Jawaban (Ivan / Regi):**  
 *"Email adalah identitas unik login dan akun keuangan rekening bersama (escrow). Mengubah email secara sembarangan membuka celah pembajakan akun (Account Takeover). Jika pengguna ingin mengganti email, hal tersebut membutuhkan alur verifikasi OTP terpisah di masa mendatang, sehingga pada profil pelanggan saat ini alamat email dikunci (*read-only*) demi keamanan."*
+
