@@ -4,9 +4,13 @@
 
 ---
 
-## 📌 Identitas Proyek
+## 📌 Identitas Proyek & Tim Pengembang
 - **Nama Proyek:** CamHub
-- **Project Owner:** Yogi Ario
+- **Tim Pengembang:** **Kelompok 1**
+  1. **Yogi Ario Pratama** — Project Owner & Lead Developer
+  2. **Muhammad Regieyanto** — Backend & System Architect
+  3. **Ivan Farrel Nanda Kristanto** — Core Routing & Security Engineer
+  4. **Krisna Mukti** — Quality Assurance & Presentation Coordinator
 - **Teknologi Backend:** PHP Native (Modular MVC-inspired Architecture) dengan PDO MySQL
 - **Web Server:** Laragon (Apache, MySQL, PHP 8.x)
 - **Repository:** [https://github.com/useripx/camhub.git](https://github.com/useripx/camhub.git)
@@ -27,7 +31,7 @@
 ```text
 camhub/
 ├── app/
-│   ├── Core/                  # Router native dan engine dasar
+│   ├── Core/                  # Router native dan database singleton (Database.php, Router.php)
 │   ├── Controllers/           # Controller penangan request
 │   ├── Models/                # Entitas data
 │   ├── Repositories/          # Akses basis data via PDO Prepared Statements
@@ -42,7 +46,10 @@ camhub/
 │
 ├── database/                  # Skema, migrasi, dan seeder MySQL
 │   ├── migrations/
-│   └── seeders/
+│   ├── seeders/
+│   │   └── initial_seed.php   # Seeder data master & mockup kamera
+│   ├── migrate.php            # Migration runner CLI
+│   └── schema.sql             # Skema DDL 22 tabel relasional
 │
 ├── public/                    # Document Root web Laragon
 │   ├── index.php              # Front Controller utama
@@ -58,14 +65,16 @@ camhub/
 ├── storage/                   # Logs, uploads, cache (terproteksi .gitignore)
 │
 ├── tests/                     # Test suite otomatis (100% PASS Gate)
-│   ├── test_foundation.php
+│   ├── test_foundation.php    # Uji Arsitektur Fondasi (7/7 PASS)
+│   ├── test_database.php      # Uji Skema Basis Data & Transaksi (7/7 PASS)
 │   ├── Unit/
 │   ├── Integration/
 │   └── Manual/
 │
 ├── Docs/                      # Dokumentasi tata kelola & rencana proyek
 │   ├── aturan/                # universal-rule.md, GEMINI.md, AGENTS.md
-│   ├── scema/                 # ERD.md (Diagram relasi 22 entitas)
+│   ├── buku/                  # Buku panduan setup & naskah presentasi tim (01 Tahap 1.md, 02 Tahap 2.md)
+│   ├── scema/                 # ERD.md & database_dictionary.md (22 entitas)
 │   ├── tahapan/               # Implementation plan fix per tahap (01.implementation_plan_Tahap1.md, dst.)
 │   ├── Task_Status.md         # Pelacak progres 13 tahapan
 │   └── Decision_Log.md        # Catatan keputusan arsitektur
@@ -85,7 +94,12 @@ camhub/
    ```bash
    cp .env.example .env
    ```
-4. Buka browser dan akses:
+4. Jalankan inisialisasi basis data (22 tabel relasional) dan data awal seeder:
+   ```bash
+   php database/migrate.php
+   php database/seeders/initial_seed.php
+   ```
+5. Buka browser dan akses:
    - Jika menggunakan Virtual Host: `http://camhub.test/`
    - Atau melalui subfolder Laragon: `http://localhost/camhub/public/`
 
@@ -96,8 +110,9 @@ camhub/
 Untuk memastikan seluruh modul berfungsi dengan standar `100% PASS`:
 ```bash
 php tests/test_foundation.php
+php tests/test_database.php
 ```
 
 ---
 
-*Hak Cipta © 2026 CamHub. Seluruh hak dilindungi undang-undang. Project Owner: Yogi Ario.*
+*Hak Cipta © 2026 CamHub. Dikembangkan oleh Kelompok 1: Yogi Ario Pratama, Muhammad Regieyanto, Ivan Farrel Nanda Kristanto, Krisna Mukti.*
