@@ -41,6 +41,16 @@ class CategoryRepository
     }
 
     /**
+     * Alias for getAllWithCount
+     *
+     * @return Category[]
+     */
+    public function getAllWithCounts(): array
+    {
+        return $this->getAllWithCount();
+    }
+
+    /**
      * Find category by slug
      */
     public function findBySlug(string $slug): ?Category

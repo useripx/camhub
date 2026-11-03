@@ -20,7 +20,7 @@
 | **03** | **Autentikasi Pengguna & RBAC** | `tahap/03-autentikasi-pengguna` | **SELESAI (100% PASS)** | [`Docs/tahapan/03.implementation_plan_Tahap3.md`](tahapan/03.implementation_plan_Tahap3.md) | `tests/test_auth.php` (10/10 PASS) |
 | **04** | **Profil Pelanggan & Verifikasi KYC** | `tahap/04-profil-pelanggan-kyc` | **SELESAI (100% PASS)** | [`Docs/tahapan/04.implementation_plan_Tahap4.md`](tahapan/04.implementation_plan_Tahap4.md) | `tests/test_kyc.php` (10/10 PASS) |
 | **05** | **Website Publik & Katalog Produk** | `tahap/05-website-publik-katalog` | **SELESAI (100% PASS)** | [`Docs/tahapan/05.implementation_plan_Tahap5.md`](tahapan/05.implementation_plan_Tahap5.md) | `tests/test_catalog.php` (10/10 PASS) |
-| **06** | Dashboard Mitra | `tahap/06-dashboard-mitra` | Belum Dimulai | - | - |
+| **06** | **Dashboard Mitra Lapak** | `tahap/06-dashboard-mitra` | **SELESAI (100% PASS)** | [`Docs/tahapan/06.implementation_plan_Tahap6.md`](tahapan/06.implementation_plan_Tahap6.md) | `tests/test_partner_dashboard.php` (10/10 PASS) |
 | **07** | Penyewaan & Pemesanan | `tahap/07-penyewaan-pemesanan` | Belum Dimulai | - | - |
 | **08** | Marketplace Jual Beli | `tahap/08-marketplace-jual-beli` | Belum Dimulai | - | - |
 | **09** | Sistem Titip Jual | `tahap/09-sistem-titip-jual` | Belum Dimulai | - | - |
@@ -103,3 +103,31 @@
 - [x] Uji regresi seluruh tahap berjalan serentak: Tahap 01 (7/7), Tahap 02 (7/7), Tahap 03 (10/10), Tahap 04 (10/10), Browser E2E (12/12), Tahap 05 (10/10) -> **Total 56 / 56 Tests LULUS (100% PASS)**.
 - [x] Pembuatan buku panduan dan naskah presentasi 4 orang Kelompok 1 di `Docs/buku/05 Tahap 5.md`.
 - [x] Pencadangan rencana implementasi fix di `Docs/tahapan/05.implementation_plan_Tahap5.md`.
+
+---
+
+## 📝 Catatan Rinci Tahap 06 (Dashboard Mitra Lapak)
+
+- [x] Pembuatan branch resmi `tahap/06-dashboard-mitra` dari branch `develop`.
+- [x] Pembuatan model data: `App\Models\Partner` dan `App\Models\ProductUnit`.
+- [x] Pembuatan repositori `App\Repositories\PartnerRepository` (agregasi metrik, daftar produk toko, penambahan unit fisik, anti-IDOR, jadwal sewa, transaksi masuk, dan profil toko).
+- [x] Pembuatan form validator server-side `App\Validators\PartnerProductValidator` (validasi produk kamera, tarif harian, serial number unik, dan biodata toko).
+- [x] Pembuatan service inti:
+  - `App\Services\PartnerDashboardService`: Agregasi metrik dan persiapan data dashboard mitra.
+  - `App\Services\PartnerProductService`: Manajemen produk kamera, proteksi anti-IDOR, upload foto produk, sanitasi slug, dan registrasi serial number fisik.
+- [x] Pembuatan controller `App\Controllers\PartnerDashboardController`.
+- [x] Pembangunan tampilan visual 100% presisi mockup prototype:
+  - `resources/views/partner/dashboard.php`: Sesuai `CamHub — Dashboard Mitra Lapak.png` (sidebar navy gelap, toko Yogi Camera, 3 kartu statistik, dan list horizontal Produk Saya dengan badge hijau Tersedia).
+  - `resources/views/partner/products.php`: Etalase inventaris produk dan tombol tambah.
+  - `resources/views/partner/product_form.php`: Formulir modern tambah & edit kamera.
+  - `resources/views/partner/units.php`: Manajemen nomor seri unit fisik.
+  - `resources/views/partner/schedule.php`: Pemantauan jadwal sewa unit kamera.
+  - `resources/views/partner/transactions.php`: Riwayat transaksi sewa & jual masuk.
+  - `resources/views/partner/wallet.php`: Saldo dompet toko dan pencairan dana escrow.
+  - `resources/views/partner/settings.php`: Pengaturan profil toko lapak mitra.
+- [x] Registrasi seluruh rute web mitra di `routes/web.php` dengan middleware `auth` dan `role:partner`.
+- [x] Test suite mandiri `php tests/test_partner_dashboard.php` (**100% PASS, 10/10**).
+- [x] Browser E2E test suite diperbarui `php tests/test_browser_e2e.php` (**100% PASS, 17/17**).
+- [x] Uji regresi seluruh tahap berjalan serentak: Tahap 01 (7/7), Tahap 02 (7/7), Tahap 03 (10/10), Tahap 04 (10/10), Tahap 05 (10/10), Tahap 06 (10/10), Browser E2E (17/17) -> **Total 71 / 71 Tests LULUS (100% PASS)**.
+- [x] Pembuatan buku panduan dan naskah presentasi 4 orang Kelompok 1 di `Docs/buku/06 Tahap 6.md`.
+- [x] Pencadangan rencana implementasi fix di `Docs/tahapan/06.implementation_plan_Tahap6.md`.
