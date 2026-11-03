@@ -8,3 +8,4 @@ return [
     'timezone' => env('APP_TIMEZONE', 'Asia/Jakarta'),
     'version' => '1.0.0',
 ];
+

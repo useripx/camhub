@@ -28,3 +28,4 @@
 ### Verifikasi Web Server Laragon (Live HTTP Check)
 - **Akses Beranda:** `http://localhost/camhub/public/` ➔ **HTTP 200 OK** (HTML Valid)
 - **Akses API Health:** `http://localhost/camhub/public/api/health` ➔ **HTTP 200 OK** (JSON: `status: "OK", version: "1.0.0"`)
+

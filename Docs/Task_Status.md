@@ -38,3 +38,4 @@
 - [x] Penyusunan ERD 22 entitas di `Docs/scema/ERD.md`.
 - [x] Penyusunan rencana tahap awal berformat nomor di `Docs/tahap/01.persiapan-fondasi.md`.
 - [x] Eksekusi test suite otomatis `php tests/test_foundation.php` menghasilkan **100% PASS (7/7)**.
+

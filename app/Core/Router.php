@@ -99,3 +99,4 @@ class Router
         die("Handler route tidak valid atau class/method tidak ditemukan.");
     }
 }
+

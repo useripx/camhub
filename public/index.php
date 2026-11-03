@@ -78,3 +78,4 @@ $response = \App\Core\Router::dispatch($requestMethod, $requestUri);
 if (is_string($response)) {
     echo $response;
 }
+

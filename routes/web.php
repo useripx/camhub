@@ -25,3 +25,4 @@ Router::get('/api/health', function () {
         'version' => '1.0.0',
     ]);
 });
+
