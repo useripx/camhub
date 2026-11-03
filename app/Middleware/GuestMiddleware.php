@@ -28,3 +28,4 @@ class GuestMiddleware implements MiddlewareInterface
         return true;
     }
 }
+

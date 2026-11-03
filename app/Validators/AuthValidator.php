@@ -104,3 +104,4 @@ class AuthValidator
         return $errors;
     }
 }
+

@@ -45,3 +45,4 @@ class RoleMiddleware implements MiddlewareInterface
         return true;
     }
 }
+

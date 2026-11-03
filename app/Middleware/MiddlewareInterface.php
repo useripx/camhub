@@ -14,3 +14,4 @@ interface MiddlewareInterface
      */
     public function handle(?string $parameter = null): bool;
 }
+

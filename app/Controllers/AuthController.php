@@ -129,3 +129,4 @@ class AuthController
         redirect('/login');
     }
 }
+

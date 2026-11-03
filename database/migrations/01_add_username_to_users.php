@@ -48,3 +48,4 @@ if (strpos($schemaContent, '`username`') === false) {
     file_put_contents($schemaPath, str_replace("\n", "\r\n", $schemaContent));
     echo "database/schema.sql berhasil disinkronkan.\n";
 }
+

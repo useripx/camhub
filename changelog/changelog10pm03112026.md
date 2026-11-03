@@ -48,3 +48,4 @@
    - Uji regresi `tests/test_foundation.php`: **7 / 7 LULUS (100% PASS)**.
    - Uji regresi `tests/test_database.php`: **7 / 7 LULUS (100% PASS)**.
    - Verifikasi live Apache: HTTP 200 pada `/login` dan `/register`, HTTP 302 pada `/dashboard/admin`.
+

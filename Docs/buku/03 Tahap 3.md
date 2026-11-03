@@ -236,3 +236,4 @@ Berikut adalah panduan antisipasi pertanyaan teknis yang sering diajukan penguji
 #### Q4: Apa fungsi `session_regenerate_id(true)` saat login?
 **Jawaban (Regi / Ivan):**  
 *"Untuk mencegah serangan **Session Fixation**. Tanpa regenerasi ID, seorang penyerang bisa menyusupkan ID sesi tertentu ke browser korban sebelum login. Jika korban berhasil login dengan ID sesi tersebut, penyerang bisa mengambil alih akun korban. Dengan `session_regenerate_id(true)`, PHP langsung menghancurkan ID sesi lama dan menerbitkan ID sesi baru yang sepenuhnya acak begitu kredensial terbukti valid."*
+

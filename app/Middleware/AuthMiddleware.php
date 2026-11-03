@@ -26,3 +26,4 @@ class AuthMiddleware implements MiddlewareInterface
         return true;
     }
 }
+
