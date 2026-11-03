@@ -2,6 +2,8 @@
 
 use App\Core\Router;
 use App\Controllers\AuthController;
+use App\Controllers\CustomerProfileController;
+use App\Controllers\KycController;
 
 /**
  * Web Routes - CamHub
@@ -49,3 +51,11 @@ Router::get('/dashboard/mitra', function () {
 Router::get('/dashboard/admin', function () {
     return view('admin.dashboard');
 }, ['auth', 'role:admin']);
+
+// 6. Profil Pelanggan & Verifikasi KYC (Khusus Customer)
+Router::get('/profil', [CustomerProfileController::class, 'showProfile'], ['auth', 'role:customer']);
+Router::post('/profil/edit', [CustomerProfileController::class, 'updateProfile'], ['auth', 'role:customer']);
+
+Router::get('/kyc', [KycController::class, 'showKycForm'], ['auth', 'role:customer']);
+Router::post('/kyc/submit', [KycController::class, 'submit'], ['auth', 'role:customer']);
+Router::get('/kyc/status', [KycController::class, 'showKycStatus'], ['auth', 'role:customer']);
