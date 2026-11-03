@@ -30,6 +30,7 @@
 $baseUrl = 'http://localhost/camhub/public/';
 $cookieJarCustomer = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'camhub_cookie_customer_' . bin2hex(random_bytes(4)) . '.txt';
 $cookieJarAdmin    = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'camhub_cookie_admin_' . bin2hex(random_bytes(4)) . '.txt';
+$cookieJarPartner  = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'camhub_cookie_partner_' . bin2hex(random_bytes(4)) . '.txt';
 
 $totalTests = 0;
 $passedTests = 0;
@@ -269,9 +270,78 @@ runHttpTest('TEST-E2E-12', 'Siklus Logout & Pembersihan Sesi Peramban', function
     ];
 });
 
+// TEST 13 (Tahap 06 Mitra Lapak)
+runHttpTest('TEST-E2E-13', 'Autentikasi Mitra Lapak (mitra:mitra) via Form POST', function () use ($baseUrl, $cookieJarPartner) {
+    $loginPage = httpGet($baseUrl . 'login', $cookieJarPartner, false);
+    $csrf = extractCsrf($loginPage['body']);
+    
+    $postData = [
+        '_token'     => $csrf,
+        'identifier' => 'mitra',
+        'password'   => 'mitra'
+    ];
+    $loginRes = httpPost($baseUrl . 'login', $postData, $cookieJarPartner, false);
+    $isRedirect = ($loginRes['code'] === 302 && str_contains($loginRes['redirect'], '/dashboard/mitra'));
+    
+    return [
+        'status' => $isRedirect,
+        'msg'    => "Login mitra sukses (HTTP 302 diarahkan ke /dashboard/mitra)."
+    ];
+});
+
+// TEST 14 (Tahap 06 Mitra Lapak)
+runHttpTest('TEST-E2E-14', 'Akses Dashboard Mitra Lapak & Verifikasi Komponen Mockup Prototype', function () use ($baseUrl, $cookieJarPartner) {
+    $dashboard = httpGet($baseUrl . 'dashboard/mitra', $cookieJarPartner, true);
+    $hasTitle   = str_contains($dashboard['body'], 'Dashboard Mitra Lapak');
+    $hasStore   = str_contains($dashboard['body'], 'Yogi Camera');
+    $hasStats   = str_contains($dashboard['body'], 'Total Produk') && str_contains($dashboard['body'], 'Pesanan Aktif') && str_contains($dashboard['body'], 'Saldo Tersedia');
+    $hasProduct = str_contains($dashboard['body'], 'Produk Saya') && str_contains($dashboard['body'], 'Tersedia');
+    $isOk = ($dashboard['code'] === 200 && $hasTitle && $hasStore && $hasStats && $hasProduct);
+    
+    return [
+        'status' => $isOk,
+        'msg'    => $isOk ? "HTTP 200, identitas lapak 'Yogi Camera', 3 kartu metrik, dan daftar Produk Saya presisi prototype." : "Code: {$dashboard['code']}, Title: " . ($hasTitle?'Y':'N') . ", Store: " . ($hasStore?'Y':'N') . ", Stats: " . ($hasStats?'Y':'N') . ", Prod: " . ($hasProduct?'Y':'N') . " | Snippet: " . substr(strip_tags($dashboard['body']), 0, 150)
+    ];
+});
+
+// TEST 15 (Tahap 06 Mitra Lapak)
+runHttpTest('TEST-E2E-15', 'Akses Halaman Kelola Etalase Produk Lapak (/dashboard/mitra/produk)', function () use ($baseUrl, $cookieJarPartner) {
+    $res = httpGet($baseUrl . 'dashboard/mitra/produk', $cookieJarPartner, true);
+    $hasHeading = str_contains($res['body'], 'Kelola Inventaris Produk');
+    $hasTable = str_contains($res['body'], 'Tarif Sewa Harian');
+    $isOk = ($res['code'] === 200 && $hasHeading && $hasTable);
+    
+    return [
+        'status' => $isOk,
+        'msg'    => $isOk ? "HTTP 200, tabel inventaris kamera dan tombol Tambah Produk Baru termuat." : "Code: {$res['code']}, Heading: " . ($hasHeading?'Y':'N') . ", Table: " . ($hasTable?'Y':'N') . " | Snippet: " . substr(strip_tags($res['body']), 0, 150)
+    ];
+});
+
+// TEST 16 (Tahap 06 Mitra Lapak)
+runHttpTest('TEST-E2E-16', 'Akses Halaman Saldo Dompet & Pencairan Lapak (/dashboard/mitra/saldo)', function () use ($baseUrl, $cookieJarPartner) {
+    $res = httpGet($baseUrl . 'dashboard/mitra/saldo', $cookieJarPartner, true);
+    $hasWallet = str_contains($res['body'], 'Saldo Dompet') || str_contains($res['body'], 'Tarik Saldo');
+    
+    return [
+        'status' => ($res['code'] === 200 && $hasWallet),
+        'msg'    => "HTTP {$res['code']}, saldo dompet toko mitra dan tombol pencairan dana tampil aktif."
+    ];
+});
+
+// TEST 17 (Tahap 06 Mitra Lapak)
+runHttpTest('TEST-E2E-17', 'Proteksi Hak Akses RBAC: Mitra Dilarang Mengakses Area Admin', function () use ($baseUrl, $cookieJarPartner) {
+    $adminRes = httpGet($baseUrl . 'dashboard/admin', $cookieJarPartner, false);
+    
+    return [
+        'status' => ($adminRes['code'] === 403),
+        'msg'    => "HTTP 403 Forbidden, akses akun mitra lapak ke area super admin diblokir."
+    ];
+});
+
 // Bersihkan berkas cookie sementara
 @unlink($cookieJarCustomer);
 @unlink($cookieJarAdmin);
+@unlink($cookieJarPartner);
 
 echo "\n========================================================\n";
 echo "HASIL PENGUJIAN BROWSER E2E: {$passedTests}/{$totalTests} BERHASIL (" . round(($passedTests / $totalTests) * 100) . "% PASS)\n";
