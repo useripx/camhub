@@ -9,6 +9,23 @@
 
 ## 📋 Ringkasan Hasil Pengujian Terkini
 
+### TAHAP 02 — PERANCANGAN BASIS DATA MYSQL
+- **Branch Diuji:** `tahap/02-perancangan-database`
+- **Perintah Eksekusi:** `php tests/test_database.php`
+- **Hasil:** **7 / 7 LULUS (100% PASS)**
+
+| ID Uji | Komponen yang Diuji | Parameter / Bukti Verifikasi | Status |
+|:---:|---|---|:---:|
+| **TEST-DB-01** | Koneksi PDO MySQL | Koneksi singleton `App\Core\Database` berhasil terhubung ke server MySQL Laragon | **PASS** |
+| **TEST-DB-02** | Keberadaan 22 Tabel | 22 tabel relasional ditemukan lengkap di basis data `camhub_db` | **PASS** |
+| **TEST-DB-03** | Foreign Key Constraints | Ditemukan 27 relasi foreign key aktif yang terdaftar di `information_schema` | **PASS** |
+| **TEST-DB-04** | Indeks Performa Kunci | Indeks unik dan komposit (`products.slug`, `idx_bookings_dates`, dll.) aktif | **PASS** |
+| **TEST-DB-05** | Integritas Master Data | 3 Peran (`admin`, `partner`, `customer`) dan 5 Kategori produk ter-seed sempurna | **PASS** |
+| **TEST-DB-06** | Data Referensi Prototype | 6 kamera mockup, 13 unit fisik, toko "Yogi Camera", dan user "Regi" terverifikasi | **PASS** |
+| **TEST-DB-07** | ACID Transaction & Rollback | Uji rollback database transaction membuktikan data uji tidak bocor | **PASS** |
+
+---
+
 ### TAHAP 01 — PERSIAPAN FONDASI
 - **Branch Diuji:** `tahap/01-persiapan-fondasi`
 - **Commit Hash:** `210f228`
@@ -28,4 +45,3 @@
 ### Verifikasi Web Server Laragon (Live HTTP Check)
 - **Akses Beranda:** `http://localhost/camhub/public/` ➔ **HTTP 200 OK** (HTML Valid)
 - **Akses API Health:** `http://localhost/camhub/public/api/health` ➔ **HTTP 200 OK** (JSON: `status: "OK", version: "1.0.0"`)
-

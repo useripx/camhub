@@ -2,7 +2,7 @@
 
 > **PROYEK:** CamHub – Camera Marketplace Platform  
 > **PROJECT OWNER:** Yogi Ario  
-> **TERAKHIR DIPERBARUI:** 03 November 2026 (Tahap 01 Selesai)  
+> **TERAKHIR DIPERBARUI:** 03 November 2026 (Tahap 02 Selesai)  
 
 ---
 
@@ -11,8 +11,8 @@
 | Tahap | Nama Tahapan | Branch Resmi | Status | Dokumen Rencana Fix | Bukti Uji (DoD) |
 |:---:|---|---|:---:|:---:|:---:|
 | **01** | **Persiapan Fondasi** | `tahap/01-persiapan-fondasi` | **SELESAI (100% PASS)** | [`Docs/tahapan/01.implementation_plan_Tahap1.md`](tahapan/01.implementation_plan_Tahap1.md) | `tests/test_foundation.php` (7/7 PASS) |
-| **02** | Perancangan Database | `tahap/02-perancangan-database` | Menunggu Persetujuan | [`Docs/scema/ERD.md`](scema/ERD.md) | - |
-| **03** | Autentikasi Pengguna | `tahap/03-autentikasi-pengguna` | Belum Dimulai | - | - |
+| **02** | **Perancangan Database** | `tahap/02-perancangan-database` | **SELESAI (100% PASS)** | [`Docs/tahapan/02.implementation_plan_Tahap2.md`](tahapan/02.implementation_plan_Tahap2.md) | `tests/test_database.php` (7/7 PASS) |
+| **03** | Autentikasi Pengguna | `tahap/03-autentikasi-pengguna` | Menunggu Persetujuan | - | - |
 | **04** | Profil Pelanggan & KYC | `tahap/04-profil-pelanggan-kyc` | Belum Dimulai | - | - |
 | **05** | Website Publik & Katalog | `tahap/05-website-publik-katalog` | Belum Dimulai | - | - |
 | **06** | Dashboard Mitra | `tahap/06-dashboard-mitra` | Belum Dimulai | - | - |
@@ -26,16 +26,14 @@
 
 ---
 
-## 📝 Catatan Rinci Tahap 01 (Persiapan Fondasi)
+## 📝 Catatan Rinci Tahap 02 (Perancangan Database)
 
-- [x] Inisialisasi Git repository lokal dan menghubungkan ke remote `https://github.com/useripx/camhub.git`.
-- [x] Pembuatan branch `main`, `develop`, dan `tahap/01-persiapan-fondasi`.
-- [x] Konfigurasi `.gitignore`, `.env.example`, dan `.env` (Proteksi Zero Secret Leakage terverifikasi).
-- [x] Pembuatan struktur direktori modular lengkap (`app/`, `config/`, `database/`, `public/`, `resources/`, `routes/`, `storage/`, `tests/`, `changelog/`).
-- [x] Implementasi Front Controller `public/index.php`, router native `app/Core/Router.php`, dan rewrite rules `.htaccess`.
-- [x] Pembuatan helper global `app/Helpers/functions.php` dan file konfigurasi `config/app.php`, `config/database.php`.
-- [x] Pembuatan halaman tampilan verifikasi fondasi responsif `resources/views/welcome.php` berpalet warna resmi prototype CamHub.
-- [x] Penyusunan ERD 22 entitas di `Docs/scema/ERD.md`.
-- [x] Pencadangan rencana implementasi fix di `Docs/tahapan/01.implementation_plan_Tahap1.md`.
-- [x] Eksekusi test suite otomatis `php tests/test_foundation.php` menghasilkan **100% PASS (7/7)**.
-- [x] Pembersihan file rules redundan di root agar workspace tetap rapi.
+- [x] Sinkronisasi branch: Merge `tahap/01-persiapan-fondasi` ke `develop`, pembuatan branch kerja `tahap/02-perancangan-database`.
+- [x] Pembuatan DDL `database/schema.sql` mencakup 22 tabel relasional, InnoDB, foreign keys, dan indeks.
+- [x] Pembuatan kelas koneksi PDO Singleton `App\Core\Database` berstandar keamanan tinggi.
+- [x] Pembuatan dan eksekusi skrip CLI migration runner `database/migrate.php` (22 tabel terverifikasi).
+- [x] Pembuatan dan eksekusi seeder `database/seeders/initial_seed.php` (3 roles, 5 kategori, admin, mitra Yogi Camera, customer Regi, dan 6 kamera mockup).
+- [x] Penyusunan dokumentasi kamus data di `Docs/scema/database_dictionary.md`.
+- [x] Pembuatan dan eksekusi test suite otomatis `php tests/test_database.php` (**100% PASS, 7/7**).
+- [x] Pengujian regresi fondasi `php tests/test_foundation.php` (**100% PASS, 7/7**).
+- [x] Pembaruan dokumen rencana kerja fix di `Docs/tahapan/02.implementation_plan_Tahap2.md`.
