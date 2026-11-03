@@ -8,21 +8,21 @@
 
 ## 📊 Matriks Progres 13 Tahapan
 
-| Tahap | Nama Tahapan | Branch Resmi | Status | Bukti Uji (DoD) |
-|:---:|---|---|:---:|:---:|
-| **01** | **Persiapan Fondasi** | `tahap/01-persiapan-fondasi` | **SELESAI (100% PASS)** | `tests/test_foundation.php` (7/7 PASS) |
-| **02** | Perancangan Database | `tahap/02-perancangan-database` | Menunggu Persetujuan | ERD di `Docs/scema/ERD.md` |
-| **03** | Autentikasi Pengguna | `tahap/03-autentikasi-pengguna` | Belum Dimulai | - |
-| **04** | Profil Pelanggan & KYC | `tahap/04-profil-pelanggan-kyc` | Belum Dimulai | - |
-| **05** | Website Publik & Katalog | `tahap/05-website-publik-katalog` | Belum Dimulai | - |
-| **06** | Dashboard Mitra | `tahap/06-dashboard-mitra` | Belum Dimulai | - |
-| **07** | Penyewaan & Pemesanan | `tahap/07-penyewaan-pemesanan` | Belum Dimulai | - |
-| **08** | Marketplace Jual Beli | `tahap/08-marketplace-jual-beli` | Belum Dimulai | - |
-| **09** | Sistem Titip Jual | `tahap/09-sistem-titip-jual` | Belum Dimulai | - |
-| **10** | Pembayaran & Escrow | `tahap/10-pembayaran-escrow` | Belum Dimulai | - |
-| **11** | Dashboard Administrator | `tahap/11-dashboard-administrator` | Belum Dimulai | - |
-| **12** | Notifikasi & Pelaporan | `tahap/12-notifikasi-pelaporan` | Belum Dimulai | - |
-| **13** | Pengujian & Penerapan | `tahap/13-pengujian-penerapan` | Belum Dimulai | - |
+| Tahap | Nama Tahapan | Branch Resmi | Status | Dokumen Rencana Fix | Bukti Uji (DoD) |
+|:---:|---|---|:---:|:---:|:---:|
+| **01** | **Persiapan Fondasi** | `tahap/01-persiapan-fondasi` | **SELESAI (100% PASS)** | [`Docs/tahapan/01.implementation_plan_Tahap1.md`](tahapan/01.implementation_plan_Tahap1.md) | `tests/test_foundation.php` (7/7 PASS) |
+| **02** | Perancangan Database | `tahap/02-perancangan-database` | Menunggu Persetujuan | [`Docs/scema/ERD.md`](scema/ERD.md) | - |
+| **03** | Autentikasi Pengguna | `tahap/03-autentikasi-pengguna` | Belum Dimulai | - | - |
+| **04** | Profil Pelanggan & KYC | `tahap/04-profil-pelanggan-kyc` | Belum Dimulai | - | - |
+| **05** | Website Publik & Katalog | `tahap/05-website-publik-katalog` | Belum Dimulai | - | - |
+| **06** | Dashboard Mitra | `tahap/06-dashboard-mitra` | Belum Dimulai | - | - |
+| **07** | Penyewaan & Pemesanan | `tahap/07-penyewaan-pemesanan` | Belum Dimulai | - | - |
+| **08** | Marketplace Jual Beli | `tahap/08-marketplace-jual-beli` | Belum Dimulai | - | - |
+| **09** | Sistem Titip Jual | `tahap/09-sistem-titip-jual` | Belum Dimulai | - | - |
+| **10** | Pembayaran & Escrow | `tahap/10-pembayaran-escrow` | Belum Dimulai | - | - |
+| **11** | Dashboard Administrator | `tahap/11-dashboard-administrator` | Belum Dimulai | - | - |
+| **12** | Notifikasi & Pelaporan | `tahap/12-notifikasi-pelaporan` | Belum Dimulai | - | - |
+| **13** | Pengujian & Penerapan | `tahap/13-pengujian-penerapan` | Belum Dimulai | - | - |
 
 ---
 
@@ -36,6 +36,6 @@
 - [x] Pembuatan helper global `app/Helpers/functions.php` dan file konfigurasi `config/app.php`, `config/database.php`.
 - [x] Pembuatan halaman tampilan verifikasi fondasi responsif `resources/views/welcome.php` berpalet warna resmi prototype CamHub.
 - [x] Penyusunan ERD 22 entitas di `Docs/scema/ERD.md`.
-- [x] Penyusunan rencana tahap awal berformat nomor di `Docs/tahap/01.persiapan-fondasi.md`.
+- [x] Pencadangan rencana implementasi fix di `Docs/tahapan/01.implementation_plan_Tahap1.md`.
 - [x] Eksekusi test suite otomatis `php tests/test_foundation.php` menghasilkan **100% PASS (7/7)**.
-
+- [x] Pembersihan file rules redundan di root agar workspace tetap rapi.

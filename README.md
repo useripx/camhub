@@ -66,7 +66,7 @@ camhub/
 ├── Docs/                      # Dokumentasi tata kelola & rencana proyek
 │   ├── aturan/                # universal-rule.md, GEMINI.md, AGENTS.md
 │   ├── scema/                 # ERD.md (Diagram relasi 22 entitas)
-│   ├── tahap/                 # Rencana implementasi per tahap (01.persiapan-fondasi.md, dst.)
+│   ├── tahapan/               # Implementation plan fix per tahap (01.implementation_plan_Tahap1.md, dst.)
 │   ├── Task_Status.md         # Pelacak progres 13 tahapan
 │   └── Decision_Log.md        # Catatan keputusan arsitektur
 │
@@ -101,4 +101,3 @@ php tests/test_foundation.php
 ---
 
 *Hak Cipta © 2026 CamHub. Seluruh hak dilindungi undang-undang. Project Owner: Yogi Ario.*
-

@@ -51,14 +51,22 @@ graph TD
 
 1. **Dilarang Keras Menyentuh Kode Terlebih Dahulu:**
    - Jangan pernah membuat, mengedit, atau menghapus file kode aplikasi sebelum menyusun rencana kerja tertulis dan memperoleh **persetujuan eksplisit** dari Yogi Ario.
-2. **Format Wajib Implementation Plan:**
-   Setiap kali ada instruksi, tahap baru, fitur baru, atau perbaikan bug, buatlah dokumen rencana (*Implementation Plan*) yang memuat:
-   - **Tujuan & Ruang Lingkup:** Apa yang ingin dicapai sesuai `Docs/implementation_plan.md`.
-   - **Analisis & Pilihan Solusi:** Tawarkan opsi jika ada trade-off teknis (misal Opsi A vs Opsi B).
-   - **Daftar File Target:** File mana yang akan dibuat, dimodifikasi, atau diuji.
-   - **Alur Pengujian:** Bagaimana cara membuktikan bahwa fitur bekerja dan bebas regresi.
+2. **Format Wajib & Lokasi Penyimpanan Implementation Plan:**
+   - Setiap tahapan pengerjaan wajib memiliki berkas rencana implementasi tertulis dengan penomoran berurutan diawali angka dua digit:
+     `Docs/tahapan/<nomor>.implementation_plan_Tahap<nomor>.md`
+     *(Contoh: `Docs/tahapan/01.implementation_plan_Tahap1.md`, `Docs/tahapan/02.implementation_plan_Tahap2.md`, dst.)*.
+   - Dokumen memuat:
+     - **01. Identitas & Ringkasan Tahap**
+     - **02. Ruang Lingkup & Batasan Pengerjaan**
+     - **03. Analisis Teknis & Pilihan Solusi (Trade-Offs)**
+     - **04. Rincian Rencana Kerja (Task Breakdown):** Subtugas diawali kode penomoran (misal: `01.01`, `01.02`, dst.)
+     - **05. Daftar File Target (File Impact List)**
+     - **06. Rencana Verifikasi & Pengujian (100% PASS Gate)**
+     - **07. Kriteria Keberhasilan (Definition of Done)**
+     - **08. Lembar Review & Persetujuan Project Owner**
+   - **Kewajiban Pencadangan Permanen:** Setelah dokumen disetujui dan dieksekusi, versi FIX wajib dicadangkan secara permanen ke direktori `Docs/tahapan/` dengan status resmi *DISETUJUI / SELESAI*.
 3. **Gerbang Persetujuan (Approval Gate):**
-   - AI Agent wajib berhenti dan menunggu konfirmasi Yogi Ario (misal: pesan "Oke disetujui", "Lanjut", atau respon positif serupa) sebelum menyentuh kode.
+   - AI Agent wajib berhenti dan menunggu konfirmasi Yogi Ario sebelum menyentuh kode.
 
 ---
 
@@ -113,7 +121,7 @@ gitGraph
 **Prinsip Inti:** *Aset Asli Tim UI/UX adalah Bahan Rujukan Murni (Read-Only).*
 
 1. **Status READ-ONLY untuk Folder Desain:**
-   - Folder prototipe mentah (`template/CamHub - Interactive UI UX Prototype/` atau `Docs/mockups/`) yang disediakan desainer dilarang keras diubah, ditimpa, atau dihapus oleh AI Agent / Backend Developer.
+   - Folder prototipe mentah (`template/CamHub — Interactive UI UX Prototype/` atau `Docs/mockups/`) yang disediakan desainer dilarang keras diubah, ditimpa, atau dihapus oleh AI Agent / Backend Developer.
    - 9 Halaman acuan utama: Beranda, Katalog Produk, Detail Produk, Booking & Checkout, Dashboard Pelanggan, Login & Register, Dashboard Mitra Lapak, Dashboard Admin, Verifikasi Identitas KYC.
    - Dilarang mengubah struktur layout, warna, ukuran/posisi komponen, atau mengganti desain dengan template generik.
 2. **Pola Adopsi Bersih:**
@@ -132,6 +140,8 @@ Setiap pengerjaan pada proyek CamHub wajib memelihara folder `Docs/` dan folder 
 | **`Task_Status.md`**          | `Docs/Task_Status.md`                         | Melacak status 13 tahapan proyek CamHub, persentase progres, dan checklist tugas real-time.                                                                                                                                                                                                                                                                     |
 | **`Decision_Log.md`**         | `Docs/Decision_Log.md`                        | Mencatat seluruh keputusan teknis/arsitektur (ID, Tanggal, Topik, Keputusan, Rationale, Status Persetujuan Yogi Ario).                                                                                                                                                                                                                                          |
 | **`implementation_plan.md`**  | `Docs/implementation_plan.md`                 | Rencana induk teknis implementasi backend CamHub (13 Tahap & arsitektur modular).                                                                                                                                                                                                                                                                                |
+| **Plan Fix per Tahap**        | `Docs/tahapan/<nomor>.implementation_plan_Tahap<nomor>.md` | Dokumen rencana implementasi fix dan resmi per tahap (contoh: `Docs/tahapan/01.implementation_plan_Tahap1.md`) yang wajib dicadangkan permanen setelah disetujui.                                                                                                                                                                                                |
+| **`ERD.md`**                  | `Docs/scema/ERD.md`                           | Skema database dan relasi entitas dalam format Mermaid diagram.                                                                                                                                                                                                                                                                                                 |
 | **`Test_Report.md`**          | `Docs/Test_Report.md`                         | Laporan hasil verifikasi pengujian otomatis dan manual (100% PASS).                                                                                                                                                                                                                                                                                             |
 | **Changelog Bertimestamp**    | `changelog/changelog<jam><ampm><ddmmyyyy>.md` | Catatan perubahan bertimestamp waktu lokal per batch rilis atau tahapan selesai. **Wajib flat** (disimpan langsung di dalam folder `changelog/`, dilarang membuat subfolder). Format: 2 digit jam (`03am` / `02pm`, huruf am/pm kecil) dan 8 digit tanggal (`ddmmyyyy`). Contoh: `changelog/changelog03am01102026.md` atau `changelog/changelog02pm31102026.md`. |
 | **Cadangan Riwayat Chat**     | `Docs/chat/riwayat<ddmmyyyy>.md`              | Arsip komprehensif riwayat dialog interaktif antara Yogi Ario dan AI Agent dari awal hingga akhir sesi.                                                                                                                                                                                                                                                         |
@@ -143,7 +153,7 @@ Setiap pengerjaan pada proyek CamHub wajib memelihara folder `Docs/` dan folder 
 **Prinsip Inti:** *Jangan Pernah Bilang Selesai Jika Belum Terbukti Lulus Uji.*
 
 1. **Wajib Memiliki Test Suite Terstruktur:**
-   - Proyek wajib memiliki skrip verifikasi mandiri (Unit, Integration, dan skenario Manual) di folder `tests/` (`tests/Unit/`, `tests/Integration/`, `tests/Manual/`).
+   - Proyek wajib memiliki skrip verifikasi mandiri (Unit, Integration, dan skenario Manual) di folder `tests/` (`tests/test_foundation.php`, `tests/Unit/`, `tests/Integration/`, `tests/Manual/`).
 2. **Definisi Selesai (Definition of Done - DoD):**
    - Suatu tahap hanya boleh dilaporkan selesai jika test suite telah dijalankan di terminal Laragon/PowerShell dan menghasilkan:
      **`HASIL: 100% PASS (0 GAGAL / 0 ERROR)`**.
@@ -166,12 +176,12 @@ Setiap pengerjaan pada proyek CamHub wajib memelihara folder `Docs/` dan folder 
    - **Controller Layer:** `app/Controllers/`
    - **Service / Application Layer:** `app/Services/` (Business logic, rental scheduling, escrow calculation)
    - **Repository / Data Access Layer:** `app/Repositories/` (PDO prepared statements, transaction locking)
-   - **Database Layer:** MySQL (`database/schema.sql`, `database/migrations/`)
+   - **Database Layer:** MySQL (`database/schema.sql`, `database/migrations/`, `Docs/scema/ERD.md`)
    - **Middleware & Validators:** `app/Middleware/` & `app/Validators/`
-4. **Hierarki Aturan Kode Sumber & Scoped AI Agent:**
-   - **Root `Docs/aturan/universal-rule.md` & `AGENTS.md`:** Otoritas makro tata kelola proyek.
-   - **Modul `AGENTS.md` (Scoped Rules):** Jika modul tertentu memiliki batasan teknis ketat, gunakan panduan modular dari `Docs/aturan/AGENTS.md`.
-   - **Resolusi Konflik:** Jika aturan lokal modul bertentangan dengan aturan universal, **aturan universal root dan keputusan eksplisit Yogi Ario selalu menjadi otoritas tertinggi.**
+4. **Hierarki Aturan Kode Sumber & Kebersihan Root Direktori:**
+   - Seluruh aturan kerja dikonsolidasikan terpusat di dalam folder [`Docs/aturan/`](Docs/aturan/).
+   - Root direktori dilarang memuat file duplikat rules yang tidak perlu agar tetap rapi dan bersih.
+   - Jika modul tertentu memiliki batasan teknis ketat, gunakan panduan modular dari `Docs/aturan/AGENTS.md`.
 
 ---
 
@@ -186,34 +196,31 @@ Setiap pengerjaan pada proyek CamHub wajib memelihara folder `Docs/` dan folder 
 3. **Tautan Markdown yang Dapat Diklik:**
    - Selalu sertakan tautan berkas yang dapat diklik (`[file.ext](file:///path/to/file)`).
 4. **Kewajiban Menanyakan Pencadangan Riwayat Chat di Akhir Respon:**
-   - **Wajib di Setiap Akhir Respon:** Setiap kali selesai memberikan respon (baik merespons pertanyaan, menyajikan rencana, maupun menyelesaikan implementasi), AI Agent **WAJIB secara proaktif bertanya di penutup respon** kepada pengguna apakah ingin mencadangkan (*backup*) riwayat percakapan sesi tersebut.
-   - **Pola Penamaan & Lokasi Berkas:** Berkas cadangan disimpan dalam format markdown pada subdirektori terstruktur `Docs/chat/` dengan pola:
-     `Docs/chat/riwayat<ddmmyyyy>.md`
-   - **Contoh Kalimat Penutup:**
-     > *"Apakah Anda ingin saya mencadangkan riwayat percakapan sesi ini ke `Docs/chat/riwayat<ddmmyyyy>.md`?"*
+   - Setiap kali selesai memberikan respon, AI Agent **WAJIB secara proaktif bertanya di penutup respon** kepada pengguna apakah ingin mencadangkan (*backup*) riwayat percakapan sesi tersebut ke `Docs/chat/riwayat<ddmmyyyy>.md`.
 
 ---
 
 ## 📁 Struktur Direktori Standar Proyek CamHub
 
-Struktur direktori proyek CamHub yang wajib dipedomani secara bertahap:
+Struktur direktori proyek CamHub yang wajib dipedomani:
 
 ```text
 camhub/
 ├── .gitignore                     # Perlindungan awal (.env, secrets, logs, uploads, cache)
 ├── .env.example                   # Template konfigurasi database & kredensial tanpa rahasia
+├── .env                           # Konfigurasi lokal aktif (terproteksi .gitignore)
+├── .htaccess                      # Pengarah request root ke public/
 ├── README.md                      # Dokumentasi pengenalan, arsitektur, dan panduan Laragon
-├── AGENTS.md                      # Indeks aturan kerja AI (merujuk ke Docs/aturan/universal-rule.md)
-├── GEMINI.md                      # Indeks aturan kerja Gemini khusus proyek CamHub
 │
 ├── app/                           # Kode sumber arsitektur Modular PHP Native
+│   ├── Core/                      # Router native dan dispatching engine
 │   ├── Controllers/               # Penanganan HTTP request dan alur antarmuka
 │   ├── Models/                    # Definisi entitas dan data mapping
 │   ├── Repositories/              # Akses database MySQL via PDO prepared statements
 │   ├── Services/                  # Logika bisnis utama (rental, order, consignment, escrow)
 │   ├── Middleware/                # Auth, Role-based guard, CSRF protection
 │   ├── Validators/                # Validasi input server-side
-│   └── Helpers/                   # Utilitas & helper umum
+│   └── Helpers/                   # Utilitas & helper umum (functions.php)
 │
 ├── config/                        # File konfigurasi sistem (database, app, payment)
 │
@@ -224,7 +231,7 @@ camhub/
 │
 ├── public/                        # Web root / Entry point untuk Laragon
 │   ├── index.php                  # Front controller / entry point utama
-│   ├── .htaccess                  # URL rewriting
+│   ├── .htaccess                  # URL rewriting Apache
 │   └── assets/                    # Aset statis (css, js, images, fonts)
 │
 ├── resources/
@@ -238,6 +245,7 @@ camhub/
 │   └── cache/
 │
 ├── tests/                         # Suite pengujian otomatis & manual (100% PASS Gate)
+│   ├── test_foundation.php
 │   ├── Unit/
 │   ├── Integration/
 │   └── Manual/
@@ -245,6 +253,8 @@ camhub/
 ├── Docs/                          # Seluruh dokumentasi formal proyek CamHub
 │   ├── aturan/                    # Aturan tata kelola (universal-rule.md, GEMINI.md, AGENTS.md)
 │   ├── implementation_plan.md     # Rencana induk implementasi backend (Tahap 01 - 13)
+│   ├── tahapan/                   # Implementation plan fix per tahap (01.implementation_plan_Tahap1.md, dst.)
+│   ├── scema/                     # ERD.md (Skema basis data & relasi 22 entitas)
 │   ├── Task_Status.md             # Pelacak progres fase dan checklist tugas
 │   ├── Decision_Log.md            # Catatan riwayat keputusan teknis & arsitektur
 │   ├── Test_Report.md             # Laporan hasil verifikasi pengujian
@@ -264,12 +274,13 @@ camhub/
 
 Sebelum AI Agent melaporkan suatu tugas selesai kepada Yogi Ario, lakukan verifikasi mandiri menggunakan checklist berikut:
 
-- [ ] Apakah rencana implementasi telah disetujui Yogi Ario sebelum kode disentuh? (**Pilar 1**)
+- [ ] Apakah rencana implementasi berformat `<nomor>.implementation_plan_Tahap<nomor>.md` telah disetujui Yogi Ario sebelum kode disentuh? (**Pilar 1**)
+- [ ] Apakah versi fix rencana kerja telah dicadangkan ke `Docs/tahapan/`? (**Pilar 1 & 5**)
 - [ ] Apakah pengerjaan berada pada branch `develop` atau `tahap/*`, bukan commit langsung ke `main`? (**Pilar 2**)
-- [ ] Apakah seluruh perubahan telah di-push ke remote GitHub repository? (**Pilar 2**)
 - [ ] Apakah file `.env` dan kredensial rahasia terlindungi oleh `.gitignore`? (**Pilar 3**)
 - [ ] Apakah folder aset desain mentah (`template/`) tetap utuh tanpa modifikasi? (**Pilar 4**)
 - [ ] Apakah `Docs/Task_Status.md` dan `Docs/Decision_Log.md` telah diperbarui? (**Pilar 5**)
 - [ ] Apakah changelog bertimestamp (`changelog/changelog<jam><ampm><ddmmyyyy>.md`) sudah dibuat secara flat tanpa subfolder? (**Pilar 5**)
 - [ ] Apakah suite pengujian telah dijalankan dan terbukti **100% PASS**? (**Pilar 6**)
+- [ ] Apakah root direktori tetap bersih tanpa file rules duplikat? (**Pilar 7**)
 - [ ] Apakah di akhir respons telah menanyakan apakah Yogi Ario ingin mencadangkan riwayat chat ke `Docs/chat/riwayat<ddmmyyyy>.md`? (**Pilar 8**)
