@@ -192,3 +192,4 @@ SLIDE / TAMPILAN:
 | **Kenapa tidak memakai framework seperti Laravel?** | *"Sesuai ketentuan Project Owner dan rencana induk implementasi, kami menggunakan Modular PHP Native agar kami benar-benar menguasai fundamental arsitektur web, routing, dependency management, dan keamanan tanpa bergantung pada 'black box' framework."* |
 | **Bagaimana cara mencegah pengguna mengakses file `.env` lewat browser?** | *"Melalui isolasi Document Root. Server web diarahkan hanya membaca folder `public/`. File `.env` berada satu tingkat di atas `public/` (di root folder), sehingga server web Apache menolak akses HTTP langsung ke berkas tersebut."* |
 | **Apakah routing ini mendukung parameter URL seperti `/produk/{id}`?** | *"Ya. Router di `app/Core/Router.php` telah dirancang menggunakan regular expression regex matching (`preg_match`), sehingga siap menerima parameter dinamis pada tahapan katalog dan detail produk berikutnya."* |
+
