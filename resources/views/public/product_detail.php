@@ -1010,7 +1010,7 @@
                 </div>
 
                 <!-- CTA BUTTONS -->
-                <a href="<?= base_url('checkout?product_id=' . $product->id . '&duration=1') ?>" id="btnBookingAction" class="btn-booking">
+                <a href="<?= base_url('checkout/' . $product->slug . '?duration=1') ?>" id="btnBookingAction" class="btn-booking">
                     Sewa Sekarang (Booking)
                 </a>
 
@@ -1142,7 +1142,7 @@
             const btn = document.getElementById('btnBookingAction');
             const startVal = document.getElementById('startDate').value;
             const endVal = document.getElementById('endDate').value;
-            btn.href = `<?= base_url('checkout') ?>?product_id=<?= $product->id ?>&duration=${days}&start_date=${startVal}&end_date=${endVal}`;
+            btn.href = `<?= base_url('checkout/' . $product->slug) ?>?duration=${days}&start_date=${startVal}&end_date=${endVal}`;
         }
     </script>
 </body>

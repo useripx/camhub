@@ -130,6 +130,14 @@ class UserRepository
     /**
      * Create customer user profile
      */
+    public function getProfile(int $userId): ?array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM user_profiles WHERE user_id = :user_id LIMIT 1");
+        $stmt->execute(['user_id' => $userId]);
+        $profile = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $profile ?: null;
+    }
+
     public function createCustomerProfile(int $userId, ?string $address = null, ?string $city = null): int
     {
         $stmt = $this->pdo->prepare("

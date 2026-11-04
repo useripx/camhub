@@ -7,7 +7,7 @@
 > 3. **Ivan Farrel Nanda Kristanto** (Core Routing & Security Engineer)  
 > 4. **Krisna Mukti** (Quality Assurance & Presentation Coordinator)  
 >  
-> **TERAKHIR DIPERBARUI:** 03 November 2026 (Tahap 05 Selesai)  
+> **TERAKHIR DIPERBARUI:** 04 November 2026 (Tahap 07 Selesai)  
 
 ---
 
@@ -21,7 +21,7 @@
 | **04** | **Profil Pelanggan & Verifikasi KYC** | `tahap/04-profil-pelanggan-kyc` | **SELESAI (100% PASS)** | [`Docs/tahapan/04.implementation_plan_Tahap4.md`](tahapan/04.implementation_plan_Tahap4.md) | `tests/test_kyc.php` (10/10 PASS) |
 | **05** | **Website Publik & Katalog Produk** | `tahap/05-website-publik-katalog` | **SELESAI (100% PASS)** | [`Docs/tahapan/05.implementation_plan_Tahap5.md`](tahapan/05.implementation_plan_Tahap5.md) | `tests/test_catalog.php` (10/10 PASS) |
 | **06** | **Dashboard Mitra Lapak** | `tahap/06-dashboard-mitra` | **SELESAI (100% PASS)** | [`Docs/tahapan/06.implementation_plan_Tahap6.md`](tahapan/06.implementation_plan_Tahap6.md) | `tests/test_partner_dashboard.php` (10/10 PASS) |
-| **07** | Penyewaan & Pemesanan | `tahap/07-penyewaan-pemesanan` | Belum Dimulai | - | - |
+| **07** | **Penyewaan & Pemesanan Kamera** | `tahap/07-penyewaan-pemesanan` | **SELESAI (100% PASS)** | [`Docs/tahapan/07.implementation_plan_Tahap7.md`](tahapan/07.implementation_plan_Tahap7.md) | `tests/test_booking.php` (10/10 PASS) |
 | **08** | Marketplace Jual Beli | `tahap/08-marketplace-jual-beli` | Belum Dimulai | - | - |
 | **09** | Sistem Titip Jual | `tahap/09-sistem-titip-jual` | Belum Dimulai | - | - |
 | **10** | Pembayaran & Escrow | `tahap/10-pembayaran-escrow` | Belum Dimulai | - | - |
@@ -131,3 +131,26 @@
 - [x] Uji regresi seluruh tahap berjalan serentak: Tahap 01 (7/7), Tahap 02 (7/7), Tahap 03 (10/10), Tahap 04 (10/10), Tahap 05 (10/10), Tahap 06 (10/10), Browser E2E (17/17) -> **Total 71 / 71 Tests LULUS (100% PASS)**.
 - [x] Pembuatan buku panduan dan naskah presentasi 4 orang Kelompok 1 di `Docs/buku/06 Tahap 6.md`.
 - [x] Pencadangan rencana implementasi fix di `Docs/tahapan/06.implementation_plan_Tahap6.md`.
+
+---
+
+## 📝 Catatan Rinci Tahap 07 (Penyewaan & Pemesanan Kamera — Booking & Checkout)
+
+- [x] Pembuatan branch resmi `tahap/07-penyewaan-pemesanan` dari branch `develop`.
+- [x] Pembuatan model data: `App\Models\RentalBooking`, `App\Models\Payment`, serta pembaruan `Product` dan `Category` dengan `\ArrayAccess`.
+- [x] Pembuatan repositori `App\Repositories\BookingRepository` (alokasi unit collision-free, transaksi ACID rental + payments + escrow_transactions + audit_logs, detail booking, dan riwayat pesanan).
+- [x] Pembuatan validator form checkout `App\Validators\BookingValidator` (validasi nama, nomor HP, tanggal mulai sewa tidak lampau, durasi sewa 1-30 hari, dan metode pembayaran).
+- [x] Pembuatan service inti `App\Services\BookingService` (pengolahan checkout, orkestrasi alokasi unit bebas benturan, kalkulasi sewa, dan registrasi transaksi).
+- [x] Pembuatan controller `App\Controllers\BookingController`.
+- [x] Pembangunan tampilan visual 100% presisi mockup prototype:
+  - `resources/views/booking/checkout.php`: Sesuai `CamHub — Booking & Checkout.png` (2 kolom: Informasi Penyewa di kiri & Ringkasan Pesanan sticky di kanan, subtotal sewa, biaya admin Rp 5.000, Total Pembayaran Rp 717.500 biru bold 32px, tombol Lanjutkan Pembayaran, dan catatan Rekening Bersama Escrow).
+  - `resources/views/booking/success.php`: Nota Tanda Terima pemesanan resmi (`#RENT-XXXXX`) dengan rincian unit, SN, toko mitra penyedia, dan garansi perlindungan Escrow.
+  - `resources/views/customer/orders.php`: Halaman riwayat pemesanan sewa kamera pelanggan (`/pesanan-saya`).
+  - Pembaruan tombol CTA di `resources/views/public/product_detail.php` mengarah ke `/checkout/{slug}`.
+- [x] Registrasi rute web di `routes/web.php` (`/checkout/{slug}`, `/checkout/{slug}/proses`, `/booking/{id}/sukses`, `/pesanan-saya`) dengan proteksi `AuthMiddleware`.
+- [x] Penyempurnaan `Router::executeAction` di `app/Core/Router.php` dengan `array_values($params)` untuk kompatibilitas named parameter PHP 8.
+- [x] Test suite mandiri `php tests/test_booking.php` (**100% PASS, 10/10**).
+- [x] Pengujian interaktif langsung di peramban Google Chrome via Chrome DevTools Protocol (foreground login customer, pembukaan form checkout, verifikasi DOM rincian harga, submit pemesanan, penerbitan nota `#RENT-00003`, dan inspeksi riwayat `/pesanan-saya`).
+- [x] Uji regresi seluruh tahap berjalan serentak: Tahap 01 (7/7), Tahap 02 (7/7), Tahap 03 (10/10), Tahap 04 (10/10), Tahap 05 (10/10), Tahap 06 (10/10), Tahap 07 (10/10), Browser E2E (17/17) -> **Total 81 / 81 Tests LULUS (100% PASS)**.
+- [x] Pembuatan buku panduan dan naskah presentasi 4 orang Kelompok 1 di `Docs/buku/07 Tahap 7.md`.
+- [x] Pencadangan rencana implementasi fix di `Docs/tahapan/07.implementation_plan_Tahap7.md`.
