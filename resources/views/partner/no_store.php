@@ -18,7 +18,15 @@
     <div class="card">
         <h1>Lapak Mitra Belum Aktif</h1>
         <p>Akun Anda terdaftar sebagai Mitra tetapi toko Anda belum terhubung. Hubungi administrator CamHub atau kembali ke beranda.</p>
-        <a href="<?= base_url() ?>" class="btn">Kembali ke Beranda Publik</a>
+        <div style="display:flex; gap:12px; justify-content:center; align-items:center; flex-wrap:wrap;">
+            <a href="<?= base_url() ?>" class="btn">Kembali ke Beranda Publik</a>
+            <form action="<?= base_url('/logout') ?>" method="POST" style="margin:0;">
+                <?= csrf_field() ?>
+                <button type="submit" style="background:#dc2626; color:#ffffff; font-weight:700; border-radius:8px; padding:12px 20px; border:none; cursor:pointer;">
+                    Keluar Akun
+                </button>
+            </form>
+        </div>
     </div>
 </body>
 </html>

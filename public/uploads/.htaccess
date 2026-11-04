@@ -1,18 +1,19 @@
-# Prevent script execution in uploads directory
-<FilesMatch "\.(php|php3|php4|php5|php7|php8|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)$">
+# CamHub - Public Uploads Directory Hardening
+# Mencegah eksekusi skrip PHP / CGI / SSI di folder unggahan berkas publik
+
+# Matikan engine PHP jika modul PHP aktif
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+
+# Tolak akses langsung ke berkas berekstensi skrip berbahaya
+<FilesMatch "(?i)\.(php|phtml|php3|php4|php5|php7|php8|phps|pht|phar|cgi|pl|py|sh|bash|exe|bat|cmd)$">
     Order Deny,Allow
     Deny from all
 </FilesMatch>
 
-# Disable PHP engine if mod_php is active
-<IfModule mod_php.c>
-    php_flag engine off
-</IfModule>
-<IfModule mod_php7.c>
-    php_flag engine off
-</IfModule>
-<IfModule mod_php8.c>
-    php_flag engine off
-</IfModule>
-
-Options -ExecCGI -Indexes
+# Matikan directory listing (browsing folder)
+Options -Indexes -ExecCGI

@@ -117,6 +117,12 @@
     <div class="user-nav">
         <span>👤 <?= htmlspecialchars($user['full_name'] ?? 'Pelanggan', ENT_QUOTES, 'UTF-8') ?></span>
         <span class="role-badge">Pelanggan</span>
+        <form action="<?= base_url('/logout') ?>" method="POST" style="margin:0; display:inline;">
+            <?= csrf_field() ?>
+            <button type="submit" style="background:#dc2626; color:#ffffff; font-weight:700; border-radius:8px; padding:6px 12px; border:none; cursor:pointer; font-size:12px; display:inline-flex; align-items:center; gap:6px;">
+                🚪 Keluar
+            </button>
+        </form>
     </div>
 </header>
 

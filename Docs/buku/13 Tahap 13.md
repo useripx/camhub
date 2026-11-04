@@ -178,3 +178,4 @@ Sekian presentasi dari Kelompok 1, kami membuka ruang seluas-luasnya untuk sesi 
 
 ---
 *Dokumen ini diterbitkan oleh Kelompok 1 sebagai bukti resmi kelulusan seluruh tahapan pengerjaan proyek CamHub.*
+

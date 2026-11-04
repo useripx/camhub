@@ -42,8 +42,14 @@
 
     <header class="topbar">
         <a href="<?= base_url() ?>" class="brand">CamHub</a>
-        <div class="nav-links">
+        <div class="nav-links" style="display:flex; align-items:center; gap:16px;">
             <a href="<?= base_url('/dashboard/pelanggan') ?>">← Kembali ke Dashboard</a>
+            <form action="<?= base_url('/logout') ?>" method="POST" style="margin:0;">
+                <?= csrf_field() ?>
+                <button type="submit" style="background:#dc2626; color:#ffffff; font-weight:700; border-radius:8px; padding:6px 12px; border:none; cursor:pointer; font-size:12px;">
+                    🚪 Keluar
+                </button>
+            </form>
         </div>
     </header>
 
