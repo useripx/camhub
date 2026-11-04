@@ -70,6 +70,12 @@
         .btn-danger { background:#dc2626; color:#ffffff; font-size:12px; font-weight:700; padding:8px 14px; border:none; border-radius:6px; cursor:pointer; }
         .btn-danger:hover { background:#b91c1c; }
     </style>
+    <script>
+        (function() {
+            const theme = localStorage.getItem('camhub_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 <body>
 
@@ -89,6 +95,9 @@
         </div>
 
         <div class="sidebar-footer">
+            <button type="button" class="btn-theme-toggle" onclick="toggleCamHubTheme()" title="Beralih Mode Gelap/Terang" style="width:100%; background:#1e293b; color:#cbd5e1; border:1px solid #334155; padding:9px 12px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; text-align:center; margin-bottom:12px;">
+                <span id="themeToggleText">Mode Terang</span>
+            </button>
             <div class="admin-profile">
                 <div class="admin-avatar">A</div>
                 <div class="admin-meta">
@@ -295,6 +304,26 @@
         </div>
     </main>
 
+    <script>
+        function toggleCamHubTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('camhub_theme', newTheme);
+            syncThemeToggleUI(newTheme);
+        }
+
+        function syncThemeToggleUI(theme) {
+            const text = document.getElementById('themeToggleText');
+            if (!text) return;
+            text.textContent = (theme === 'dark') ? 'Mode Terang' : 'Mode Gelap';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.documentElement.getAttribute('data-theme') || 'dark';
+            syncThemeToggleUI(active);
+        });
+    </script>
 </body>
 </html>
 

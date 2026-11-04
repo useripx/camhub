@@ -7,11 +7,62 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('camhub_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', system-ui, sans-serif; }
-        body { background:#f8fafc; color:#0f172a; min-height:100vh; display:flex; }
+        :root {
+            --bg-page: #0b1320;
+            --bg-surface: #112240;
+            --bg-card: #132644;
+            --bg-subtle: rgba(255, 255, 255, 0.04);
+            --bg-input: #0d1b30;
+            --border-color: #1e3a5f;
+            --border-subtle: #162c4a;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
+        }
 
-        /* SIDEBAR IDENTIK DENGAN DASHBOARD PELANGGAN */
+        html[data-theme="dark"], html:not([data-theme="light"]) {
+            --bg-page: #0b1320;
+            --bg-surface: #112240;
+            --bg-card: #132644;
+            --bg-subtle: rgba(255, 255, 255, 0.04);
+            --bg-input: #0d1b30;
+            --border-color: #1e3a5f;
+            --border-subtle: #162c4a;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
+        }
+
+        html[data-theme="light"] {
+            --bg-page: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-card: #ffffff;
+            --bg-subtle: #f1f5f9;
+            --bg-input: #ffffff;
+            --border-color: #e2e8f0;
+            --border-subtle: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --accent-blue: #2563eb;
+            --accent-amber: #d97706;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', system-ui, sans-serif; }
+        body { background:var(--bg-page); color:var(--text-primary); min-height:100vh; display:flex; }
+
+        /* SIDEBAR (CLEAN TEXT-ONLY, NO ICONS) */
         .sidebar {
             width:260px;
             background:#0c192c;
@@ -32,10 +83,10 @@
             letter-spacing:-0.5px;
         }
         .sidebar-user {
-            margin-bottom:36px;
+            margin-bottom:32px;
         }
         .user-fullname {
-            font-size:18px;
+            font-size:17px;
             font-weight:700;
             color:#ffffff;
             line-height:1.3;
@@ -54,9 +105,7 @@
             flex:1;
         }
         .nav-item a {
-            display:flex;
-            align-items:center;
-            gap:14px;
+            display:block;
             padding:12px 16px;
             border-radius:10px;
             font-size:14px;
@@ -73,25 +122,37 @@
             background:#1e293b;
             color:#ffffff;
             font-weight:700;
+            border-left:3px solid #3b82f6;
         }
-        .nav-icon {
-            font-size:16px;
-            width:20px;
-            text-align:center;
-            display:inline-block;
-        }
+        
         .sidebar-bottom {
             margin-top:auto;
             padding-top:24px;
             border-top:1px solid #1e293b;
             display:flex;
             flex-direction:column;
-            gap:8px;
+            gap:10px;
+        }
+        .btn-theme-toggle {
+            width:100%;
+            background:#16243a;
+            color:#cbd5e1;
+            border:1px solid #1e3a5f;
+            padding:10px 14px;
+            border-radius:8px;
+            font-size:13px;
+            font-weight:600;
+            cursor:pointer;
+            text-align:center;
+            transition:all 0.2s;
+        }
+        .btn-theme-toggle:hover {
+            background:#1e293b;
+            color:#ffffff;
+            border-color:#3b82f6;
         }
         .btn-sidebar-link {
-            display:flex;
-            align-items:center;
-            gap:12px;
+            display:block;
             padding:10px 14px;
             color:#94a3b8;
             font-size:13px;
@@ -109,9 +170,6 @@
             background:transparent;
             border:none;
             cursor:pointer;
-            display:flex;
-            align-items:center;
-            gap:12px;
             padding:10px 14px;
             color:#ef4444;
             font-size:13px;
@@ -128,7 +186,7 @@
         /* MAIN CONTENT AREA */
         .main-content {
             flex:1;
-            padding:48px 56px;
+            padding:40px 48px 60px;
             overflow-y:auto;
             max-width:1040px;
         }
@@ -137,11 +195,11 @@
             align-items:center;
             gap:8px;
             font-size:13px;
-            color:#64748b;
+            color:var(--text-muted);
             margin-bottom:20px;
         }
         .breadcrumb a {
-            color:#2563eb;
+            color:var(--accent-blue);
             text-decoration:none;
             font-weight:600;
         }
@@ -152,23 +210,23 @@
             margin-bottom:28px;
         }
         .page-title {
-            font-size:30px;
+            font-size:28px;
             font-weight:800;
-            color:#0f172a;
+            color:var(--text-primary);
             letter-spacing:-0.5px;
             margin-bottom:6px;
         }
         .page-subtitle {
             font-size:14px;
-            color:#64748b;
+            color:var(--text-secondary);
             line-height:1.6;
         }
 
         /* ALERTS */
         .alert-success {
-            background:#dcfce7;
-            border:1px solid #bbf7d0;
-            color:#15803d;
+            background:rgba(16, 185, 129, 0.15);
+            border:1px solid rgba(16, 185, 129, 0.3);
+            color:#34d399;
             padding:14px 18px;
             border-radius:12px;
             margin-bottom:24px;
@@ -176,9 +234,9 @@
             font-weight:600;
         }
         .alert-danger {
-            background:#fee2e2;
-            border:1px solid #fecaca;
-            color:#b91c1c;
+            background:rgba(239, 68, 68, 0.15);
+            border:1px solid rgba(239, 68, 68, 0.3);
+            color:#f87171;
             padding:14px 18px;
             border-radius:12px;
             margin-bottom:24px;
@@ -188,8 +246,8 @@
 
         /* USER SUMMARY HEADER CARD */
         .user-header-card {
-            background:#ffffff;
-            border:1px solid #e2e8f0;
+            background:var(--bg-card);
+            border:1px solid var(--border-color);
             border-radius:16px;
             padding:28px 32px;
             display:flex;
@@ -198,7 +256,7 @@
             margin-bottom:28px;
             flex-wrap:wrap;
             gap:20px;
-            box-shadow:0 1px 3px rgba(0,0,0,0.02);
+            box-shadow:0 2px 10px rgba(0,0,0,0.04);
         }
         .user-info-left {
             display:flex;
@@ -221,11 +279,11 @@
         .user-names h2 {
             font-size:22px;
             font-weight:800;
-            color:#0f172a;
+            color:var(--text-primary);
             margin-bottom:4px;
         }
         .user-names p {
-            color:#64748b;
+            color:var(--text-secondary);
             font-size:13px;
         }
 
@@ -241,16 +299,16 @@
             gap:16px;
         }
         .kyc-banner.unverified {
-            background:#fffbeb;
-            border:1px solid #fde68a;
+            background:rgba(245, 158, 11, 0.12);
+            border:1px solid rgba(245, 158, 11, 0.3);
         }
         .kyc-banner.pending {
-            background:#f0f9ff;
-            border:1px solid #bae6fd;
+            background:rgba(59, 130, 246, 0.12);
+            border:1px solid rgba(59, 130, 246, 0.3);
         }
         .kyc-banner.approved {
-            background:#f0fdf4;
-            border:1px solid #bbf7d0;
+            background:rgba(16, 185, 129, 0.12);
+            border:1px solid rgba(16, 185, 129, 0.3);
         }
         .kyc-btn-action {
             padding:10px 20px;
@@ -264,21 +322,21 @@
 
         /* EDIT FORM CARD */
         .form-card {
-            background:#ffffff;
-            border:1px solid #e2e8f0;
+            background:var(--bg-card);
+            border:1px solid var(--border-color);
             border-radius:16px;
             padding:32px;
-            box-shadow:0 1px 3px rgba(0,0,0,0.02);
+            box-shadow:0 2px 10px rgba(0,0,0,0.04);
         }
         .card-header {
             margin-bottom:24px;
-            border-bottom:1px solid #f1f5f9;
+            border-bottom:1px solid var(--border-subtle);
             padding-bottom:14px;
         }
         .card-title {
             font-size:18px;
             font-weight:800;
-            color:#0f172a;
+            color:var(--text-primary);
         }
         
         .form-grid {
@@ -294,7 +352,7 @@
             display:block;
             font-size:13px;
             font-weight:700;
-            color:#334155;
+            color:var(--text-primary);
             margin-bottom:8px;
         }
         .form-control {
@@ -302,22 +360,22 @@
             height:48px;
             padding:12px 16px;
             font-size:14px;
-            border:1.5px solid #cbd5e1;
+            border:1px solid var(--border-color);
             border-radius:10px;
-            background:#ffffff;
-            color:#0f172a;
+            background:var(--bg-input);
+            color:var(--text-primary);
             transition:0.2s;
         }
         .form-control:focus {
             outline:none;
-            border-color:#2563eb;
-            box-shadow:0 0 0 3px rgba(37,99,235,0.12);
+            border-color:var(--accent-blue);
+            box-shadow:0 0 0 3px rgba(37,99,235,0.15);
         }
         .form-control:disabled {
-            background:#f1f5f9;
-            color:#64748b;
+            background:var(--bg-subtle);
+            color:var(--text-muted);
             cursor:not-allowed;
-            border-color:#e2e8f0;
+            border-color:var(--border-subtle);
         }
         textarea.form-control {
             height:100px;
@@ -349,7 +407,7 @@
 </head>
 <body>
 
-    <!-- SIDEBAR KIRI VERTIKAL IDENTIK DASHBOARD PELANGGAN -->
+    <!-- SIDEBAR KIRI VERTIKAL (CLEAN TEXT-ONLY, NO ICONS) -->
     <aside class="sidebar">
         <a href="<?= base_url() ?>" class="sidebar-brand">CamHub</a>
         
@@ -360,59 +418,41 @@
 
         <ul class="nav-menu">
             <li class="nav-item">
-                <a href="<?= base_url('/dashboard/pelanggan') ?>">
-                    <span class="nav-icon">⌂</span>
-                    <span>Beranda</span>
-                </a>
+                <a href="<?= base_url('/dashboard/pelanggan') ?>">Beranda</a>
             </li>
             <li class="nav-item">
-                <a href="<?= base_url('/pesanan-saya') ?>">
-                    <span class="nav-icon">🗂</span>
-                    <span>Pesanan Saya</span>
-                </a>
+                <a href="<?= base_url('/pesanan-saya') ?>">Pesanan Saya</a>
             </li>
             <li class="nav-item">
-                <a href="<?= base_url('/pesanan-saya?type=rental') ?>">
-                    <span class="nav-icon">📷</span>
-                    <span>Sewa Saya</span>
-                </a>
+                <a href="<?= base_url('/pesanan-saya?type=rental') ?>">Sewa Saya</a>
             </li>
             <li class="nav-item">
-                <a href="<?= base_url('/pesanan-saya?type=sale') ?>">
-                    <span class="nav-icon">🛒</span>
-                    <span>Jual Beli Saya</span>
-                </a>
+                <a href="<?= base_url('/pesanan-saya?type=sale') ?>">Jual Beli Saya</a>
             </li>
             <li class="nav-item">
-                <a href="<?= base_url('/titip-jual/saya') ?>">
-                    <span class="nav-icon">🏷️</span>
-                    <span>Titip Jual Saya</span>
-                </a>
+                <a href="<?= base_url('/titip-jual/saya') ?>">Titip Jual Saya</a>
             </li>
             <li class="nav-item">
-                <a href="<?= base_url('/kyc/status') ?>">
-                    <span class="nav-icon">📄</span>
-                    <span>Dokumen KYC</span>
-                </a>
+                <a href="<?= base_url('/kyc/status') ?>">Dokumen KYC</a>
             </li>
             <li class="nav-item active">
-                <a href="<?= base_url('/profil') ?>">
-                    <span class="nav-icon">⚙️</span>
-                    <span>Pengaturan</span>
-                </a>
+                <a href="<?= base_url('/profil') ?>">Pengaturan</a>
             </li>
         </ul>
 
         <div class="sidebar-bottom">
+            <button type="button" class="btn-theme-toggle" onclick="toggleCamHubTheme()" title="Beralih Mode Gelap/Terang">
+                <span id="themeToggleText">Mode Terang</span>
+            </button>
+
             <a href="<?= base_url('/') ?>" class="btn-sidebar-link">
-                <span>🌐</span>
-                <span>Lihat Beranda Publik</span>
+                Lihat Beranda Publik
             </a>
+
             <form action="<?= base_url('/logout') ?>" method="POST" style="margin:0;">
                 <?= csrf_field() ?>
                 <button type="submit" class="btn-sidebar-logout">
-                    <span>🚪</span>
-                    <span>Keluar Akun</span>
+                    Keluar
                 </button>
             </form>
         </div>
@@ -432,7 +472,7 @@
         </div>
 
         <?php if (!empty($success)): ?>
-            <div class="alert-success">✓ <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?></div>
+            <div class="alert-success"><?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?></div>
         <?php endif; ?>
         <?php if (!empty($error)): ?>
             <div class="alert-danger"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
@@ -450,51 +490,60 @@
                 </div>
             </div>
 
+            <!-- KYC STATUS BADGE IN HEADER -->
             <div>
-                <?php 
-                    $kycStat = strtolower($profile['kyc_status'] ?? 'unverified');
-                ?>
-                <span style="display:inline-block; padding:8px 16px; border-radius:20px; font-size:12px; font-weight:800; text-transform:uppercase;
-                    <?= match($kycStat) {
-                        'approved' => 'background:#dcfce7; color:#15803d; border:1px solid #bbf7d0;',
-                        'pending' => 'background:#fef3c7; color:#d97706; border:1px solid #fde68a;',
-                        'rejected' => 'background:#fee2e2; color:#b91c1c; border:1px solid #fecaca;',
-                        default => 'background:#f1f5f9; color:#475569; border:1px solid #cbd5e1;'
-                    } ?>">
-                    <?= match($kycStat) {
-                        'approved' => '✓ Terverifikasi (KYC)',
-                        'pending' => '⏳ Menunggu Verifikasi',
-                        'rejected' => '✕ KYC Ditolak',
-                        default => '⚠ Belum Verifikasi KYC'
-                    } ?>
-                </span>
+                <?php if ($kycStatus === 'approved'): ?>
+                    <span style="display:inline-flex; align-items:center; gap:6px; background:#dcfce7; color:#15803d; border:1px solid #bbf7d0; padding:8px 16px; border-radius:20px; font-weight:800; font-size:13px;">
+                        TERVERIFIKASI
+                    </span>
+                <?php elseif ($kycStatus === 'pending'): ?>
+                    <span style="display:inline-flex; align-items:center; gap:6px; background:#fef3c7; color:#d97706; border:1px solid #fde68a; padding:8px 16px; border-radius:20px; font-weight:800; font-size:13px;">
+                        MENUNGGU VERIFIKASI
+                    </span>
+                <?php elseif ($kycStatus === 'rejected'): ?>
+                    <span style="display:inline-flex; align-items:center; gap:6px; background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; padding:8px 16px; border-radius:20px; font-weight:800; font-size:13px;">
+                        VERIFIKASI DITOLAK
+                    </span>
+                <?php else: ?>
+                    <span style="display:inline-flex; align-items:center; gap:6px; background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1; padding:8px 16px; border-radius:20px; font-weight:800; font-size:13px;">
+                        BELUM VERIFIKASI
+                    </span>
+                <?php endif; ?>
             </div>
         </div>
 
-        <!-- KYC CALLOUT BANNER -->
-        <?php if ($kycStat === 'unverified' || $kycStat === 'rejected'): ?>
-            <div class="kyc-banner unverified">
+        <!-- KYC STATUS BANNER -->
+        <?php if ($kycStatus === 'approved'): ?>
+            <div class="kyc-banner approved">
                 <div>
-                    <strong style="color:#d97706; font-size:15px;">Verifikasi Identitas Anda untuk Menyewa Kamera</strong>
-                    <p style="color:#64748b; font-size:13px; margin-top:4px;">Lengkapi data diri dan foto KTP untuk membuka akses seluruh unit sewa di platform CamHub.</p>
+                    <strong style="color:#15803d; font-size:15px; display:block; margin-bottom:4px;">Identitas Anda Terverifikasi Penuh</strong>
+                    <p style="color:#166534; font-size:13px;">Dokumen KTP Anda telah disetujui Super Admin CamHub. Hak akses sewa kamera aktif.</p>
                 </div>
-                <a href="<?= base_url('/kyc') ?>" class="kyc-btn-action" style="background:#f59e0b; color:#ffffff;">Mulai Verifikasi KYC Sekarang &rarr;</a>
+                <a href="<?= base_url('/kyc/status') ?>" class="kyc-btn-action" style="background:#15803d; color:#ffffff;">Lihat Detail Status</a>
             </div>
-        <?php elseif ($kycStat === 'pending'): ?>
+        <?php elseif ($kycStatus === 'pending'): ?>
             <div class="kyc-banner pending">
                 <div>
-                    <strong style="color:#0284c7; font-size:15px;">Dokumen KYC Anda Sedang Ditinjau Admin</strong>
-                    <p style="color:#64748b; font-size:13px; margin-top:4px;">Estimasi verifikasi 1x24 jam kerja. Pantau pembaruan status di halaman status dokumen.</p>
+                    <strong style="color:#0284c7; font-size:15px; display:block; margin-bottom:4px;">Dokumen KYC Anda Sedang Ditinjau Admin</strong>
+                    <p style="color:#0369a1; font-size:13px;">Estimasi verifikasi 1x24 jam kerja. Pantau pembaruan status di halaman status.</p>
                 </div>
                 <a href="<?= base_url('/kyc/status') ?>" class="kyc-btn-action" style="background:#0284c7; color:#ffffff;">Lihat Detail Status</a>
             </div>
-        <?php elseif ($kycStat === 'approved'): ?>
-            <div class="kyc-banner approved">
+        <?php elseif ($kycStatus === 'rejected'): ?>
+            <div class="kyc-banner unverified" style="background:rgba(239, 68, 68, 0.12); border-color:rgba(239, 68, 68, 0.3);">
                 <div>
-                    <strong style="color:#15803d; font-size:15px;">Akun Terverifikasi Resmi (KYC Approved)</strong>
-                    <p style="color:#64748b; font-size:13px; margin-top:4px;">Identitas Anda telah diakui oleh CamHub. Anda dapat melakukan booking dan sewa kamera tanpa batasan.</p>
+                    <strong style="color:#b91c1c; font-size:15px; display:block; margin-bottom:4px;">Pengajuan KYC Ditolak</strong>
+                    <p style="color:#991b1b; font-size:13px;">Alasan: <?= htmlspecialchars($kycRecord['rejection_reason'] ?? 'Foto KTP buram atau data tidak cocok.') ?></p>
                 </div>
-                <a href="<?= base_url('/katalog') ?>" class="kyc-btn-action" style="background:#10b981; color:#ffffff;">Sewa Kamera Sekarang</a>
+                <a href="<?= base_url('/kyc') ?>" class="kyc-btn-action" style="background:#b91c1c; color:#ffffff;">Ajukan Ulang Dokumen</a>
+            </div>
+        <?php else: ?>
+            <div class="kyc-banner unverified">
+                <div>
+                    <strong style="color:#b45309; font-size:15px; display:block; margin-bottom:4px;">Verifikasi Identitas Anda Belum Lengkap</strong>
+                    <p style="color:#92400e; font-size:13px;">Unggah foto KTP dan swafoto untuk membuka fitur penyewaan kamera bergaransi rekening bersama.</p>
+                </div>
+                <a href="<?= base_url('/kyc') ?>" class="kyc-btn-action" style="background:#d97706; color:#ffffff;">Unggah KTP Sekarang</a>
             </div>
         <?php endif; ?>
 
@@ -541,5 +590,25 @@
         </div>
     </main>
 
+    <script>
+        function toggleCamHubTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('camhub_theme', newTheme);
+            syncThemeToggleUI(newTheme);
+        }
+
+        function syncThemeToggleUI(theme) {
+            const text = document.getElementById('themeToggleText');
+            if (!text) return;
+            text.textContent = (theme === 'dark') ? 'Mode Terang' : 'Mode Gelap';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.documentElement.getAttribute('data-theme') || 'dark';
+            syncThemeToggleUI(active);
+        });
+    </script>
 </body>
 </html>

@@ -13,6 +13,12 @@
         p { color:#94A3B8; font-size:14px; margin-bottom:24px; line-height:1.6; }
         .btn { background:#2563EB; color:#fff; text-decoration:none; padding:12px 24px; border-radius:8px; font-weight:700; display:inline-block; }
     </style>
+    <script>
+        (function() {
+            const theme = localStorage.getItem('camhub_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 <body>
     <div class="card">
@@ -23,10 +29,30 @@
             <form action="<?= base_url('/logout') ?>" method="POST" style="margin:0;">
                 <?= csrf_field() ?>
                 <button type="submit" style="background:#dc2626; color:#ffffff; font-weight:700; border-radius:8px; padding:12px 20px; border:none; cursor:pointer;">
-                    Keluar Akun
+                    Keluar
                 </button>
             </form>
         </div>
     </div>
+    <script>
+        function toggleCamHubTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('camhub_theme', newTheme);
+            syncThemeToggleUI(newTheme);
+        }
+
+        function syncThemeToggleUI(theme) {
+            const text = document.getElementById('themeToggleText');
+            if (!text) return;
+            text.textContent = (theme === 'dark') ? 'Mode Terang' : 'Mode Gelap';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.documentElement.getAttribute('data-theme') || 'dark';
+            syncThemeToggleUI(active);
+        });
+    </script>
 </body>
 </html>

@@ -48,6 +48,12 @@
         .btn-action-primary { background: #EFF6FF; color: #2563EB; border-color: #BFDBFE; }
         .btn-action-danger { color: #DC2626; border-color: #FECACA; background: #FEF2F2; cursor: pointer; }
     </style>
+    <script>
+        (function() {
+            const theme = localStorage.getItem('camhub_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 <body>
 
@@ -59,34 +65,37 @@
 
         <ul class="nav-menu">
             <li class="nav-item <?= ($activeMenu === 'beranda') ? 'active' : '' ?>">
-                <a href="<?= base_url('/dashboard/mitra') ?>"><span class="nav-icon">⌂</span> Beranda</a>
+                <a href="<?= base_url('/dashboard/mitra') ?>">Beranda</a>
             </li>
             <li class="nav-item <?= ($activeMenu === 'produk') ? 'active' : '' ?>">
-                <a href="<?= base_url('/dashboard/mitra/produk') ?>"><span class="nav-icon">▣</span> Kelola Produk</a>
+                <a href="<?= base_url('/dashboard/mitra/produk') ?>">Kelola Produk</a>
             </li>
             <li class="nav-item <?= ($activeMenu === 'jadwal') ? 'active' : '' ?>">
-                <a href="<?= base_url('/dashboard/mitra/jadwal') ?>"><span class="nav-icon">▦</span> Jadwal Sewa</a>
+                <a href="<?= base_url('/dashboard/mitra/jadwal') ?>">Jadwal Sewa</a>
             </li>
             <li class="nav-item <?= ($activeMenu === 'transaksi') ? 'active' : '' ?>">
-                <a href="<?= base_url('/dashboard/mitra/transaksi') ?>"><span class="nav-icon">⧉</span> Transaksi</a>
+                <a href="<?= base_url('/dashboard/mitra/transaksi') ?>">Transaksi</a>
             </li>
             <li class="nav-item <?= ($activeMenu === 'saldo') ? 'active' : '' ?>">
-                <a href="<?= base_url('/dashboard/mitra/saldo') ?>"><span class="nav-icon">Rp</span> Saldo & Pencairan</a>
+                <a href="<?= base_url('/dashboard/mitra/saldo') ?>">Saldo & Pencairan</a>
             </li>
             <li class="nav-item <?= ($activeMenu === 'pengaturan') ? 'active' : '' ?>">
-                <a href="<?= base_url('/dashboard/mitra/pengaturan') ?>"><span class="nav-icon">⚙</span> Pengaturan</a>
+                <a href="<?= base_url('/dashboard/mitra/pengaturan') ?>">Pengaturan</a>
             </li>
             <li class="nav-item <?= ($activeMenu === 'titip-jual') ? 'active' : '' ?>">
-                <a href="<?= base_url('/dashboard/mitra/titip-jual') ?>"><span class="nav-icon">📦</span> Kelola Titip Jual</a>
+                <a href="<?= base_url('/dashboard/mitra/titip-jual') ?>">Kelola Titip Jual</a>
             </li>
         </ul>
 
         <div class="sidebar-footer">
-            <a href="<?= base_url('/') ?>" target="_blank"><span>🌐</span> Website Publik</a>
+            <button type="button" class="btn-theme-toggle" onclick="toggleCamHubTheme()" title="Beralih Mode Gelap/Terang" style="width:100%; background:#16243a; color:#cbd5e1; border:1px solid #1e3a5f; padding:9px 12px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; text-align:center; margin-bottom:8px;">
+                <span id="themeToggleText">Mode Terang</span>
+            </button>
+            <a href="<?= base_url('/') ?>" target="_blank">Website Publik</a>
             <form action="<?= base_url('/logout') ?>" method="POST" style="margin:0; width:100%;">
                 <?= csrf_field() ?>
                 <button type="submit" style="background:#dc2626; color:#ffffff; font-weight:700; border-radius:8px; justify-content:center; padding:10px 14px; margin-top:8px; width:100%; display:flex; align-items:center; gap:8px; border:none; cursor:pointer;">
-                    <span>🚪</span> Keluar Akun
+                    Keluar
                 </button>
             </form>
         </div>
@@ -99,7 +108,7 @@
                 <p style="color:#64748B; font-size:14px; margin-top:4px;">Daftar seluruh kamera, lensa, dan aksesoris yang terdaftar di etalase toko Anda.</p>
             </div>
             <a href="<?= base_url('/dashboard/mitra/produk/tambah') ?>" class="btn-add">
-                <span>+</span> Tambah Produk Baru
+                Tambah Produk Baru
             </a>
         </div>
 
@@ -136,8 +145,7 @@
                                             <?php if (!empty($p['primary_image'])): ?>
                                                 <img src="<?= base_url('/' . ltrim($p['primary_image'], '/')) ?>" alt="" onerror="this.src='<?= base_url('/assets/img/canon_r50.png') ?>'">
                                             <?php else: ?>
-                                                <span>📷</span>
-                                            <?php endif; ?>
+                                                <?php endif; ?>
                                         </div>
                                         <div>
                                             <strong style="color:#0F172A; display:block;"><?= htmlspecialchars($p['name']) ?></strong>
@@ -184,5 +192,25 @@
         </div>
     </main>
 
+    <script>
+        function toggleCamHubTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('camhub_theme', newTheme);
+            syncThemeToggleUI(newTheme);
+        }
+
+        function syncThemeToggleUI(theme) {
+            const text = document.getElementById('themeToggleText');
+            if (!text) return;
+            text.textContent = (theme === 'dark') ? 'Mode Terang' : 'Mode Gelap';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.documentElement.getAttribute('data-theme') || 'dark';
+            syncThemeToggleUI(active);
+        });
+    </script>
 </body>
 </html>

@@ -1,3 +1,6 @@
+<?php
+$user = $user ?? auth();
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -7,11 +10,62 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('camhub_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', system-ui, sans-serif; }
-        body { background:#f8fafc; color:#0f172a; min-height:100vh; display:flex; }
+        :root {
+            --bg-page: #0b1320;
+            --bg-surface: #112240;
+            --bg-card: #132644;
+            --bg-subtle: rgba(255, 255, 255, 0.04);
+            --bg-input: #0d1b30;
+            --border-color: #1e3a5f;
+            --border-subtle: #162c4a;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
+        }
 
-        /* SIDEBAR IDENTIK DENGAN DASHBOARD PELANGGAN */
+        html[data-theme="dark"], html:not([data-theme="light"]) {
+            --bg-page: #0b1320;
+            --bg-surface: #112240;
+            --bg-card: #132644;
+            --bg-subtle: rgba(255, 255, 255, 0.04);
+            --bg-input: #0d1b30;
+            --border-color: #1e3a5f;
+            --border-subtle: #162c4a;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
+        }
+
+        html[data-theme="light"] {
+            --bg-page: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-card: #ffffff;
+            --bg-subtle: #f1f5f9;
+            --bg-input: #ffffff;
+            --border-color: #e2e8f0;
+            --border-subtle: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --accent-blue: #2563eb;
+            --accent-amber: #d97706;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', system-ui, sans-serif; }
+        body { background:var(--bg-page); color:var(--text-primary); min-height:100vh; display:flex; }
+
+        /* SIDEBAR (CLEAN TEXT-ONLY, NO ICONS) */
         .sidebar {
             width:260px;
             background:#0c192c;
@@ -32,10 +86,10 @@
             letter-spacing:-0.5px;
         }
         .sidebar-user {
-            margin-bottom:36px;
+            margin-bottom:32px;
         }
         .user-fullname {
-            font-size:18px;
+            font-size:17px;
             font-weight:700;
             color:#ffffff;
             line-height:1.3;
@@ -54,9 +108,7 @@
             flex:1;
         }
         .nav-item a {
-            display:flex;
-            align-items:center;
-            gap:14px;
+            display:block;
             padding:12px 16px;
             border-radius:10px;
             font-size:14px;
@@ -73,25 +125,37 @@
             background:#1e293b;
             color:#ffffff;
             font-weight:700;
+            border-left:3px solid #3b82f6;
         }
-        .nav-icon {
-            font-size:16px;
-            width:20px;
-            text-align:center;
-            display:inline-block;
-        }
+        
         .sidebar-bottom {
             margin-top:auto;
             padding-top:24px;
             border-top:1px solid #1e293b;
             display:flex;
             flex-direction:column;
-            gap:8px;
+            gap:10px;
+        }
+        .btn-theme-toggle {
+            width:100%;
+            background:#16243a;
+            color:#cbd5e1;
+            border:1px solid #1e3a5f;
+            padding:10px 14px;
+            border-radius:8px;
+            font-size:13px;
+            font-weight:600;
+            cursor:pointer;
+            text-align:center;
+            transition:all 0.2s;
+        }
+        .btn-theme-toggle:hover {
+            background:#1e293b;
+            color:#ffffff;
+            border-color:#3b82f6;
         }
         .btn-sidebar-link {
-            display:flex;
-            align-items:center;
-            gap:12px;
+            display:block;
             padding:10px 14px;
             color:#94a3b8;
             font-size:13px;
@@ -109,9 +173,6 @@
             background:transparent;
             border:none;
             cursor:pointer;
-            display:flex;
-            align-items:center;
-            gap:12px;
             padding:10px 14px;
             color:#ef4444;
             font-size:13px;
@@ -128,7 +189,7 @@
         /* MAIN CONTENT AREA */
         .main-content {
             flex:1;
-            padding:48px 56px;
+            padding:40px 48px 60px;
             overflow-y:auto;
             max-width:960px;
         }
@@ -137,11 +198,11 @@
             align-items:center;
             gap:8px;
             font-size:13px;
-            color:#64748b;
+            color:var(--text-muted);
             margin-bottom:20px;
         }
         .breadcrumb a {
-            color:#2563eb;
+            color:var(--accent-blue);
             text-decoration:none;
             font-weight:600;
         }
@@ -150,9 +211,9 @@
         }
 
         .alert-success {
-            background:#dcfce7;
-            border:1px solid #bbf7d0;
-            color:#15803d;
+            background:rgba(16, 185, 129, 0.15);
+            border:1px solid rgba(16, 185, 129, 0.3);
+            color:#34d399;
             padding:14px 18px;
             border-radius:12px;
             margin-bottom:24px;
@@ -162,28 +223,28 @@
 
         /* STATUS CARD */
         .status-card {
-            background:#ffffff;
-            border:1px solid #e2e8f0;
+            background:var(--bg-card);
+            border:1px solid var(--border-color);
             border-radius:16px;
-            padding:40px 32px;
+            padding:48px 40px;
             text-align:center;
+            box-shadow:0 4px 20px rgba(0,0,0,0.06);
             margin-bottom:28px;
-            box-shadow:0 1px 3px rgba(0,0,0,0.02);
         }
         .status-icon-circle {
             width:72px;
             height:72px;
             border-radius:50%;
-            margin:0 auto 18px;
+            margin:0 auto 20px;
             display:flex;
             align-items:center;
             justify-content:center;
             font-size:32px;
             font-weight:800;
         }
-        .status-approved .status-icon-circle { background:#dcfce7; color:#15803d; border:2px solid #bbf7d0; }
-        .status-pending .status-icon-circle { background:#fef3c7; color:#d97706; border:2px solid #fde68a; }
-        .status-rejected .status-icon-circle { background:#fee2e2; color:#b91c1c; border:2px solid #fecaca; }
+        .status-approved .status-icon-circle { background:rgba(16, 185, 129, 0.15); border:2px solid rgba(16, 185, 129, 0.4); color:#34d399; }
+        .status-pending .status-icon-circle { background:rgba(245, 158, 11, 0.15); border:2px solid rgba(245, 158, 11, 0.4); color:#fbbf24; }
+        .status-rejected .status-icon-circle { background:rgba(239, 68, 68, 0.15); border:2px solid rgba(239, 68, 68, 0.4); color:#f87171; }
 
         .badge-status {
             display:inline-block;
@@ -194,18 +255,18 @@
             letter-spacing:0.5px;
             text-transform:uppercase;
         }
-        .badge-approved { background:#dcfce7; color:#15803d; border:1px solid #bbf7d0; }
-        .badge-pending { background:#fef3c7; color:#d97706; border:1px solid #fde68a; }
-        .badge-rejected { background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; }
+        .badge-approved { background:rgba(16, 185, 129, 0.15); color:#34d399; border:1px solid rgba(16, 185, 129, 0.3); }
+        .badge-pending { background:rgba(245, 158, 11, 0.15); color:#fbbf24; border:1px solid rgba(245, 158, 11, 0.3); }
+        .badge-rejected { background:rgba(239, 68, 68, 0.15); color:#f87171; border:1px solid rgba(239, 68, 68, 0.3); }
 
         .status-title {
             font-size:24px;
             font-weight:800;
-            color:#0f172a;
+            color:var(--text-primary);
             letter-spacing:-0.5px;
         }
         .status-desc {
-            color:#64748b;
+            color:var(--text-secondary);
             font-size:14px;
             line-height:1.6;
             max-width:620px;
@@ -213,8 +274,8 @@
         }
 
         .details-table {
-            background:#f8fafc;
-            border:1px solid #e2e8f0;
+            background:var(--bg-subtle);
+            border:1px solid var(--border-subtle);
             border-radius:12px;
             max-width:600px;
             margin:0 auto 28px;
@@ -225,12 +286,12 @@
             justify-content:space-between;
             align-items:center;
             padding:12px 18px;
-            border-bottom:1px solid #e2e8f0;
+            border-bottom:1px solid var(--border-subtle);
             font-size:13px;
         }
         .detail-row:last-child { border-bottom:none; }
-        .detail-label { color:#64748b; font-weight:600; }
-        .detail-val { color:#0f172a; font-weight:700; }
+        .detail-label { color:var(--text-muted); font-weight:600; }
+        .detail-val { color:var(--text-primary); font-weight:700; }
 
         .action-row {
             display:flex;
@@ -251,27 +312,27 @@
         .btn-dash:hover { background:#1d4ed8; }
         .btn-outline {
             background:transparent;
-            color:#475569;
-            border:1px solid #cbd5e1;
+            color:var(--text-primary);
+            border:1px solid var(--border-color);
             text-decoration:none;
             padding:12px 24px;
             border-radius:10px;
-            font-weight:600;
+            font-weight:700;
             font-size:14px;
             transition:0.2s;
         }
-        .btn-outline:hover { background:#f1f5f9; color:#0f172a; }
+        .btn-outline:hover { background:var(--bg-subtle); border-color:var(--accent-blue); }
 
-        @media (max-width: 900px) {
+        @media (max-width: 768px) {
             body { flex-direction:column; }
             .sidebar { width:100%; min-height:auto; }
-            .main-content { padding:24px; }
+            .main-content { padding:24px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR KIRI VERTIKAL IDENTIK DASHBOARD PELANGGAN -->
+    <!-- SIDEBAR KIRI VERTIKAL (CLEAN TEXT-ONLY, NO ICONS) -->
     <aside class="sidebar">
         <a href="<?= base_url() ?>" class="sidebar-brand">CamHub</a>
         
@@ -282,59 +343,41 @@
 
         <ul class="nav-menu">
             <li class="nav-item">
-                <a href="<?= base_url('/dashboard/pelanggan') ?>">
-                    <span class="nav-icon">⌂</span>
-                    <span>Beranda</span>
-                </a>
+                <a href="<?= base_url('/dashboard/pelanggan') ?>">Beranda</a>
             </li>
             <li class="nav-item">
-                <a href="<?= base_url('/pesanan-saya') ?>">
-                    <span class="nav-icon">🗂</span>
-                    <span>Pesanan Saya</span>
-                </a>
+                <a href="<?= base_url('/pesanan-saya') ?>">Pesanan Saya</a>
             </li>
             <li class="nav-item">
-                <a href="<?= base_url('/pesanan-saya?type=rental') ?>">
-                    <span class="nav-icon">📷</span>
-                    <span>Sewa Saya</span>
-                </a>
+                <a href="<?= base_url('/pesanan-saya?type=rental') ?>">Sewa Saya</a>
             </li>
             <li class="nav-item">
-                <a href="<?= base_url('/pesanan-saya?type=sale') ?>">
-                    <span class="nav-icon">🛒</span>
-                    <span>Jual Beli Saya</span>
-                </a>
+                <a href="<?= base_url('/pesanan-saya?type=sale') ?>">Jual Beli Saya</a>
             </li>
             <li class="nav-item">
-                <a href="<?= base_url('/titip-jual/saya') ?>">
-                    <span class="nav-icon">🏷️</span>
-                    <span>Titip Jual Saya</span>
-                </a>
+                <a href="<?= base_url('/titip-jual/saya') ?>">Titip Jual Saya</a>
             </li>
             <li class="nav-item active">
-                <a href="<?= base_url('/kyc/status') ?>">
-                    <span class="nav-icon">📄</span>
-                    <span>Dokumen KYC</span>
-                </a>
+                <a href="<?= base_url('/kyc/status') ?>">Dokumen KYC</a>
             </li>
             <li class="nav-item">
-                <a href="<?= base_url('/profil') ?>">
-                    <span class="nav-icon">⚙️</span>
-                    <span>Pengaturan</span>
-                </a>
+                <a href="<?= base_url('/profil') ?>">Pengaturan</a>
             </li>
         </ul>
 
         <div class="sidebar-bottom">
+            <button type="button" class="btn-theme-toggle" onclick="toggleCamHubTheme()" title="Beralih Mode Gelap/Terang">
+                <span id="themeToggleText">Mode Terang</span>
+            </button>
+
             <a href="<?= base_url('/') ?>" class="btn-sidebar-link">
-                <span>🌐</span>
-                <span>Lihat Beranda Publik</span>
+                Lihat Beranda Publik
             </a>
+
             <form action="<?= base_url('/logout') ?>" method="POST" style="margin:0;">
                 <?= csrf_field() ?>
                 <button type="submit" class="btn-sidebar-logout">
-                    <span>🚪</span>
-                    <span>Keluar Akun</span>
+                    Keluar
                 </button>
             </form>
         </div>
@@ -349,7 +392,7 @@
         </div>
 
         <?php if (!empty($success)): ?>
-            <div class="alert-success">✓ <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?></div>
+            <div class="alert-success"><?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?></div>
         <?php endif; ?>
 
         <?php if (!empty($kyc)): ?>
@@ -414,8 +457,8 @@
             </div>
         <?php else: ?>
             <div class="status-card">
-                <div class="status-icon-circle" style="background:#f1f5f9; border:2px solid #cbd5e1; color:#64748b;">
-                    🪪
+                <div class="status-icon-circle" style="background:var(--bg-subtle); border:2px solid var(--border-color); color:var(--text-muted);">
+                    KTP
                 </div>
                 <h1 class="status-title">Belum Ada Pengajuan KYC</h1>
                 <p class="status-desc">
@@ -429,5 +472,25 @@
         <?php endif; ?>
     </main>
 
+    <script>
+        function toggleCamHubTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('camhub_theme', newTheme);
+            syncThemeToggleUI(newTheme);
+        }
+
+        function syncThemeToggleUI(theme) {
+            const text = document.getElementById('themeToggleText');
+            if (!text) return;
+            text.textContent = (theme === 'dark') ? 'Mode Terang' : 'Mode Gelap';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.documentElement.getAttribute('data-theme') || 'dark';
+            syncThemeToggleUI(active);
+        });
+    </script>
 </body>
 </html>
