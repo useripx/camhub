@@ -1015,7 +1015,7 @@
                 </a>
 
                 <?php if ($product->is_sale && $product->sale_price > 0): ?>
-                    <a href="<?= base_url('marketplace/buy?product_id=' . $product->id) ?>" class="btn-buy-marketplace">
+                    <a href="<?= base_url('beli/' . $product->slug) ?>" class="btn-buy-marketplace">
                         Beli Unit Ini (Rp <?= number_format($product->sale_price, 0, ',', '.') ?>)
                     </a>
                 <?php endif; ?>

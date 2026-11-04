@@ -17,6 +17,7 @@ class Product implements ArrayAccess
     public ?string $condition_note = null;
     public bool $is_rental = true;
     public bool $is_sale = false;
+    public bool $is_for_sale = false;
     public bool $is_consignment = false;
     public float $sale_price = 0.0;
     public int $stock_quantity = 1;
