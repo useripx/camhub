@@ -8,6 +8,7 @@ use App\Controllers\HomeController;
 use App\Controllers\CatalogController;
 use App\Controllers\ProductDetailController;
 use App\Controllers\PartnerDashboardController;
+use App\Controllers\BookingController;
 
 /**
  * Web Routes - CamHub
@@ -76,3 +77,9 @@ Router::post('/profil/edit', [CustomerProfileController::class, 'updateProfile']
 Router::get('/kyc', [KycController::class, 'showKycForm'], ['auth', 'role:customer']);
 Router::post('/kyc/submit', [KycController::class, 'submit'], ['auth', 'role:customer']);
 Router::get('/kyc/status', [KycController::class, 'showKycStatus'], ['auth', 'role:customer']);
+
+// 10. Penyewaan & Pemesanan Kamera (Tahap 07: Mockup CamHub — Booking & Checkout.png)
+Router::get('/checkout/{slug}', [BookingController::class, 'checkout'], ['auth']);
+Router::post('/checkout/{slug}/proses', [BookingController::class, 'process'], ['auth']);
+Router::get('/booking/{id}/sukses', [BookingController::class, 'success'], ['auth']);
+Router::get('/pesanan-saya', [BookingController::class, 'customerOrders'], ['auth', 'role:customer']);

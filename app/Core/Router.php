@@ -106,7 +106,7 @@ class Router
                 }
 
                 $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
-                return self::executeAction($route['action'], $params);
+                return self::executeAction($route['action'], array_values($params));
             }
         }
 
