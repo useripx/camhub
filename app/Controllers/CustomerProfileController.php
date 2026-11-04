@@ -34,6 +34,8 @@ class CustomerProfileController
         return view('customer.profile', [
             'pageTitle' => 'Profil Saya & Pengaturan Akun — CamHub',
             'profile' => $profile,
+            'kycStatus' => $profile['kyc_status'] ?? 'unverified',
+            'kycRecord' => $profile['kyc'] ?? null,
             'user' => $user,
             'errors' => flash('errors') ?? [],
             'error' => flash('error'),

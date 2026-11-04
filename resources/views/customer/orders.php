@@ -91,33 +91,36 @@ if (empty($bookings) && ($activeType === 'rental' || $activeType === 'all')) {
             width:260px;
             background:#0c192c;
             color:#ffffff;
-            padding:36px 24px;
+            padding:32px 24px 24px;
             display:flex;
             flex-direction:column;
             flex-shrink:0;
-            min-height:100vh;
+            height:100vh;
+            position:sticky;
+            top:0;
+            overflow-y:auto;
         }
         .sidebar-brand {
             font-size:24px;
             font-weight:800;
             color:#ffffff;
             text-decoration:none;
-            margin-bottom:32px;
+            margin-bottom:24px;
             display:block;
             letter-spacing:-0.5px;
         }
         .sidebar-user {
-            margin-bottom:32px;
+            margin-bottom:24px;
         }
         .user-fullname {
-            font-size:17px;
+            font-size:16px;
             font-weight:700;
             color:#ffffff;
             line-height:1.3;
             margin-bottom:4px;
         }
         .user-role-label {
-            font-size:13px;
+            font-size:12px;
             color:#94a3b8;
             font-weight:500;
         }
@@ -125,14 +128,13 @@ if (empty($bookings) && ($activeType === 'rental' || $activeType === 'all')) {
             list-style:none;
             display:flex;
             flex-direction:column;
-            gap:6px;
-            flex:1;
+            gap:4px;
         }
         .nav-item a {
             display:block;
-            padding:12px 16px;
-            border-radius:10px;
-            font-size:14px;
+            padding:10px 14px;
+            border-radius:8px;
+            font-size:13px;
             font-weight:600;
             color:#94a3b8;
             text-decoration:none;
@@ -150,12 +152,12 @@ if (empty($bookings) && ($activeType === 'rental' || $activeType === 'all')) {
         }
         
         .sidebar-bottom {
-            margin-top:auto;
-            padding-top:24px;
-            border-top:1px solid #1e293b;
+            margin-top:16px;
+            padding-top:16px;
+            border-top:1px solid #1e3a5f;
             display:flex;
             flex-direction:column;
-            gap:10px;
+            gap:8px;
         }
         .btn-theme-toggle {
             width:100%;
