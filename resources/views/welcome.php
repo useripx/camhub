@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title ?? 'CamHub') ?></title>
     <link rel="stylesheet" href="<?= asset_url('css/app.css') ?>">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('camhub_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 <body>
 
@@ -26,6 +32,10 @@
 
             <!-- AUTH BUTTONS (Login / Register / Dashboard) -->
             <div class="nav-auth-buttons" style="display: flex; align-items: center; gap: 10px;">
+                <button type="button" onclick="toggleCamHubTheme()" style="display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:8px; border:1px solid #334155; background:#1e293b; color:#ffffff; font-size:14px; font-weight:600; cursor:pointer;" title="Beralih Mode Gelap/Terang">
+                    <span id="themeIconWrap"></span>
+                    <span id="themeToggleText">Mode Terang</span>
+                </button>
                 <?php if (auth_check()): ?>
                     <?php 
                         $currentUser = auth();
@@ -34,9 +44,10 @@
                             'partner' => base_url('/dashboard/mitra'),
                             default => base_url('/dashboard/pelanggan')
                         };
+                        $displayName = $currentUser['full_name'] ?? $currentUser['username'] ?? 'Akun Saya';
                     ?>
-                    <a href="<?= $dashUrl ?>" style="background: #2563eb; color: #ffffff; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
-                        <span>👤</span> Dashboard (<?= htmlspecialchars($currentUser['username'] ?? $currentUser['full_name'], ENT_QUOTES, 'UTF-8') ?>)
+                    <a href="<?= $dashUrl ?>" style="background: #2563eb; color: #ffffff; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center;">
+                        <?= htmlspecialchars($displayName, ENT_QUOTES, 'UTF-8') ?>
                     </a>
                     <a href="<?= base_url('/logout') ?>" style="background: #fee2e2; color: #dc2626; padding: 8px 14px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
                         Keluar
@@ -126,5 +137,32 @@
         </div>
     </footer>
 
+    <script>
+        const SUN_ICON = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+        const MOON_ICON = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+        function toggleCamHubTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('camhub_theme', newTheme);
+            syncThemeToggleUI(newTheme);
+        }
+        function syncThemeToggleUI(theme) {
+            const text = document.getElementById('themeToggleText');
+            const iconWrap = document.getElementById('themeIconWrap');
+            if (!text) return;
+            if (theme === 'dark') {
+                text.textContent = 'Mode Terang';
+                if (iconWrap) iconWrap.innerHTML = SUN_ICON;
+            } else {
+                text.textContent = 'Mode Gelap';
+                if (iconWrap) iconWrap.innerHTML = MOON_ICON;
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.documentElement.getAttribute('data-theme') || 'dark';
+            syncThemeToggleUI(active);
+        });
+    </script>
 </body>
 </html>
