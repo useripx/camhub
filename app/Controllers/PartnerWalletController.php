@@ -73,3 +73,4 @@ class PartnerWalletController
         redirect(base_url('/dashboard/mitra/saldo'));
     }
 }
+
