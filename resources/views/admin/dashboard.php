@@ -223,13 +223,13 @@
         <div>
             <a href="<?= base_url('/dashboard/admin') ?>" class="sidebar-brand">CamHub</a>
             <ul class="sidebar-nav">
-                <li><a href="<?= base_url('/dashboard/admin') ?>" class="active">Beranda</a></li>
-                <li><a href="<?= base_url('/dashboard/admin') ?>">Verifikasi KYC</a></li>
-                <li><a href="<?= base_url('/dashboard/admin') ?>">Jadwal Unit</a></li>
-                <li><a href="<?= base_url('/dashboard/admin') ?>">Transaksi</a></li>
-                <li><a href="<?= base_url('/dashboard/admin') ?>">Manajemen Denda</a></li>
-                <li><a href="<?= base_url('/dashboard/admin') ?>">Laporan</a></li>
-                <li><a href="<?= base_url('/dashboard/admin') ?>">Pengaturan</a></li>
+                <li><a href="<?= base_url('/dashboard/admin') ?>" class="<?= ($activeMenu ?? 'beranda') === 'beranda' ? 'active' : '' ?>">Beranda</a></li>
+                <li><a href="<?= base_url('/dashboard/admin/kyc') ?>" class="<?= ($activeMenu ?? '') === 'kyc' ? 'active' : '' ?>">Verifikasi KYC</a></li>
+                <li><a href="<?= base_url('/dashboard/admin/jadwal') ?>" class="<?= ($activeMenu ?? '') === 'jadwal' ? 'active' : '' ?>">Jadwal Unit</a></li>
+                <li><a href="<?= base_url('/dashboard/admin/transaksi') ?>" class="<?= ($activeMenu ?? '') === 'transaksi' ? 'active' : '' ?>">Transaksi</a></li>
+                <li><a href="<?= base_url('/dashboard/admin/denda') ?>" class="<?= ($activeMenu ?? '') === 'denda' ? 'active' : '' ?>">Manajemen Denda</a></li>
+                <li><a href="<?= base_url('/dashboard/admin/pengaturan') ?>" class="<?= ($activeMenu ?? '') === 'laporan' ? 'active' : '' ?>">Laporan</a></li>
+                <li><a href="<?= base_url('/dashboard/admin/pengaturan') ?>" class="<?= ($activeMenu ?? '') === 'pengaturan' ? 'active' : '' ?>">Pengaturan</a></li>
             </ul>
         </div>
 

@@ -53,8 +53,20 @@ Router::get('/logout', [AuthController::class, 'logout'], ['auth']);
 // 7. Dashboard Peran Terproteksi (RBAC Route Guard)
 Router::get('/dashboard/pelanggan', [CustomerProfileController::class, 'dashboard'], ['auth', 'role:customer']);
 
-// 8. Dashboard Administrator (Tahap 09: Presisi 100% CamHub — Dashboard Admin.png)
+// 8. Dashboard Administrator (Tahap 09 & 11: Pusat Kendali Super Administrator)
 Router::get('/dashboard/admin', [AdminDashboardController::class, 'index'], ['auth', 'role:admin']);
+Router::get('/dashboard/admin/kyc', [AdminDashboardController::class, 'kyc'], ['auth', 'role:admin']);
+Router::post('/dashboard/admin/kyc/{id}/approve', [AdminDashboardController::class, 'approveKyc'], ['auth', 'role:admin']);
+Router::post('/dashboard/admin/kyc/{id}/reject', [AdminDashboardController::class, 'rejectKyc'], ['auth', 'role:admin']);
+Router::get('/dashboard/admin/transaksi', [AdminDashboardController::class, 'transactions'], ['auth', 'role:admin']);
+Router::post('/dashboard/admin/transaksi/sengketa/{id}/resolusi', [AdminDashboardController::class, 'resolveDispute'], ['auth', 'role:admin']);
+Router::post('/dashboard/admin/transaksi/pencairan/{id}/proses', [AdminDashboardController::class, 'processWithdrawal'], ['auth', 'role:admin']);
+Router::get('/dashboard/admin/jadwal', [AdminDashboardController::class, 'schedule'], ['auth', 'role:admin']);
+Router::get('/dashboard/admin/denda', [AdminDashboardController::class, 'fines'], ['auth', 'role:admin']);
+Router::post('/dashboard/admin/denda/simpan', [AdminDashboardController::class, 'storeFine'], ['auth', 'role:admin']);
+Router::post('/dashboard/admin/denda/{id}/lunas', [AdminDashboardController::class, 'payFine'], ['auth', 'role:admin']);
+Router::get('/dashboard/admin/pengaturan', [AdminDashboardController::class, 'settings'], ['auth', 'role:admin']);
+Router::post('/dashboard/admin/pengguna/{id}/status', [AdminDashboardController::class, 'toggleUserStatus'], ['auth', 'role:admin']);
 
 // 9. Dashboard Mitra Lapak (Tahap 06: Mockup CamHub — Dashboard Mitra Lapak.png)
 Router::get('/dashboard/mitra', [PartnerDashboardController::class, 'index'], ['auth', 'role:partner']);
