@@ -1,13 +1,14 @@
+
 # Laporan Bug: SQLSTATE[01000] Data Truncated for Column 'order_status'
 
-**ID Bug:** `BUG-ADM-001`  
-**Kategori:** Database Schema & Backend Service Integrity  
-**Tingkat Keparahan:** 🔴 Kritis (*Critical Blocker*)  
-**Status:** 🟢 **TERSELESAIKAN (*RESOLVED*)**  
-**Tanggal Kejadian:** 04 November 2026, 17:49 WIB  
-**Tanggal Perbaikan:** 04 November 2026, 18:10 WIB  
-**Branch:** `fix`  
-**Penanggung Jawab:** Kelompok 1 (Yogi Ario Pratama, Muhammad Regieyanto, Ivan Farrel Nanda Kristanto, Krisna Mukti)  
+**ID Bug:** `BUG-ADM-001`
+**Kategori:** Database Schema & Backend Service Integrity
+**Tingkat Keparahan:** 🔴 Kritis (*Critical Blocker*)
+**Status:** 🟢 **TERSELESAIKAN (*RESOLVED*)**
+**Tanggal Kejadian:** 04 November 2026, 17:49 WIB
+**Tanggal Perbaikan:** 04 November 2026, 18:10 WIB
+**Branch:** `fix`
+**Penanggung Jawab:** Kelompok 1 (Yogi Ario Pratama, Muhammad Regieyanto, Ivan Farrel Nanda Kristanto, Krisna Mukti)
 
 ---
 
@@ -16,6 +17,7 @@
 Saat Super Admin melakukan moderasi sengketa transaksi rekening bersama (*Escrow Dispute Resolution*) untuk transaksi berjenis **Jual Beli Kamera** (`sales_orders`) pada halaman **Pusat Transaksi & Rekening Bersama Escrow** (`/dashboard/admin/transaksi`), penekanan tombol **`✓ Cairkan ke Mitra`** gagal diproses dan memunculkan kotak galat (*flash error*) berwarna merah.
 
 ### Pesan Galat:
+
 ```text
 Gagal memproses resolusi sengketa: SQLSTATE[01000]: Warning: 1265 Data truncated for column 'order_status' at row 1
 ```
@@ -25,21 +27,23 @@ Gagal memproses resolusi sengketa: SQLSTATE[01000]: Warning: 1265 Data truncated
 ## 2. Bukti Visual (Evidence Screenshots)
 
 ### Sebelum Perbaikan (Kondisi Galat):
+
 Tangkapan layar pada saat admin mengeksekusi resolusi sengketa pesanan `#BUY-00018` (Escrow ID `#84`):
 ![Galat Resolusi Sengketa](file:///C:/Users/yogia/.gemini/antigravity/brain/ec57eb36-033d-444e-ade3-8d0c90550b05/.user_uploaded/media_1793789424004_b447d419.jpg)
 
 ### Setelah Perbaikan (Kondisi Sukses Terverifikasi di Browser):
+
 Tangkapan layar verifikasi langsung di peramban Chrome DevTools setelah perbaikan diterapkan:
 ![Sukses Resolusi Sengketa](file:///C:/Users/yogia/.gemini/antigravity/brain/ec57eb36-033d-444e-ade3-8d0c90550b05/.system_generated/steps/4205/media_0.png)
-*(Tampil banner hijau: "Sengketa Escrow #104 diputus untuk dicairkan ke toko mitra." tanpa error)*
+*(Tampil banner hijau: "Sengketa Escrow #104#104 diputus untuk dicairkan ke toko mitra." tanpa error)*
 
 ---
 
 ## 3. Analisis Akar Masalah (Root Cause Analysis)
 
-1. **Titik Panggilan Kode:**  
+1. **Titik Panggilan Kode:**
    Ketika tombol `✓ Cairkan ke Mitra` diklik, peramban mengirimkan request `POST /dashboard/admin/transaksi/sengketa/{id}/resolusi` dengan parameter `resolution = 'release'`.
-2. **Eksekusi Logika Bisnis:**  
+2. **Eksekusi Logika Bisnis:**
    Metode `AdminService::resolveDispute()` menangani putusan ini:
    ```php
    // File: app/Services/AdminService.php (Baris 140-143)
@@ -48,7 +52,7 @@ Tangkapan layar verifikasi langsung di peramban Chrome DevTools setelah perbaika
                 ->execute(['id' => $escrow['sales_order_id']]);
    }
    ```
-3. **Penyebab Inkonsistensi (*Schema vs Code Mismatch*):**  
+3. **Penyebab Inkonsistensi (*Schema vs Code Mismatch*):**
    - Pada skema awal basis data MySQL (`database/schema.sql` baris 199), kolom `order_status` didefinisikan sebagai:
      ```sql
      `order_status` ENUM('pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled') NOT NULL DEFAULT 'pending'
@@ -62,7 +66,9 @@ Tangkapan layar verifikasi langsung di peramban Chrome DevTools setelah perbaika
 ## 4. Langkah-Langkah Perbaikan (Fix Implementation)
 
 ### 1. Migrasi DDL Basis Data MySQL Live
+
 Mengeksekusi pembaruan struktur kolom secara langsung pada tabel `sales_orders`:
+
 ```sql
 ALTER TABLE `sales_orders` 
 MODIFY COLUMN `order_status` 
@@ -71,15 +77,20 @@ NOT NULL DEFAULT 'pending';
 ```
 
 ### 2. Sinkronisasi Skema Sumber (`database/schema.sql`)
+
 Memperbarui berkas DDL master [`database/schema.sql`](file:///c:/laragon/www/camhub/database/schema.sql#L199) baris 199 agar setiap migrasi baru atau *fresh setup* memiliki definisi ENUM yang lengkap dan seragam.
 
 ### 3. Pembaruan Model Objek (`app/Models/SalesOrder.php`)
+
 Menambahkan penanganan status `'completed'` pada metode lencana tampilan dan menyediakan helper method:
+
 - Menambahkan `'completed' => '<span class="badge badge-success">Selesai</span>'` ke dalam `getStatusBadge()`.
 - Menambahkan helper method `isCompleted()`, `isCancelled()`, dan `isPaid()`.
 
 ### 4. Pembuatan Pengujian Otomatis (`tests/test_fix_admin_dispute.php`)
+
 Menyusun test suite mandiri yang menguji 6 skenario kritis:
+
 - `TEST-FIX-01`: Validasi kolom `order_status` di MySQL memuat enum `'completed'`.
 - `TEST-FIX-02`: Eksekusi `AdminService::resolveDispute()` opsi `release` berhasil tanpa galat.
 - `TEST-FIX-03`: Status `sales_orders.order_status = 'completed'` dan `escrow_transactions.status = 'released'`.
@@ -92,9 +103,10 @@ Menyusun test suite mandiri yang menguji 6 skenario kritis:
 ## 5. Hasil Pengujian & Verifikasi
 
 ### A. Pengujian Unit Mandiri (`php tests/test_fix_admin_dispute.php`):
+
 ```text
 ========================================================
-   CAMHUB TEST SUITE — FIX: ADMIN DISPUTE RESOLUTION    
+   CAMHUB TEST SUITE — FIX: ADMIN DISPUTE RESOLUTION  
 ========================================================
 
  [PASS] TEST-FIX-01: Validasi Skema MySQL sales_orders.order_status
@@ -116,6 +128,7 @@ HASIL PENGUJIAN: 6 / 6 BERHASIL (100% PASS)
 ```
 
 ### B. Master Regression Suite (`php tests/run_all.php`):
+
 ```text
 ========================================================
    MASTER REGRESSION SUITE: 15 SUITE PENGUJIAN CAMHUB   
@@ -144,6 +157,7 @@ STATUS     : SEMUA 147 PENGUJIAN 100% SUKSES HIJAU
 ```
 
 ### C. Verifikasi Interaktif Browser Chrome DevTools:
+
 - **Halaman Diuji:** `http://localhost/camhub/public/dashboard/admin/transaksi`
 - **Tindakan:** Mengklik tombol `✓ Cairkan ke Mitra` pada transaksi sengketa Escrow `#104`.
 - **Hasil:** Transaksi sengketa berhasil diputuskan, status dana escrow dirilis ke toko mitra, dan banner notifikasi hijau berhasil muncul di layar tanpa pesan galat SQL.
@@ -151,4 +165,5 @@ STATUS     : SEMUA 147 PENGUJIAN 100% SUKSES HIJAU
 ---
 
 ## 6. Riwayat Keputusan Arsitektur
+
 Pembaruan ini dicatat secara resmi pada [`Docs/Decision_Log.md`](file:///c:/laragon/www/camhub/Docs/Decision_Log.md) di bawah kode **`DEC-039`**.

@@ -228,7 +228,7 @@
                 <li><a href="<?= base_url('/dashboard/admin/jadwal') ?>" class="<?= ($activeMenu ?? '') === 'jadwal' ? 'active' : '' ?>">Jadwal Unit</a></li>
                 <li><a href="<?= base_url('/dashboard/admin/transaksi') ?>" class="<?= ($activeMenu ?? '') === 'transaksi' ? 'active' : '' ?>">Transaksi</a></li>
                 <li><a href="<?= base_url('/dashboard/admin/denda') ?>" class="<?= ($activeMenu ?? '') === 'denda' ? 'active' : '' ?>">Manajemen Denda</a></li>
-                <li><a href="<?= base_url('/dashboard/admin/pengaturan') ?>" class="<?= ($activeMenu ?? '') === 'laporan' ? 'active' : '' ?>">Laporan</a></li>
+                <li><a href="<?= base_url('/dashboard/admin/laporan') ?>" class="<?= ($activeMenu ?? '') === 'laporan' ? 'active' : '' ?>">Laporan</a></li>
                 <li><a href="<?= base_url('/dashboard/admin/pengaturan') ?>" class="<?= ($activeMenu ?? '') === 'pengaturan' ? 'active' : '' ?>">Pengaturan</a></li>
             </ul>
         </div>

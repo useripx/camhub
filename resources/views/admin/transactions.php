@@ -83,7 +83,7 @@
                 <li><a href="<?= base_url('/dashboard/admin/jadwal') ?>">Jadwal Unit</a></li>
                 <li><a href="<?= base_url('/dashboard/admin/transaksi') ?>" class="active">Transaksi</a></li>
                 <li><a href="<?= base_url('/dashboard/admin/denda') ?>">Manajemen Denda</a></li>
-                <li><a href="<?= base_url('/dashboard/admin/pengaturan') ?>">Laporan</a></li>
+                <li><a href="<?= base_url('/dashboard/admin/laporan') ?>">Laporan</a></li>
                 <li><a href="<?= base_url('/dashboard/admin/pengaturan') ?>">Pengaturan</a></li>
             </ul>
         </div>
