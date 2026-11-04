@@ -19,8 +19,7 @@
         .nav-item.active a { color: #FFFFFF; background: rgba(255, 255, 255, 0.1); }
         .nav-icon { font-size: 16px; width: 20px; text-align: center; }
         .sidebar-footer { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .sidebar-footer a, .sidebar-footer button { display: flex; align-items: center; gap: 10px; color: #94A3B8; text-decoration: none; font-size: 13px; font-weight: 600; background: none; border: none; cursor: pointer; padding: 8px 12px; border-radius: 6px; transition: 0.2s; width: 100%; text-align: left; }
-        .sidebar-footer button.btn-logout { color: #F87171; }
+        .sidebar-footer a { color: #94A3B8; text-decoration: none; font-size: 13px; font-weight: 600; padding: 4px 0; }
         
         .main-content { flex-grow: 1; padding: 40px 48px; overflow-y: auto; max-width: 1200px; }
         .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
@@ -77,13 +76,18 @@
             <li class="nav-item <?= ($activeMenu === 'pengaturan') ? 'active' : '' ?>">
                 <a href="<?= base_url('/dashboard/mitra/pengaturan') ?>"><span class="nav-icon">⚙</span> Pengaturan</a>
             </li>
+            <li class="nav-item <?= ($activeMenu === 'titip-jual') ? 'active' : '' ?>">
+                <a href="<?= base_url('/dashboard/mitra/titip-jual') ?>"><span class="nav-icon">📦</span> Kelola Titip Jual</a>
+            </li>
         </ul>
 
         <div class="sidebar-footer">
             <a href="<?= base_url('/') ?>" target="_blank"><span>🌐</span> Website Publik</a>
-            <form action="<?= base_url('/logout') ?>" method="POST" style="margin:0;">
+            <form action="<?= base_url('/logout') ?>" method="POST" style="margin:0; width:100%;">
                 <?= csrf_field() ?>
-                <button type="submit" class="btn-logout"><span>🚪</span> Keluar Akun</button>
+                <button type="submit" style="background:#dc2626; color:#ffffff; font-weight:700; border-radius:8px; justify-content:center; padding:10px 14px; margin-top:8px; width:100%; display:flex; align-items:center; gap:8px; border:none; cursor:pointer;">
+                    <span>🚪</span> Keluar Akun
+                </button>
             </form>
         </div>
     </aside>
