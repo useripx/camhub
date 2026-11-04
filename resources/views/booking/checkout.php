@@ -379,7 +379,7 @@
                     <div class="summary-divider"></div>
 
                     <div class="summary-total-label">Total pembayaran</div>
-                    <div class="summary-total-val" id="summaryTotal">Rp <?= number_format($calculation['total_price'] ?? ($calculation['subtotal'] + 5000), 0, ',', '.') ?></div>
+                    <div class="summary-total-val" id="summaryTotal">Rp <?= number_format($calculation['total'], 0, ',', '.') ?></div>
 
                     <button type="submit" class="btn-checkout-submit" id="btnSubmit">
                         Lanjutkan Pembayaran
@@ -425,3 +425,4 @@
     </script>
 </body>
 </html>
+

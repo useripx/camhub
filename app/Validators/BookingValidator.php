@@ -81,3 +81,4 @@ class BookingValidator
         return $this->errors;
     }
 }
+

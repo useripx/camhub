@@ -201,7 +201,7 @@ try {
         'full_name' => $user['full_name'],
         'phone' => '081234567890',
         'pickup_address' => 'Jl. Kaliurang KM 5, Sleman, Yogyakarta',
-        'start_date' => date('Y-m-d', strtotime('+3 days')),
+        'start_date' => date('Y-m-d', strtotime('+60 days')),
         'duration_days' => 3,
         'payment_method' => 'escrow',
     ];
@@ -291,3 +291,4 @@ if ($passCount === $totalTests) {
 } else {
     exit(1);
 }
+

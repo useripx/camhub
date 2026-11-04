@@ -80,10 +80,10 @@ class BookingController
     /**
      * Halaman Nota Konfirmasi Pemesanan (Booking Receipt)
      */
-    public function success(int $id): string
+    public function success(int $bookingId): string
     {
         $userId = auth()['id'] ?? 0;
-        $booking = $this->bookingRepo->findBookingById($id, $userId);
+        $booking = $this->bookingRepo->findBookingById($bookingId, $userId);
 
         if (!$booking) {
             flash('error', 'Pesanan tidak ditemukan.');
@@ -110,3 +110,4 @@ class BookingController
         ]);
     }
 }
+
