@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-class Product
+use ArrayAccess;
+
+class Product implements ArrayAccess
 {
-    public int $id;
-    public int $store_id;
-    public int $category_id;
-    public string $name;
-    public string $slug;
+    public int $id = 0;
+    public int $store_id = 0;
+    public int $category_id = 0;
+    public string $name = '';
+    public string $slug = '';
     public ?string $description = null;
     public ?string $condition_note = null;
     public bool $is_rental = true;
@@ -20,8 +22,8 @@ class Product
     public int $stock_quantity = 1;
     public float $rating_avg = 5.0;
     public int $review_count = 0;
-    public string $created_at;
-    public string $updated_at;
+    public string $created_at = '';
+    public string $updated_at = '';
 
     // Joined fields from relations
     public ?string $category_name = null;
@@ -82,5 +84,26 @@ class Product
             return base_url($this->primary_image);
         }
         return 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80';
+    }
+
+    // ArrayAccess implementation
+    public function offsetExists(mixed $offset): bool
+    {
+        return property_exists($this, (string)$offset);
+    }
+
+    public function offsetGet(mixed $offset): mixed
+    {
+        return $this->{$offset} ?? null;
+    }
+
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        $this->{$offset} = $value;
+    }
+
+    public function offsetUnset(mixed $offset): void
+    {
+        unset($this->{$offset});
     }
 }
