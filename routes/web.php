@@ -9,6 +9,7 @@ use App\Controllers\CatalogController;
 use App\Controllers\ProductDetailController;
 use App\Controllers\PartnerDashboardController;
 use App\Controllers\BookingController;
+use App\Controllers\SalesController;
 
 /**
  * Web Routes - CamHub
@@ -81,3 +82,9 @@ Router::get('/checkout/{slug}', [BookingController::class, 'checkout'], ['auth']
 Router::post('/checkout/{slug}/proses', [BookingController::class, 'process'], ['auth']);
 Router::get('/booking/{id}/sukses', [BookingController::class, 'success'], ['auth']);
 Router::get('/pesanan-saya', [BookingController::class, 'customerOrders'], ['auth', 'role:customer']);
+
+// 11. Marketplace Jual Beli Kamera (Tahap 08: Direct Purchase & Checkout)
+Router::get('/beli/{slug}', [SalesController::class, 'checkout'], ['auth']);
+Router::post('/beli/{slug}/proses', [SalesController::class, 'processCheckout'], ['auth']);
+Router::get('/pesanan/beli/{id}/sukses', [SalesController::class, 'success'], ['auth']);
+Router::get('/jual-beli-saya', [SalesController::class, 'customerPurchases'], ['auth', 'role:customer']);
