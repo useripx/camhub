@@ -7,7 +7,7 @@
 > 3. **Ivan Farrel Nanda Kristanto** (Core Routing & Security Engineer)  
 > 4. **Krisna Mukti** (Quality Assurance & Presentation Coordinator)  
 >  
-> **TERAKHIR DIPERBARUI:** 04 November 2026 (Tahap 07 Selesai)  
+> **TERAKHIR DIPERBARUI:** 04 November 2026 (Tahap 08 Selesai)  
 
 ---
 
@@ -22,7 +22,7 @@
 | **05** | **Website Publik & Katalog Produk** | `tahap/05-website-publik-katalog` | **SELESAI (100% PASS)** | [`Docs/tahapan/05.implementation_plan_Tahap5.md`](tahapan/05.implementation_plan_Tahap5.md) | `tests/test_catalog.php` (10/10 PASS) |
 | **06** | **Dashboard Mitra Lapak** | `tahap/06-dashboard-mitra` | **SELESAI (100% PASS)** | [`Docs/tahapan/06.implementation_plan_Tahap6.md`](tahapan/06.implementation_plan_Tahap6.md) | `tests/test_partner_dashboard.php` (10/10 PASS) |
 | **07** | **Penyewaan & Pemesanan Kamera** | `tahap/07-penyewaan-pemesanan` | **SELESAI (100% PASS)** | [`Docs/tahapan/07.implementation_plan_Tahap7.md`](tahapan/07.implementation_plan_Tahap7.md) | `tests/test_booking.php` (10/10 PASS) |
-| **08** | Marketplace Jual Beli | `tahap/08-marketplace-jual-beli` | Belum Dimulai | - | - |
+| **08** | **Marketplace Jual Beli Kamera** | `tahap/08-marketplace-jual-beli` | **SELESAI (100% PASS)** | [`Docs/tahapan/08.implementation_plan_Tahap8.md`](tahapan/08.implementation_plan_Tahap8.md) | `tests/test_marketplace.php` (10/10 PASS) |
 | **09** | Sistem Titip Jual | `tahap/09-sistem-titip-jual` | Belum Dimulai | - | - |
 | **10** | Pembayaran & Escrow | `tahap/10-pembayaran-escrow` | Belum Dimulai | - | - |
 | **11** | Dashboard Administrator | `tahap/11-dashboard-administrator` | Belum Dimulai | - | - |
@@ -154,3 +154,27 @@
 - [x] Uji regresi seluruh tahap berjalan serentak: Tahap 01 (7/7), Tahap 02 (7/7), Tahap 03 (10/10), Tahap 04 (10/10), Tahap 05 (10/10), Tahap 06 (10/10), Tahap 07 (10/10), Browser E2E (17/17) -> **Total 81 / 81 Tests LULUS (100% PASS)**.
 - [x] Pembuatan buku panduan dan naskah presentasi 4 orang Kelompok 1 di `Docs/buku/07 Tahap 7.md`.
 - [x] Pencadangan rencana implementasi fix di `Docs/tahapan/07.implementation_plan_Tahap7.md`.
+
+---
+
+## 📝 Catatan Rinci Tahap 08 (Marketplace Jual Beli Kamera — Direct Purchase & Escrow)
+
+- [x] Pembuatan branch resmi `tahap/08-marketplace-jual-beli` dari branch `develop`.
+- [x] Eksekusi migrasi skema basis data `database/migrations/02_allow_sales_escrow.php` agar tabel `escrow_transactions` mendukung relasi foreign key `sales_order_id`.
+- [x] Pembuatan data model: `App\Models\SalesOrder` dan `App\Models\SalesOrderItem`.
+- [x] Pembuatan repositori `App\Repositories\SalesRepository` (kueri produk siap jual `is_sale = 1`, transaksi atomic ACID penulisan `sales_orders` + `sales_order_items` + `payments` + `escrow_transactions` + `audit_logs`, detail nota invoice, dan riwayat pembelian pelanggan).
+- [x] Pembuatan form validator server-side `App\Validators\SalesValidator` (validasi nama penerima, nomor HP kurir, alamat lengkap minimal 10 karakter, kota, dan metode bayar).
+- [x] Pembuatan service inti `App\Services\SalesService` (orkestrasi harga kamera + ongkir flat berasuransi Rp 25.000 + biaya admin rekber Rp 5.000, serta eksekusi pesanan).
+- [x] Pembuatan controller `App\Controllers\SalesController` (`checkout`, `processCheckout`, `success`, dan `customerPurchases`).
+- [x] Pembangunan tampilan visual:
+  - Tombol aksi "Beli Unit Ini" pada `resources/views/public/product_detail.php`.
+  - Halaman checkout 2 kolom `resources/views/sales/checkout.php` persis prototype `CamHub — Booking & Checkout.png` (Informasi Pengiriman di kiri & Ringkasan Pembelian sticky di kanan).
+  - Nota konfirmasi pembelian resmi `resources/views/sales/success.php` (`#BUY-XXXXX`) dengan lencana proteksi Escrow.
+  - Pembaruan `resources/views/customer/orders.php` dengan filter tab interaktif (*Semua Transaksi*, *Sewa Saya*, *Jual Beli Saya*).
+  - Penyelarasan tampilan Dashboard Pelanggan `resources/views/customer/dashboard.php` 100% presisi mengacu pada `CamHub — Dashboard Pelanggan.png` (sidebar navy rapi, 3 kartu statistik, dan riwayat pesanan).
+- [x] Registrasi rute web jual beli di `routes/web.php` (`/beli/{slug}`, `/beli/{slug}/proses`, `/pesanan/beli/{id}/sukses`, `/jual-beli-saya`) dengan proteksi `AuthMiddleware`.
+- [x] Test suite mandiri `php tests/test_marketplace.php` (**100% PASS, 10/10**).
+- [x] Pengujian interaktif langsung di Google Chrome via Chrome DevTools Protocol (foreground navigasi produk, auto-fill form pembelian, kalkulasi Rp 24.530.000, submit pesanan, penerbitan invoice `#BUY-00002`, dan inspeksi daftar *Jual Beli Saya*).
+- [x] Uji regresi seluruh tahap berjalan serentak: Tahap 01 (7/7), Tahap 02 (7/7), Tahap 03 (10/10), Tahap 04 (10/10), Tahap 05 (10/10), Tahap 06 (10/10), Tahap 07 (10/10), Tahap 08 (10/10), Browser E2E (17/17) -> **Total 91 / 91 Tests LULUS (100% PASS)**.
+- [x] Pembuatan buku panduan dan naskah presentasi 4 orang Kelompok 1 di `Docs/buku/08 Tahap 8.md`.
+- [x] Pencadangan rencana implementasi fix di `Docs/tahapan/08.implementation_plan_Tahap8.md`.

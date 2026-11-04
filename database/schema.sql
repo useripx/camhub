@@ -270,7 +270,8 @@ DROP TABLE IF EXISTS `escrow_transactions`;
 CREATE TABLE `escrow_transactions` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `payment_id` INT NOT NULL,
-    `booking_id` INT NOT NULL,
+    `booking_id` INT NULL,
+    `sales_order_id` INT NULL,
     `amount_held` DECIMAL(15, 2) NOT NULL,
     `held_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `released_at` DATETIME NULL,
@@ -284,7 +285,8 @@ CREATE TABLE `escrow_transactions` (
 DROP TABLE IF EXISTS `fines`;
 CREATE TABLE `fines` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `booking_id` INT NOT NULL,
+    `booking_id` INT NULL,
+    `sales_order_id` INT NULL,
     `fine_type` ENUM('late_return', 'damage', 'missing_accessory') NOT NULL,
     `amount` DECIMAL(15, 2) NOT NULL,
     `reason` TEXT NOT NULL,
