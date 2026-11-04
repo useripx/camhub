@@ -164,3 +164,4 @@ Gunakan pembagian peran ini saat mempresentasikan Tahap 07 di hadapan dosen peng
 - [x] Jalankan seluruh test suite platform (Wajib 81/81 PASS).
 - [x] Buka Google Chrome di `http://localhost/camhub/public/login` dan demonstrasikan pemesanan Sony A7 III dengan durasi 3 hari.
 - [x] Perlihatkan nota tanda terima `#RENT-XXXXX` dengan rincian rekening bersama Escrow.
+

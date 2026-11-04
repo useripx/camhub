@@ -57,3 +57,4 @@ class RentalBooking
         return $this->rentalStatus === 'active';
     }
 }
+

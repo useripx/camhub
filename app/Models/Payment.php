@@ -42,3 +42,4 @@ class Payment
         return $this->paymentMethod === 'escrow';
     }
 }
+

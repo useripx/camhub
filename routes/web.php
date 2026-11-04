@@ -46,9 +46,7 @@ Router::post('/logout', [AuthController::class, 'logout'], ['auth']);
 Router::get('/logout', [AuthController::class, 'logout'], ['auth']);
 
 // 7. Dashboard Peran Terproteksi (RBAC Route Guard)
-Router::get('/dashboard/pelanggan', function () {
-    return view('customer.dashboard');
-}, ['auth', 'role:customer']);
+Router::get('/dashboard/pelanggan', [CustomerProfileController::class, 'dashboard'], ['auth', 'role:customer']);
 
 Router::get('/dashboard/admin', function () {
     return view('admin.dashboard');
