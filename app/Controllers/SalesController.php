@@ -98,6 +98,34 @@ class SalesController
     }
 
     /**
+     * Halaman Cetak Invoice Pembelian Kamera Resmi (Print-to-PDF)
+     */
+    public function printInvoice(int $id): string
+    {
+        $user = auth();
+        if (!$user) {
+            redirect('/login');
+            return '';
+        }
+
+        $userId = (int) $user['id'];
+        $userRole = (string) ($user['role'] ?? 'customer');
+
+        // Admin dapat melihat seluruh invoice, customer hanya miliknya
+        $order = $this->salesRepo->findOrderById($id, $userRole === 'admin' ? null : $userId);
+
+        if (!$order) {
+            flash('error', 'Dokumen invoice pembelian tidak ditemukan.');
+            redirect('/pesanan-saya?type=sale');
+            return '';
+        }
+
+        return view('sales.invoice_print', [
+            'order' => $order,
+        ]);
+    }
+
+    /**
      * Halaman Daftar Jual Beli Saya (Pembelian Kamera Pelanggan)
      */
     public function customerPurchases(): string

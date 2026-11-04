@@ -14,6 +14,7 @@ use App\Controllers\AdminDashboardController;
 use App\Controllers\ConsignmentController;
 use App\Controllers\EscrowController;
 use App\Controllers\PartnerWalletController;
+use App\Controllers\NotificationController;
 
 /**
  * Web Routes - CamHub
@@ -53,7 +54,7 @@ Router::get('/logout', [AuthController::class, 'logout'], ['auth']);
 // 7. Dashboard Peran Terproteksi (RBAC Route Guard)
 Router::get('/dashboard/pelanggan', [CustomerProfileController::class, 'dashboard'], ['auth', 'role:customer']);
 
-// 8. Dashboard Administrator (Tahap 09 & 11: Pusat Kendali Super Administrator)
+// 8. Dashboard Administrator (Tahap 09, 11 & 12: Pusat Kendali Super Administrator)
 Router::get('/dashboard/admin', [AdminDashboardController::class, 'index'], ['auth', 'role:admin']);
 Router::get('/dashboard/admin/kyc', [AdminDashboardController::class, 'kyc'], ['auth', 'role:admin']);
 Router::post('/dashboard/admin/kyc/{id}/approve', [AdminDashboardController::class, 'approveKyc'], ['auth', 'role:admin']);
@@ -67,8 +68,10 @@ Router::post('/dashboard/admin/denda/simpan', [AdminDashboardController::class, 
 Router::post('/dashboard/admin/denda/{id}/lunas', [AdminDashboardController::class, 'payFine'], ['auth', 'role:admin']);
 Router::get('/dashboard/admin/pengaturan', [AdminDashboardController::class, 'settings'], ['auth', 'role:admin']);
 Router::post('/dashboard/admin/pengguna/{id}/status', [AdminDashboardController::class, 'toggleUserStatus'], ['auth', 'role:admin']);
+Router::get('/dashboard/admin/laporan', [AdminDashboardController::class, 'reports'], ['auth', 'role:admin']);
+Router::get('/dashboard/admin/laporan/export', [AdminDashboardController::class, 'exportReport'], ['auth', 'role:admin']);
 
-// 9. Dashboard Mitra Lapak (Tahap 06: Mockup CamHub — Dashboard Mitra Lapak.png)
+// 9. Dashboard Mitra Lapak (Tahap 06 & 10: Mockup CamHub — Dashboard Mitra Lapak.png)
 Router::get('/dashboard/mitra', [PartnerDashboardController::class, 'index'], ['auth', 'role:partner']);
 Router::get('/dashboard/mitra/produk', [PartnerDashboardController::class, 'products'], ['auth', 'role:partner']);
 Router::get('/dashboard/mitra/produk/tambah', [PartnerDashboardController::class, 'createProduct'], ['auth', 'role:partner']);
@@ -82,6 +85,7 @@ Router::get('/dashboard/mitra/jadwal', [PartnerDashboardController::class, 'sche
 Router::get('/dashboard/mitra/transaksi', [PartnerDashboardController::class, 'transactions'], ['auth', 'role:partner']);
 Router::get('/dashboard/mitra/saldo', [PartnerWalletController::class, 'index'], ['auth', 'role:partner']);
 Router::post('/dashboard/mitra/saldo/tarik', [PartnerWalletController::class, 'withdraw'], ['auth', 'role:partner']);
+Router::get('/dashboard/mitra/saldo/export', [PartnerWalletController::class, 'export'], ['auth', 'role:partner']);
 Router::get('/dashboard/mitra/pengaturan', [PartnerDashboardController::class, 'settings'], ['auth', 'role:partner']);
 Router::post('/dashboard/mitra/pengaturan/update', [PartnerDashboardController::class, 'updateSettings'], ['auth', 'role:partner']);
 
@@ -117,3 +121,11 @@ Router::post('/dashboard/mitra/titip-jual/{id}/setujui', [ConsignmentController:
 Router::post('/pesanan/sewa/{id}/konfirmasi-selesai', [EscrowController::class, 'confirmRental'], ['auth', 'role:customer']);
 Router::post('/pesanan/beli/{id}/konfirmasi-terima', [EscrowController::class, 'confirmSale'], ['auth', 'role:customer']);
 Router::post('/pesanan/dispute', [EscrowController::class, 'dispute'], ['auth', 'role:customer']);
+
+// 15. Notifikasi & Cetak Dokumen Resmi (Tahap 12: Print-to-PDF & In-App Notifications)
+Router::get('/pesanan/sewa/{id}/cetak', [BookingController::class, 'printReceipt'], ['auth']);
+Router::get('/pesanan/beli/{id}/cetak', [SalesController::class, 'printInvoice'], ['auth']);
+Router::get('/notifikasi', [NotificationController::class, 'index'], ['auth']);
+Router::post('/notifikasi/{id}/baca', [NotificationController::class, 'markAsRead'], ['auth']);
+Router::post('/notifikasi/baca-semua', [NotificationController::class, 'markAllAsRead'], ['auth']);
+Router::get('/api/notifikasi/unread', [NotificationController::class, 'apiUnreadCount'], ['auth']);

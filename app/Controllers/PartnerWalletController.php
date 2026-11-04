@@ -5,17 +5,20 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Services\EscrowService;
+use App\Services\ReportService;
 use App\Repositories\PartnerRepository;
 
 class PartnerWalletController
 {
     private EscrowService $escrowService;
     private PartnerRepository $partnerRepo;
+    private ReportService $reportService;
 
     public function __construct()
     {
         $this->escrowService = new EscrowService();
         $this->partnerRepo = new PartnerRepository();
+        $this->reportService = new ReportService();
     }
 
     /**
@@ -72,5 +75,30 @@ class PartnerWalletController
 
         redirect(base_url('/dashboard/mitra/saldo'));
     }
-}
 
+    /**
+     * Ekspor mutasi saldo dan riwayat transaksi toko mitra ke format CSV
+     */
+    public function export(): void
+    {
+        $userId = auth()['id'] ?? 0;
+        $partner = $this->partnerRepo->findByUserId($userId);
+
+        if (!$partner) {
+            redirect(base_url('/dashboard/mitra'));
+            return;
+        }
+
+        $csvData = $this->reportService->generateCsvPartnerReport((int) $partner['partner_id']);
+        $storeNameSanitized = preg_replace('/[^a-zA-Z0-9_-]/', '_', (string)$partner['store_name']);
+        $filename = 'Rekap_Saldo_' . $storeNameSanitized . '_' . date('Ymd_His') . '.csv';
+
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        echo $csvData;
+        exit;
+    }
+}

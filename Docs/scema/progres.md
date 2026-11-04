@@ -7,9 +7,9 @@
 > 3. Ivan Farrel Nanda Kristanto (Core Routing & Security Engineer)  
 > 4. Krisna Mukti (Quality Assurance & Presentation Coordinator)  
 >  
-> **Terakhir Diperbarui:** 04 November 2026 (Tahap 11 Selesai)  
-> **Status Keseluruhan:** **11 dari 13 Tahapan Selesai (85%)**  
-> **Hasil Uji Otomatis:** **121 / 121 Skenario LULUS (100% PASS, 0 Gagal)**
+> **Terakhir Diperbarui:** 04 November 2026 (Tahap 12 Selesai)  
+> **Status Keseluruhan:** **12 dari 13 Tahapan Selesai (92%)**  
+> **Hasil Uji Otomatis:** **131 / 131 Skenario LULUS (100% PASS, 0 Gagal)**
 
 ---
 
@@ -28,7 +28,7 @@
 | **09** | **Sistem Titip Jual & Admin Dashboard** | **SELESAI** | `test_consignment.php` (10/10 PASS) |
 | **10** | **Integrasi Pembayaran & Escrow Gateway** | **SELESAI** | `test_escrow_payment.php` (10/10 PASS) |
 | **11** | **Dashboard Super Administrator** | **SELESAI** | `test_admin_suite.php` (10/10 PASS) |
-| 12 | Sistem Notifikasi & Laporan Finansial | Belum Dimulai | - |
+| **12** | **Sistem Notifikasi & Laporan Finansial** | **SELESAI** | `test_report_notifications.php` (10/10 PASS) |
 | 13 | Final Hardening & Penerapan (Deployment) | Belum Dimulai | - |
 
 ---
@@ -125,9 +125,26 @@
   - Pengaturan status akun (*Active* / *Suspended*) dengan proteksi anti-lockout akun Root Admin ID 1.
   - Penayangan 50 baris riwayat terkini aktivitas operasional pada tabel `audit_logs`.
 
+### 12. Sistem Notifikasi Dalam Aplikasi & Pelaporan Finansial Platform (Tahap 12)
+- **Pusat Notifikasi Interaktif Pelanggan (`/notifikasi`):**
+  - Pemicu notifikasi otomatis untuk verifikasi KYC (disetujui/ditolak), pesanan baru, status rekber escrow, denda operasional, dan inspeksi unit titip jual.
+  - Aksi penandaan dibaca tunggal (*mark as read*) dan serentak (*mark all as read*).
+  - API JSON penghitung notifikasi belum dibaca (`/api/notifikasi/unread-count`).
+- **Pusat Laporan Finansial Administrator (`/dashboard/admin/laporan`):**
+  - 4 Kartu Ringkasan Metrik Kas: Omzet Transaksi Gross (GTV), Pendapatan Bersih Platform (Net Revenue), Total Transaksi Berjalan, dan Total Saldo Dicairkan Mitra.
+  - Akumulasi pendapatan bersih dari 3 sumber: fee rekening bersama Rp 5.000/transaksi, bagi hasil komisi 10% titip jual kamera, dan denda terlambat/kerusakan yang dilunasi.
+  - Filter rentang waktu terisolasi: Hari Ini (`today`), 7 Hari Terakhir (`7days`), Bulan Ini (`month`), dan Rentang Kustom (`custom`).
+  - Distribusi omzet penjualan dan sewa per kategori kamera (DSLR, Mirrorless, Lensa, Aksesori, Drone).
+- **Mesin Ekspor Rekapitulasi CSV / Excel:**
+  - Unduh CSV Laporan Finansial Admin dengan metadata lengkap dan UTF-8 BOM agar kompatibel dengan Microsoft Excel (`/dashboard/admin/laporan/export`).
+  - Unduh CSV Mutasi Saldo & Transaksi Toko Mitra Lapak (`/dashboard/mitra/saldo/export`).
+- **Dokumen Cetak Nota & Invoice Resmi Transaksi (Print-to-PDF):**
+  - Cetak Nota Resmi Sewa Kamera (`/pesanan/sewa/{id}/cetak`) lengkap dengan nomor nota `#RENT-XXXXX`, nomor seri fisik kamera, durasi sewa, dan kartu jaminan perlindungan rekber.
+  - Cetak Invoice Pembelian Kamera (`/pesanan/beli/{id}/cetak`) lengkap dengan kode pesanan `#BUY-XXXXX`, alamat ekspedisi kurir, dan rincian ongkir.
+  - Proteksi Anti-IDOR: Pelanggan hanya dapat mencetak dokumen miliknya sendiri, sementara Super Admin dapat mencetak seluruh nota platform.
+
 ---
 
-## ⏳ Fitur yang Belum Dikerjakan (Tahap 12 s.d 13)
+## ⏳ Fitur yang Belum Dikerjakan (Tahap 13)
 
-1. **Tahap 12:** Notifikasi Sistem & Laporan Keuangan (*Cetak PDF & Export Excel*).
-2. **Tahap 13:** Pengujian Beban Akhir, Audit Keamanan, & Panduan Deployment Sidang.
+1. **Tahap 13:** Pengujian Beban Akhir, Final Hardening Keamanan, & Panduan Deployment Sidang.

@@ -6,16 +6,19 @@ namespace App\Controllers;
 
 use App\Repositories\AdminRepository;
 use App\Services\AdminService;
+use App\Services\ReportService;
 
 class AdminDashboardController
 {
     private AdminRepository $adminRepo;
     private AdminService $adminService;
+    private ReportService $reportService;
 
     public function __construct()
     {
         $this->adminRepo = new AdminRepository();
         $this->adminService = new AdminService();
+        $this->reportService = new ReportService();
     }
 
     /**
@@ -246,5 +249,47 @@ class AdminDashboardController
         }
 
         redirect(base_url('/dashboard/admin/pengaturan'));
+    }
+
+    /**
+     * MODUL 6: Laporan Finansial & Operasional Platform
+     */
+    public function reports(): string
+    {
+        $period = $_GET['period'] ?? 'all';
+        $startDate = $_GET['start_date'] ?? null;
+        $endDate = $_GET['end_date'] ?? null;
+
+        $summary = $this->reportService->getFinancialSummary($period, $startDate, $endDate);
+        $categoryBreakdown = $this->reportService->getCategoryBreakdown($period, $startDate, $endDate);
+        $transactions = $this->reportService->getAllTransactionsForReport($period, $startDate, $endDate, 50);
+
+        return view('admin.reports', [
+            'period' => $period,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'summary' => $summary,
+            'categoryBreakdown' => $categoryBreakdown,
+            'transactions' => $transactions,
+            'activeMenu' => 'laporan',
+        ]);
+    }
+
+    public function exportReport(): void
+    {
+        $period = $_GET['period'] ?? 'all';
+        $startDate = $_GET['start_date'] ?? null;
+        $endDate = $_GET['end_date'] ?? null;
+
+        $csvContent = $this->reportService->generateCsvAdminReport($period, $startDate, $endDate);
+        $filename = 'Laporan_Keuangan_CamHub_' . date('Ymd_His') . '.csv';
+
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        echo $csvContent;
+        exit;
     }
 }

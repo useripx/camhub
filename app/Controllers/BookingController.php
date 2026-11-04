@@ -9,7 +9,7 @@ use App\Repositories\BookingRepository;
  * Controller BookingController
  * 
  * Mengelola alur pemesanan sewa kamera (Booking & Checkout),
- * nota keberhasilan transaksi escrow, dan riwayat pesanan sewa pelanggan.
+ * nota keberhasilan transaksi escrow, cetak nota resmi, dan riwayat pesanan sewa pelanggan.
  */
 class BookingController
 {
@@ -73,6 +73,23 @@ class BookingController
             return;
         }
 
+        // Trigger notification
+        try {
+            $notifService = new \App\Services\NotificationService();
+            $booking = $this->bookingRepo->findBookingById($result['booking_id']);
+            if ($booking) {
+                $partnerUserId = (int)($booking['partner_user_id'] ?? 2);
+                $notifService->notifyRentalBookingCreated(
+                    $result['booking_id'],
+                    $partnerUserId,
+                    $userId,
+                    (string)$booking['product_name']
+                );
+            }
+        } catch (\Throwable $e) {
+            // Non-blocking notification fail-safe
+        }
+
         flash('success', 'Pemesanan sewa kamera berhasil dibuat! Silakan lakukan pembayaran rekening bersama.');
         redirect('/booking/' . $result['booking_id'] . '/sukses');
     }
@@ -97,6 +114,34 @@ class BookingController
     }
 
     /**
+     * Halaman Cetak Nota Sewa Resmi (Print-to-PDF)
+     */
+    public function printReceipt(int $bookingId): string
+    {
+        $user = auth();
+        if (!$user) {
+            redirect('/login');
+            return '';
+        }
+
+        $userId = (int) $user['id'];
+        $userRole = (string) ($user['role'] ?? 'customer');
+
+        // Admin dapat melihat seluruh nota, customer hanya nota miliknya
+        $booking = $this->bookingRepo->findBookingById($bookingId, $userRole === 'admin' ? null : $userId);
+
+        if (!$booking) {
+            flash('error', 'Dokumen nota pemesanan tidak ditemukan.');
+            redirect('/pesanan-saya');
+            return '';
+        }
+
+        return view('booking.receipt_print', [
+            'booking' => $booking,
+        ]);
+    }
+
+    /**
      * Halaman Riwayat Pesanan Sewa Pelanggan
      */
     public function customerOrders(): string
@@ -110,4 +155,3 @@ class BookingController
         ]);
     }
 }
-

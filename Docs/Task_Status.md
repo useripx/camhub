@@ -7,7 +7,7 @@
 > 3. **Ivan Farrel Nanda Kristanto** (Core Routing & Security Engineer)  
 > 4. **Krisna Mukti** (Quality Assurance & Presentation Coordinator)  
 >  
-> **TERAKHIR DIPERBARUI:** 04 November 2026 (Tahap 08 Selesai)  
+> **TERAKHIR DIPERBARUI:** 04 November 2026 (Tahap 12 Selesai — 131/131 PASS)  
 
 ---
 
@@ -25,8 +25,8 @@
 | **08** | **Marketplace Jual Beli Kamera** | `tahap/08-marketplace-jual-beli` | **SELESAI (100% PASS)** | [`Docs/tahapan/08.implementation_plan_Tahap8.md`](tahapan/08.implementation_plan_Tahap8.md) | `tests/test_marketplace.php` (10/10 PASS) |
 | **09** | **Sistem Titip Jual & Admin Dashboard** | `tahap/09-sistem-titip-jual` | **SELESAI (100% PASS)** | [`Docs/tahapan/09.implementation_plan_Tahap9.md`](tahapan/09.implementation_plan_Tahap9.md) | `tests/test_consignment.php` (10/10 PASS) |
 | **10** | **Pembayaran & Escrow Gateway** | `tahap/10-pembayaran-escrow` | **SELESAI (100% PASS)** | [`Docs/tahapan/10.implementation_plan_Tahap10.md`](tahapan/10.implementation_plan_Tahap10.md) | `tests/test_escrow_payment.php` (10/10 PASS) |
-| **11** | Dashboard Administrator | `tahap/11-dashboard-administrator` | Belum Dimulai | - | - |
-| **12** | Notifikasi & Pelaporan | `tahap/12-notifikasi-pelaporan` | Belum Dimulai | - | - |
+| **11** | **Dashboard Administrator** | `tahap/11-dashboard-administrator` | **SELESAI (100% PASS)** | [`Docs/tahapan/11.implementation_plan_Tahap11.md`](tahapan/11.implementation_plan_Tahap11.md) | `tests/test_admin_suite.php` (10/10 PASS) |
+| **12** | **Notifikasi & Pelaporan** | `tahap/12-notifikasi-pelaporan` | **SELESAI (100% PASS)** | [`Docs/tahapan/12.implementation_plan_Tahap12.md`](tahapan/12.implementation_plan_Tahap12.md) | `tests/test_report_notifications.php` (10/10 PASS) |
 | **13** | Pengujian & Penerapan | `tahap/13-pengujian-penerapan` | Belum Dimulai | - | - |
 
 ---
@@ -220,3 +220,30 @@
 - [x] Verifikasi browser Chrome DevTools pada `/dashboard/admin`, `/dashboard/admin/kyc`, dan `/dashboard/admin/transaksi`.
 - [x] Pembuatan buku panduan dan naskah presentasi 4 orang Kelompok 1 di `Docs/buku/11 Tahap 11.md`.
 - [x] Pencadangan rencana implementasi fix di `Docs/tahapan/11.implementation_plan_Tahap11.md`.
+
+---
+
+## 📝 Catatan Rinci Tahap 12 (Sistem Notifikasi & Pelaporan Finansial Platform)
+
+- [x] Pembuatan branch resmi `tahap/12-notifikasi-pelaporan` dari branch `develop`.
+- [x] Pembuatan model `App\Models\Notification`.
+- [x] Pembuatan repositori `App\Repositories\NotificationRepository` (`getUserNotifications`, `getUnreadCount`, `create`, `markAsRead`, `markAllAsRead`, `getById`).
+- [x] Pembuatan service `App\Services\NotificationService` (trigger otomatis untuk KYC approved/rejected, pesanan baru dibuat, escrow status changed, denda diterbitkan, dan inspeksi titip jual).
+- [x] Pembuatan controller `App\Controllers\NotificationController` (`index`, `markAsRead`, `markAllAsRead`, `apiUnreadCount`).
+- [x] Pembuatan tampilan Pusat Notifikasi Interaktif `resources/views/customer/notifications.php`.
+- [x] Pembuatan repositori `App\Repositories\ReportRepository` (`getFinancialSummary`, `getCategoryBreakdown`, `getAllTransactionsForReport`, `getPartnerTransactionHistory` dengan filter `today`, `7days`, `month`, `custom`).
+- [x] Pembuatan service `App\Services\ReportService` (generator CSV streaming dengan UTF-8 BOM untuk Admin dan Mitra Lapak).
+- [x] Penambahan fitur laporan finansial admin di `App\Controllers\AdminDashboardController` (`reports`, `exportReport`).
+- [x] Penambahan fitur ekspor rekapitulasi mutasi saldo di `App\Controllers\PartnerWalletController` (`export`).
+- [x] Pembuatan halaman cetak nota sewa dan invoice beli resmi:
+  - `App\Controllers\BookingController::printReceipt` -> `resources/views/booking/receipt_print.php`
+  - `App\Controllers\SalesController::printInvoice` -> `resources/views/sales/invoice_print.php`
+  - Dilengkapi CSS cetak mandiri `@media print` dan proteksi Anti-IDOR lintas pengguna.
+- [x] Pembangunan tampilan visual Laporan Admin `resources/views/admin/reports.php` (sidebar active Laporan, formulir filter waktu dinamis, 4 kartu ringkasan metrik kas, grafik kategori, dan tabel transaksi).
+- [x] Registrasi 6 rute web baru di `routes/web.php` untuk laporan, ekspor CSV, notifikasi, dan cetak nota.
+- [x] Test suite mandiri `php tests/test_report_notifications.php` (**100% PASS, 10/10**).
+- [x] Uji regresi seluruh sistem (13 suites pengujian platform) -> **Total 131 / 131 Tests LULUS (100% PASS, 0 Gagal, 0 Error)**.
+- [x] Verifikasi browser live di `/notifikasi`, `/dashboard/admin/laporan`, `/pesanan/sewa/2/cetak`, dan `/pesanan/beli/13/cetak`.
+- [x] Pembuatan buku panduan dan naskah presentasi 4 orang Kelompok 1 di `Docs/buku/12 Tahap 12.md`.
+- [x] Pencadangan rencana implementasi fix di `Docs/tahapan/12.implementation_plan_Tahap12.md`.
+

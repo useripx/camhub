@@ -129,9 +129,14 @@
     </aside>
 
     <main class="main-content">
-        <div class="page-header">
-            <h1 class="page-title">Saldo & Pencairan Dana</h1>
-            <p class="page-subtitle">Kelola Saldo Dompet toko, pantau pergerakan dana rekening bersama Escrow, dan ajukan Tarik Saldo ke rekening bank Anda.</p>
+        <div class="page-header" style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+                <h1 class="page-title">Saldo & Pencairan Dana</h1>
+                <p class="page-subtitle">Kelola Saldo Dompet toko, pantau pergerakan dana rekening bersama Escrow, dan ajukan Tarik Saldo ke rekening bank Anda.</p>
+            </div>
+            <a href="<?= base_url('/dashboard/mitra/saldo/export') ?>" style="background:#16a34a; color:#ffffff; text-decoration:none; padding:10px 16px; border-radius:8px; font-weight:700; font-size:13px; display:inline-flex; align-items:center; gap:6px; flex-shrink:0;">
+                <span>📊</span> Unduh Rekap CSV
+            </a>
         </div>
 
         <?php if (!empty($success)): ?>
