@@ -73,6 +73,7 @@ class SalesOrder implements ArrayAccess
             'processing' => '<span class="badge badge-primary">Diproses Penjual</span>',
             'shipped' => '<span class="badge badge-primary">Dalam Pengiriman</span>',
             'delivered' => '<span class="badge badge-success">Diterima</span>',
+            'completed' => '<span class="badge badge-success">Selesai</span>',
             'cancelled' => '<span class="badge badge-danger">Dibatalkan</span>',
         ];
 
@@ -98,5 +99,20 @@ class SalesOrder implements ArrayAccess
     public function offsetUnset(mixed $offset): void
     {
         unset($this->data[$offset]);
+    }
+
+    public function isCompleted(): bool
+    {
+        return $this->getOrderStatus() === 'completed';
+    }
+
+    public function isCancelled(): bool
+    {
+        return $this->getOrderStatus() === 'cancelled';
+    }
+
+    public function isPaid(): bool
+    {
+        return in_array($this->getOrderStatus(), ['paid', 'processing', 'shipped', 'delivered', 'completed'], true);
     }
 }
