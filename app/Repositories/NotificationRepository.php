@@ -98,3 +98,4 @@ class NotificationRepository
         return $row ?: null;
     }
 }
+

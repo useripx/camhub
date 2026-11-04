@@ -7,7 +7,7 @@
 > 3. **Ivan Farrel Nanda Kristanto** (Core Routing & Security Engineer)  
 > 4. **Krisna Mukti** (Quality Assurance & Presentation Coordinator)  
 >  
-> **TERAKHIR DIPERBARUI:** 04 November 2026 (Tahap 12 Selesai — 131/131 PASS)  
+> **TERAKHIR DIPERBARUI:** 04 November 2026 (Tahap 13 Selesai — 141/141 PASS, 100% SELESAI & PRODUCTION READY)  
 
 ---
 
@@ -27,7 +27,7 @@
 | **10** | **Pembayaran & Escrow Gateway** | `tahap/10-pembayaran-escrow` | **SELESAI (100% PASS)** | [`Docs/tahapan/10.implementation_plan_Tahap10.md`](tahapan/10.implementation_plan_Tahap10.md) | `tests/test_escrow_payment.php` (10/10 PASS) |
 | **11** | **Dashboard Administrator** | `tahap/11-dashboard-administrator` | **SELESAI (100% PASS)** | [`Docs/tahapan/11.implementation_plan_Tahap11.md`](tahapan/11.implementation_plan_Tahap11.md) | `tests/test_admin_suite.php` (10/10 PASS) |
 | **12** | **Notifikasi & Pelaporan** | `tahap/12-notifikasi-pelaporan` | **SELESAI (100% PASS)** | [`Docs/tahapan/12.implementation_plan_Tahap12.md`](tahapan/12.implementation_plan_Tahap12.md) | `tests/test_report_notifications.php` (10/10 PASS) |
-| **13** | Pengujian & Penerapan | `tahap/13-pengujian-penerapan` | Belum Dimulai | - | - |
+| **13** | **Pengujian & Penerapan** | `tahap/13-pengujian-penerapan` | **SELESAI (100% PASS)** | [`Docs/tahapan/13.implementation_plan_Tahap13.md`](tahapan/13.implementation_plan_Tahap13.md) | `tests/test_hardening_production.php` (10/10 PASS) & `tests/run_all.php` (141/141 PASS) |
 
 ---
 
@@ -246,4 +246,24 @@
 - [x] Verifikasi browser live di `/notifikasi`, `/dashboard/admin/laporan`, `/pesanan/sewa/2/cetak`, dan `/pesanan/beli/13/cetak`.
 - [x] Pembuatan buku panduan dan naskah presentasi 4 orang Kelompok 1 di `Docs/buku/12 Tahap 12.md`.
 - [x] Pencadangan rencana implementasi fix di `Docs/tahapan/12.implementation_plan_Tahap12.md`.
+
+---
+
+## 📝 Catatan Rinci Tahap 13 (Final Hardening, Stress Testing, & Deployment Produksi)
+
+- [x] Pembuatan branch resmi `tahap/13-pengujian-penerapan` dari branch `develop`.
+- [x] Injeksi 5 HTTP Security Headers global pada front controller `public/index.php` (`X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `X-XSS-Protection`, `Referrer-Policy`, `X-Permitted-Cross-Domain-Policies: none`).
+- [x] Penambahan penanganan galat produksi (*Graceful Exception Handler*) dan pembuatan tampilan kustom `resources/views/errors/404.php` & `resources/views/errors/500.php` tanpa membocorkan kredensial basis data atau stack trace rahasia.
+- [x] Pengamanan direktori unggahan berkas `public/uploads/.htaccess` dan `public/uploads/kyc/.htaccess` untuk menonaktifkan eksekusi skrip PHP secara total.
+- [x] Pembangunan modul proteksi *Brute Force* & *Rate Limiting* (`rate_limit_check`, `rate_limit_increment`, `rate_limit_clear`) pada `app/Helpers/functions.php` dan terintegrasi ke `app/Controllers/AuthController.php`.
+- [x] Penguatan transaksi ACID dan *Pessimistic Locking* (`SELECT ... FOR UPDATE`) pada `App\Repositories\BookingRepository::createBookingWithTransaction` untuk mencegah *double booking* pada nomor seri kamera yang sama.
+- [x] Pembangunan dan eksekusi skrip uji beban konkurensi `tests/test_concurrency_stress.php` (5 request simultan: tepat 1 transaksi berhasil dan 4 transaksi bentrok tercegah aman).
+- [x] Audit keutuhan basis data: terbukti 0 data yatim (*orphaned records*) pada seluruh 23 tabel relasional basis data.
+- [x] Verifikasi formula saldo kas dompet mitra lapak terbukti akurat dan seimbang.
+- [x] Test suite mandiri Tahap 13 `php tests/test_hardening_production.php` (**100% PASS, 10/10**).
+- [x] Eksekusi Master Regression Test Suite `php tests/run_all.php` (14 rangkaian tes) -> **Total 141 / 141 Tests LULUS (100% PASS, 0 GAGAL, 0 ERROR)**.
+- [x] Penyusunan buku panduan deployment resmi `Docs/DEPLOYMENT.md` (Laragon Windows & Ubuntu Linux Nginx).
+- [x] Penyusunan buku panduan dan naskah roleplay sidang komprehensif bagi 4 anggota Kelompok 1 di `Docs/buku/13 Tahap 13.md`.
+- [x] Pencadangan rencana implementasi fix di `Docs/tahapan/13.implementation_plan_Tahap13.md`.
+
 

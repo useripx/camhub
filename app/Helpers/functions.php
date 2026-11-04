@@ -295,3 +295,89 @@ if (!function_exists('clear_old_input')) {
         unset($_SESSION['_old_input']);
     }
 }
+
+
+if (!function_exists('rate_limit_check')) {
+    /**
+     * Check if request exceeds rate limit
+     * 
+     * @param string $action Action name (e.g., 'login', 'register')
+     * @param int $maxAttempts Maximum allowed attempts within decay window
+     * @param int $decaySeconds Cooldown period in seconds
+     * @return array ['allowed' => bool, 'remaining' => int, 'retry_after' => int]
+     */
+    function rate_limit_check(string $action, int $maxAttempts = 5, int $decaySeconds = 60): array
+    {
+        session_start_safe();
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $key = 'rate_limit_' . md5($action . '_' . $ip);
+
+        $now = time();
+        $record = $_SESSION[$key] ?? ['attempts' => 0, 'first_attempt' => $now, 'locked_until' => 0];
+
+        // If currently locked
+        if ($record['locked_until'] > $now) {
+            return [
+                'allowed' => false,
+                'remaining' => 0,
+                'retry_after' => $record['locked_until'] - $now
+            ];
+        }
+
+        // If decay window expired, reset attempts
+        if ($now - $record['first_attempt'] > $decaySeconds) {
+            $record['attempts'] = 0;
+            $record['first_attempt'] = $now;
+            $record['locked_until'] = 0;
+            $_SESSION[$key] = $record;
+        }
+
+        $remaining = max(0, $maxAttempts - $record['attempts']);
+        return [
+            'allowed' => $remaining > 0,
+            'remaining' => $remaining,
+            'retry_after' => 0
+        ];
+    }
+}
+
+if (!function_exists('rate_limit_increment')) {
+    /**
+     * Increment failed attempt count for rate limit
+     */
+    function rate_limit_increment(string $action, int $maxAttempts = 5, int $decaySeconds = 60): void
+    {
+        session_start_safe();
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $key = 'rate_limit_' . md5($action . '_' . $ip);
+
+        $now = time();
+        $record = $_SESSION[$key] ?? ['attempts' => 0, 'first_attempt' => $now, 'locked_until' => 0];
+
+        if ($now - $record['first_attempt'] > $decaySeconds) {
+            $record['attempts'] = 1;
+            $record['first_attempt'] = $now;
+        } else {
+            $record['attempts']++;
+        }
+
+        if ($record['attempts'] >= $maxAttempts) {
+            $record['locked_until'] = $now + $decaySeconds;
+        }
+
+        $_SESSION[$key] = $record;
+    }
+}
+
+if (!function_exists('rate_limit_clear')) {
+    /**
+     * Clear rate limit on successful action
+     */
+    function rate_limit_clear(string $action): void
+    {
+        session_start_safe();
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        $key = 'rate_limit_' . md5($action . '_' . $ip);
+        unset($_SESSION[$key]);
+    }
+}

@@ -12,10 +12,10 @@ class AuthController
     private AuthService $authService;
     private AuthValidator $validator;
 
-    public function __construct(?AuthService $authService = null, ?AuthValidator $validator = null)
+    public function __construct()
     {
-        $this->authService = $authService ?? new AuthService();
-        $this->validator = $validator ?? new AuthValidator();
+        $this->authService = new AuthService();
+        $this->validator = new AuthValidator();
     }
 
     /**
@@ -24,7 +24,7 @@ class AuthController
     public function showLoginForm(): string
     {
         return view('auth.login', [
-            'pageTitle' => 'Masuk ke CamHub — Platform Marketplace Kamera',
+            'pageTitle' => 'Masuk Akun — CamHub',
             'errors' => flash('errors') ?? [],
             'error' => flash('error'),
             'success' => flash('success'),
@@ -36,6 +36,14 @@ class AuthController
      */
     public function login(): void
     {
+        // 0. Rate Limiting Protection (Anti-Brute Force)
+        $rateCheck = rate_limit_check('auth_login', 5, 60);
+        if (!$rateCheck['allowed']) {
+            flash('error', "Terlalu banyak percobaan masuk yang gagal. Silakan coba kembali dalam {$rateCheck['retry_after']} detik demi keamanan akun Anda.");
+            redirect('/login');
+            return;
+        }
+
         // 1. Verify CSRF Token
         if (!verify_csrf()) {
             flash('error', 'Sesi formulir kedaluwarsa atau token keamanan tidak valid. Silakan coba lagi.');
@@ -59,12 +67,14 @@ class AuthController
         $result = $this->authService->attempt($identifier, $password);
 
         if (!$result['success']) {
+            rate_limit_increment('auth_login', 5, 60);
             flash('error', $result['message']);
             flash_input($_POST);
             redirect('/login');
             return;
         }
 
+        rate_limit_clear('auth_login');
         clear_old_input();
         flash('success', "Selamat datang kembali, {$result['user']['full_name']}!");
         redirect($result['redirect']);
@@ -88,6 +98,14 @@ class AuthController
      */
     public function register(): void
     {
+        // 0. Rate Limiting Protection
+        $rateCheck = rate_limit_check('auth_register', 10, 60);
+        if (!$rateCheck['allowed']) {
+            flash('error', "Terlalu banyak permintaan pendaftaran. Silakan tunggu {$rateCheck['retry_after']} detik sebelum mencoba kembali.");
+            redirect('/register');
+            return;
+        }
+
         // 1. Verify CSRF Token
         if (!verify_csrf()) {
             flash('error', 'Sesi formulir kedaluwarsa atau token keamanan tidak valid. Silakan coba lagi.');
@@ -108,12 +126,14 @@ class AuthController
         $result = $this->authService->register($_POST);
 
         if (!$result['success']) {
+            rate_limit_increment('auth_register', 10, 60);
             flash('error', $result['message']);
             flash_input($_POST);
             redirect('/register');
             return;
         }
 
+        rate_limit_clear('auth_register');
         clear_old_input();
         flash('success', 'Pendaftaran akun berhasil! Silakan masuk dengan kredensial baru Anda.');
         redirect('/login');
@@ -129,4 +149,3 @@ class AuthController
         redirect('/login');
     }
 }
-

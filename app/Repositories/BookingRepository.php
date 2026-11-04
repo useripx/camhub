@@ -62,6 +62,23 @@ class BookingRepository
         $this->pdo->beginTransaction();
 
         try {
+            // Pessimistic Concurrency Guard (Anti-Race Condition & Anti-Double Booking)
+            $stmtCheck = $this->pdo->prepare("
+                SELECT id FROM rental_bookings 
+                WHERE product_unit_id = :unit_id 
+                  AND rental_status NOT IN ('cancelled', 'returned', 'completed')
+                  AND (start_date <= :end_date AND end_date >= :start_date)
+                FOR UPDATE
+            ");
+            $stmtCheck->execute([
+                'unit_id' => $b['product_unit_id'],
+                'start_date' => $b['start_date'],
+                'end_date' => $b['end_date'],
+            ]);
+            if ($stmtCheck->fetchColumn()) {
+                throw new \RuntimeException('Unit fisik kamera telah terbooking oleh transaksi konkuren lain pada tanggal tersebut.');
+            }
+
             // 1. Simpan ke tabel rental_bookings
             $stmtBooking = $this->pdo->prepare("
                 INSERT INTO rental_bookings (
