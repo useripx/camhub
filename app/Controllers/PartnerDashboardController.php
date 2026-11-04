@@ -283,17 +283,7 @@ class PartnerDashboardController
      */
     public function wallet(): string
     {
-        $userId = auth()['id'] ?? 0;
-        $partner = $this->partnerRepo->findByUserId($userId);
-        $storeId = (int)($partner['store_id'] ?? 0);
-
-        $metrics = $this->partnerRepo->getDashboardMetrics($storeId);
-
-        return view('partner/wallet', [
-            'partner' => $partner,
-            'metrics' => $metrics,
-            'activeMenu' => 'saldo',
-        ]);
+        return (new \App\Controllers\PartnerWalletController())->index();
     }
 
     /**

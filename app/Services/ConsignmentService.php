@@ -91,3 +91,4 @@ class ConsignmentService
         return $this->repo->publishToCatalog($consignmentId, $categoryId);
     }
 }
+

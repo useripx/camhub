@@ -75,6 +75,7 @@ if (empty($bookings) && ($activeType === 'rental' || $activeType === 'all')) {
         .badge-pending { background:#FEF3C7; color:#D97706; }
         .badge-confirmed { background:#E0E7FF; color:#4338CA; }
         .badge-active { background:#DCFCE7; color:#15803D; }
+        .badge-completed { background:#D1FAE5; color:#065F46; }
         .badge-shipped { background:#DBEAFE; color:#1D4ED8; }
         .badge-delivered { background:#DCFCE7; color:#15803D; }
         .badge-returned { background:#F1F5F9; color:#475569; }
@@ -101,6 +102,17 @@ if (empty($bookings) && ($activeType === 'rental' || $activeType === 'all')) {
     </header>
 
     <main class="main-container">
+        <?php if ($msg = flash('success')): ?>
+            <div style="background:#ecfdf5; border:1px solid #a7f3d0; color:#065f46; padding:12px 18px; border-radius:10px; margin-bottom:20px; font-weight:600; font-size:14px;">
+                <?= $msg ?>
+            </div>
+        <?php endif; ?>
+        <?php if ($msg = flash('error')): ?>
+            <div style="background:#fef2f2; border:1px solid #fecaca; color:#991b1b; padding:12px 18px; border-radius:10px; margin-bottom:20px; font-weight:600; font-size:14px;">
+                <?= $msg ?>
+            </div>
+        <?php endif; ?>
+
         <div class="page-header">
             <h1 class="page-title">Riwayat Pesanan Saya</h1>
             <p style="color:#64748B; font-size:14px; margin-top:4px;">Pantau jadwal sewa, status pembelian kamera, dan perlindungan dana Escrow Anda.</p>
@@ -152,6 +164,14 @@ if (empty($bookings) && ($activeType === 'rental' || $activeType === 'all')) {
                             <a href="<?= base_url('/pesanan/beli/' . $p['id'] . '/sukses') ?>" style="font-size:13px; font-weight:600; color:#2563EB; text-decoration:none;">
                                 Lihat Invoice & Status Escrow →
                             </a>
+                            <?php if (($p['order_status'] ?? '') !== 'completed'): ?>
+                                <form action="<?= base_url('/pesanan/beli/' . $p['id'] . '/konfirmasi-terima') ?>" method="POST" style="margin-top:6px;">
+                                    <?= csrf_field() ?>
+                                    <button type="submit" style="background:#16a34a; color:#fff; border:none; padding:7px 14px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer;" onclick="return confirm('Konfirmasi Anda telah menerima kamera ini dengan baik? Dana pembayaran akan diteruskan ke mitra lapak.')">
+                                        ✓ Konfirmasi Terima & Lepas Escrow
+                                    </button>
+                                </form>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -191,6 +211,14 @@ if (empty($bookings) && ($activeType === 'rental' || $activeType === 'all')) {
                             <a href="<?= base_url('/booking/' . $b['id'] . '/sukses') ?>" style="font-size:13px; font-weight:600; color:#2563EB; text-decoration:none;">
                                 Lihat Nota & Panduan Escrow →
                             </a>
+                            <?php if (($b['rental_status'] ?? '') !== 'completed'): ?>
+                                <form action="<?= base_url('/pesanan/sewa/' . $b['id'] . '/konfirmasi-selesai') ?>" method="POST" style="margin-top:6px;">
+                                    <?= csrf_field() ?>
+                                    <button type="submit" style="background:#2563eb; color:#fff; border:none; padding:7px 14px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer;" onclick="return confirm('Selesaikan masa sewa kamera ini? Dana sewa akan diteruskan ke toko mitra.')">
+                                        ✓ Selesai Sewa & Lepas Escrow
+                                    </button>
+                                </form>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>

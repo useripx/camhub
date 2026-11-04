@@ -317,7 +317,7 @@
 </head>
 <body>
 
-    <!-- SIDEBAR NAVY GELAP (PERSIS MOCKUP) -->
+    <!-- Sidebar Navy Gelap -->
     <aside class="sidebar">
         <div>
             <a href="<?= base_url('/dashboard/mitra') ?>" class="brand-logo">CamHub</a>
@@ -375,7 +375,7 @@
         </div>
     </aside>
 
-    <!-- KONTEN UTAMA DASHBOARD MITRA -->
+    <!-- Konten Utama Dashboard Mitra -->
     <main class="main-content">
         <div class="page-header">
             <h1 class="page-title">Dashboard Mitra Lapak</h1>
@@ -389,7 +389,7 @@
             <div class="flash-alert flash-error"><?= $msg ?></div>
         <?php endif; ?>
 
-        <!-- 3 KARTU METRIK UTAMA (PERSIS MOCKUP) -->
+        <!-- 3 Kartu Metrik Utama -->
         <section class="stats-grid">
             <div class="stat-card">
                 <div class="stat-label">Total Produk</div>
@@ -405,7 +405,7 @@
             </div>
         </section>
 
-        <!-- SEKSI PRODUK SAYA (PERSIS MOCKUP) -->
+        <!-- Seksi Produk Saya -->
         <section>
             <div class="section-header">
                 <h2 class="section-title">Produk Saya</h2>

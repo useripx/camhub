@@ -1,16 +1,15 @@
-# RINGKASAN PERKEMBANGAN PROYEK CAMHUB
+# LAPORAN PERKEMBANGAN PENGERJAAN PROYEK CAMHUB
+## Sistem Marketplace & Rental Kamera Terintegrasi
 
-> **PROYEK:** CamHub – Camera Marketplace Platform  
-> **KELOMPOK:** Kelompok 1  
-> **ANGGOTA:**  
-> 1. **Yogi Ario Pratama** (Project Owner & Lead Developer)  
-> 2. **Muhammad Regieyanto** (Backend & System Architect)  
-> 3. **Ivan Farrel Nanda Kristanto** (Core Routing & Security Engineer)  
-> 4. **Krisna Mukti** (Quality Assurance & Presentation Coordinator)  
+> **Kelompok 1:**  
+> 1. Yogi Ario Pratama (Project Owner & Lead Developer)  
+> 2. Muhammad Regieyanto (Backend & System Architect)  
+> 3. Ivan Farrel Nanda Kristanto (Core Routing & Security Engineer)  
+> 4. Krisna Mukti (Quality Assurance & Presentation Coordinator)  
 >  
-> **STATUS PENGERJAAN:** **9 dari 13 Tahap SELESAI (69,2% Progres Selesai)**  
-> **HASIL PENGUJIAN:** **101 dari 101 Tests LULUS 100% (0 Gagal / 0 Error)**  
-> **STATUS SERVER:** Apache & MySQL Laragon Aktif (`http://localhost/camhub/public/`)
+> **Terakhir Diperbarui:** 04 November 2026 (Tahap 10 Selesai)  
+> **Status Keseluruhan:** **10 dari 13 Tahapan Selesai (77%)**  
+> **Hasil Uji Otomatis:** **111 / 111 Skenario LULUS (100% PASS, 0 Gagal)**
 
 ---
 
@@ -18,28 +17,28 @@
 
 | No | Tahap Pengerjaan | Status | Bukti Pengujian |
 |:---:|---|:---:|:---:|
-| **01** | **Persiapan Fondasi & Struktur MVC** | **SELESAI** | `test_foundation.php` (7/7 PASS) |
-| **02** | **Perancangan Basis Data Relasional** | **SELESAI** | `test_database.php` (7/7 PASS) |
-| **03** | **Autentikasi Pengguna & RBAC** | **SELESAI** | `test_auth.php` (10/10 PASS) |
-| **04** | **Profil Pelanggan & Verifikasi KYC** | **SELESAI** | `test_kyc.php` (10/10 PASS) |
+| **01** | **Persiapan Fondasi & Arsitektur MVC Native** | **SELESAI** | `test_foundation.php` (7/7 PASS) |
+| **02** | **Perancangan Skema Database (23 Tabel Relasional)** | **SELESAI** | `test_database.php` (7/7 PASS) |
+| **03** | **Autentikasi Pengguna & RBAC Guard** | **SELESAI** | `test_auth.php` (10/10 PASS) |
+| **04** | **Profil Pelanggan & Verifikasi KYC KTP** | **SELESAI** | `test_kyc.php` (10/10 PASS) |
 | **05** | **Website Publik & Katalog Kamera** | **SELESAI** | `test_catalog.php` (10/10 PASS) |
 | **06** | **Dashboard Mitra Lapak** | **SELESAI** | `test_partner_dashboard.php` (10/10 PASS) |
 | **07** | **Penyewaan & Booking Kamera (Rental)** | **SELESAI** | `test_booking.php` (10/10 PASS) |
 | **08** | **Marketplace Jual Beli Kamera (Sales)** | **SELESAI** | `test_marketplace.php` (10/10 PASS) |
 | **09** | **Sistem Titip Jual & Admin Dashboard** | **SELESAI** | `test_consignment.php` (10/10 PASS) |
-| 10 | Integrasi Pembayaran & Escrow Gateway | Belum Dimulai | - |
+| **10** | **Integrasi Pembayaran & Escrow Gateway** | **SELESAI** | `test_escrow_payment.php` (10/10 PASS) |
 | 11 | Dashboard Super Administrator | Belum Dimulai | - |
 | 12 | Sistem Notifikasi & Laporan Finansial | Belum Dimulai | - |
 | 13 | Final Hardening & Penerapan (Deployment) | Belum Dimulai | - |
 
 ---
 
-##  Fitur-Fitur yang Sudah Selesai Dibuat (8 Tahap)
+## 🎯 Fitur-Fitur yang Sudah Selesai Dibuat (10 Tahap)
 
 ### 1. Fondasi Sistem & Basis Data (Tahap 01 & 02)
 - Arsitektur Native PHP MVC (tanpa framework pihak ketiga).
 - Koneksi aman PDO Singleton dengan MySQL InnoDB (`camhub_db`).
-- 22 tabel relasional aktif dengan 28 batasan *foreign key* dan *composite index*.
+- 23 tabel relasional aktif dengan 29 batasan *foreign key* dan *composite index*.
 - Data seeder 3 peran (Admin, Mitra, Pelanggan), 5 kategori, dan 6 kamera lengkap unit fisiknya.
 
 ### 2. Autentikasi & Keamanan Hak Akses / RBAC (Tahap 03)
@@ -86,20 +85,29 @@
 - 3 Kartu statistik metrik: **Pesanan Aktif**, **Sewa Mendatang**, dan **Saldo Escrow**.
 - Daftar **Pesanan Terbaru** riil dari database lengkap dengan status badge (*Dalam proses*, *Dikirim*, *Selesai*).
 
----
-
 ### 9. Sistem Titip Jual Kamera & Perbaikan Total Dashboard Admin (Tahap 09)
 - **Penyelarasan Dashboard Admin 100% Mockup:** Layout 2 kolom presisi sesuai `CamHub — Dashboard Admin.png`: Sidebar Navy Slate `#0c192c`, 4 kartu metrik 2x2 (*Menunggu Verifikasi KYC*, *Unit Inspeksi*, *Transaksi Hari Ini*, *Denda Pending*), dan kartu *Transaksi 7 Hari Terakhir* dengan bar chart biru dinamis `#2563eb` via `AdminDashboardController`.
 - **Alur Titip Jual Kamera (Consignment):** Formulir pengajuan pelanggan memilih toko mitra lapak (`/titip-jual/ajukan`), inspeksi fisik & persetujuan harga final dengan komisi 10% di sisi mitra lapak (`/dashboard/mitra/titip-jual`), dan pelacak status stepper di sisi pelanggan (`/titip-jual/saya`).
 - **Publikasi Otomatis ke Etalase:** Unit titip jual yang lolos otomatis terbit di katalog publik dengan penanda khusus badge **"Titip Jual"**.
 - **Tombol Logout Mitra:** Ditambahkan tombol logout terpadu yang rapi pada Dashboard Mitra Lapak sesuai masukan pengguna.
 
+### 10. Integrasi Pembayaran & Rekening Bersama Escrow Gateway (Tahap 10)
+- **Pembersihan Cacat Visual Dashboard Mitra:** Menghapus seluruh kebocoran teks komentar CSS/HTML dan mengonsolidasikan menu `Kelola Titip Jual` menjadi tepat satu entri di sidebar navigasi.
+- **Siklus Hidup Lengkap Escrow (Zero-Trust):**
+  - Status `held`: Mengamankan dana transaksi saat pesanan sewa atau beli dibuat.
+  - Status `released`: Tombol interaktif "Konfirmasi Selesai / Terima Barang" di sisi pelanggan (`/pesanan-saya`) langsung melepaskan dana ke saldo toko mitra secara instan dan otomatis mengubah status transaksi menjadi `completed`.
+  - Status `refunded`: Pembatalan pesanan mengembalikan dana penuh ke rekening pelanggan tanpa merugikan mitra lapak.
+  - Status `disputed`: Mekanisme komplain kerusakan/ketidaksesuaian barang mengunci dana escrow dari pelepasan otomatis untuk diinvestigasi tim admin.
+- **Dompet & Pencairan Saldo Mitra (`/dashboard/mitra/saldo`):**
+  - Panel metrik real-time: Saldo Tersedia (siap ditarik), Saldo Tertahan di Escrow, dan Total Dana Pernah Ditarik.
+  - Formulir penarikan dana ke rekening bank mitra (BCA, Mandiri, BRI, BNI, BSI) dengan batas minimum Rp 50.000 dan proteksi saldo berlebih (*anti-overdraft*).
+  - Tabel riwayat penarikan bank (`partner_withdrawals`) dan mutasi riwayat dana masuk escrow.
+- **Audit Trail ACID:** Seluruh mutasi finansial dilindungi transaksi basis data MySQL InnoDB dan terekam permanen di tabel `audit_logs`.
+
 ---
 
-## ⏳ Fitur yang Belum Dikerjakan (Tahap 10 s.d 13)
+## ⏳ Fitur yang Belum Dikerjakan (Tahap 11 s.d 13)
 
-
-2. **Tahap 10:** Integrasi Pembayaran & Escrow Gateway (*Pencairan Dana Mitra & Mekanisme Dispute*).
-3. **Tahap 11:** Dashboard Super Administrator (*Manajemen Pengguna, Review KYC, & Audit Log*).
-4. **Tahap 12:** Notifikasi Sistem & Laporan Keuangan (*Cetak PDF & Export Excel*).
-5. **Tahap 13:** Pengujian Beban Akhir, Audit Keamanan, & Panduan Deployment Sidang.
+1. **Tahap 11:** Dashboard Super Administrator (*Manajemen Pengguna, Review KYC, & Audit Log*).
+2. **Tahap 12:** Notifikasi Sistem & Laporan Keuangan (*Cetak PDF & Export Excel*).
+3. **Tahap 13:** Pengujian Beban Akhir, Audit Keamanan, & Panduan Deployment Sidang.

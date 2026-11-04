@@ -52,3 +52,4 @@ class ConsignmentValidator
         return $this->errors;
     }
 }
+

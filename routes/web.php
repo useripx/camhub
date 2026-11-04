@@ -12,6 +12,8 @@ use App\Controllers\BookingController;
 use App\Controllers\SalesController;
 use App\Controllers\AdminDashboardController;
 use App\Controllers\ConsignmentController;
+use App\Controllers\EscrowController;
+use App\Controllers\PartnerWalletController;
 
 /**
  * Web Routes - CamHub
@@ -66,7 +68,8 @@ Router::get('/dashboard/mitra/produk/{id}/unit', [PartnerDashboardController::cl
 Router::post('/dashboard/mitra/produk/{id}/unit/simpan', [PartnerDashboardController::class, 'storeUnit'], ['auth', 'role:partner']);
 Router::get('/dashboard/mitra/jadwal', [PartnerDashboardController::class, 'schedule'], ['auth', 'role:partner']);
 Router::get('/dashboard/mitra/transaksi', [PartnerDashboardController::class, 'transactions'], ['auth', 'role:partner']);
-Router::get('/dashboard/mitra/saldo', [PartnerDashboardController::class, 'wallet'], ['auth', 'role:partner']);
+Router::get('/dashboard/mitra/saldo', [PartnerWalletController::class, 'index'], ['auth', 'role:partner']);
+Router::post('/dashboard/mitra/saldo/tarik', [PartnerWalletController::class, 'withdraw'], ['auth', 'role:partner']);
 Router::get('/dashboard/mitra/pengaturan', [PartnerDashboardController::class, 'settings'], ['auth', 'role:partner']);
 Router::post('/dashboard/mitra/pengaturan/update', [PartnerDashboardController::class, 'updateSettings'], ['auth', 'role:partner']);
 
@@ -97,3 +100,8 @@ Router::get('/titip-jual/saya', [ConsignmentController::class, 'customerConsignm
 Router::get('/dashboard/mitra/titip-jual', [ConsignmentController::class, 'partnerConsignments'], ['auth', 'role:partner']);
 Router::post('/dashboard/mitra/titip-jual/{id}/inspeksi', [ConsignmentController::class, 'partnerInspect'], ['auth', 'role:partner']);
 Router::post('/dashboard/mitra/titip-jual/{id}/setujui', [ConsignmentController::class, 'partnerApprove'], ['auth', 'role:partner']);
+
+// 14. Penyelesaian Transaksi, Rekening Bersama Escrow & Sengketa (Tahap 10)
+Router::post('/pesanan/sewa/{id}/konfirmasi-selesai', [EscrowController::class, 'confirmRental'], ['auth', 'role:customer']);
+Router::post('/pesanan/beli/{id}/konfirmasi-terima', [EscrowController::class, 'confirmSale'], ['auth', 'role:customer']);
+Router::post('/pesanan/dispute', [EscrowController::class, 'dispute'], ['auth', 'role:customer']);

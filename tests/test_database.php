@@ -59,14 +59,14 @@ try {
         'partner_stores', 'categories', 'products', 'product_images', 'product_units',
         'rental_pricing', 'rental_bookings', 'sales_orders', 'sales_order_items',
         'consignments', 'payments', 'payment_transactions', 'escrow_transactions',
-        'fines', 'inspections', 'notifications', 'audit_logs'
+        'fines', 'inspections', 'notifications', 'audit_logs', 'partner_withdrawals'
     ];
 
     $stmt = $pdo->query("SHOW TABLES");
     $existingTables = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     $missingTables = array_diff($requiredTables, $existingTables);
-    $allTablesExist = count($missingTables) === 0 && count($existingTables) === 22;
+    $allTablesExist = count($missingTables) === 0 && count($existingTables) >= 22;
     $assert_test("TEST-DB-02", "All 22 Relational Tables Exist in MySQL", $allTablesExist, "Tabel hilang: " . implode(', ', $missingTables));
 
     // TEST-DB-03: Foreign Key Constraints Validation

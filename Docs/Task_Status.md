@@ -24,7 +24,7 @@
 | **07** | **Penyewaan & Pemesanan Kamera** | `tahap/07-penyewaan-pemesanan` | **SELESAI (100% PASS)** | [`Docs/tahapan/07.implementation_plan_Tahap7.md`](tahapan/07.implementation_plan_Tahap7.md) | `tests/test_booking.php` (10/10 PASS) |
 | **08** | **Marketplace Jual Beli Kamera** | `tahap/08-marketplace-jual-beli` | **SELESAI (100% PASS)** | [`Docs/tahapan/08.implementation_plan_Tahap8.md`](tahapan/08.implementation_plan_Tahap8.md) | `tests/test_marketplace.php` (10/10 PASS) |
 | **09** | **Sistem Titip Jual & Admin Dashboard** | `tahap/09-sistem-titip-jual` | **SELESAI (100% PASS)** | [`Docs/tahapan/09.implementation_plan_Tahap9.md`](tahapan/09.implementation_plan_Tahap9.md) | `tests/test_consignment.php` (10/10 PASS) |
-| **10** | Pembayaran & Escrow | `tahap/10-pembayaran-escrow` | Belum Dimulai | - | - |
+| **10** | **Pembayaran & Escrow Gateway** | `tahap/10-pembayaran-escrow` | **SELESAI (100% PASS)** | [`Docs/tahapan/10.implementation_plan_Tahap10.md`](tahapan/10.implementation_plan_Tahap10.md) | `tests/test_escrow_payment.php` (10/10 PASS) |
 | **11** | Dashboard Administrator | `tahap/11-dashboard-administrator` | Belum Dimulai | - | - |
 | **12** | Notifikasi & Pelaporan | `tahap/12-notifikasi-pelaporan` | Belum Dimulai | - | - |
 | **13** | Pengujian & Penerapan | `tahap/13-pengujian-penerapan` | Belum Dimulai | - | - |
@@ -178,3 +178,23 @@
 - [x] Uji regresi seluruh tahap berjalan serentak: Tahap 01 (7/7), Tahap 02 (7/7), Tahap 03 (10/10), Tahap 04 (10/10), Tahap 05 (10/10), Tahap 06 (10/10), Tahap 07 (10/10), Tahap 08 (10/10), Browser E2E (17/17) -> **Total 91 / 91 Tests LULUS (100% PASS)**.
 - [x] Pembuatan buku panduan dan naskah presentasi 4 orang Kelompok 1 di `Docs/buku/08 Tahap 8.md`.
 - [x] Pencadangan rencana implementasi fix di `Docs/tahapan/08.implementation_plan_Tahap8.md`.
+
+---
+
+## 📝 Catatan Rinci Tahap 10 (Pembayaran, Rekening Bersama Escrow, & Pencairan Saldo Mitra)
+
+- [x] Pembuatan branch resmi `tahap/10-pembayaran-escrow` dari branch `develop`.
+- [x] Pembersihan total cacat visual komentar HTML di `resources/views/partner/dashboard.php` dan konsolidasi menu `Kelola Titip Jual` menjadi tepat 1 entri.
+- [x] Eksekusi migrasi basis data `database/migrations/03_create_partner_withdrawals.php` untuk pencatatan penarikan dana mitra lapak.
+- [x] Pembuatan repositori `App\Repositories\EscrowRepository` (pengecekan escrow sewa/beli, mutasi status `held` -> `released` -> `refunded` -> `disputed`, kalkulasi saldo tersedia vs tertahan toko mitra, dan pencatatan penarikan bank).
+- [x] Pembuatan service inti `App\Services\EscrowService` (transaksi atomic ACID pelepasan dana, sengketa dispute, pengembalian dana refund, validasi formulir penarikan saldo min. Rp 50.000, dan audit logging).
+- [x] Pembuatan controller `App\Controllers\EscrowController` dan `App\Controllers\PartnerWalletController`.
+- [x] Pembangunan antarmuka:
+  - Halaman Dompet Saldo & Pencairan Dana Mitra `resources/views/partner/wallet.php` (3 kartu metrik saldo, formulir penarikan bank, riwayat penarikan, dan mutasi transaksi escrow).
+  - Penambahan tombol aksi "Konfirmasi Terima & Lepas Escrow" / "Selesai Sewa & Lepas Escrow" di `resources/views/customer/orders.php`.
+- [x] Registrasi rute web escrow dan dompet mitra di `routes/web.php` (`/dashboard/mitra/saldo`, `/dashboard/mitra/saldo/tarik`, `/pesanan/sewa/{id}/konfirmasi-selesai`, `/pesanan/beli/{id}/konfirmasi-terima`, `/pesanan/dispute`).
+- [x] Test suite mandiri `php tests/test_escrow_payment.php` (**100% PASS, 10/10**).
+- [x] Uji regresi seluruh tahap platform (Tahap 01 s/d 10 + Browser E2E) -> **Total 111 / 111 Tests LULUS (100% PASS, 0 Error)**.
+- [x] Verifikasi browser Chrome DevTools pada `/dashboard/mitra/saldo` dan `/pesanan-saya`.
+- [x] Pembuatan buku panduan dan naskah presentasi 4 orang Kelompok 1 di `Docs/buku/10 Tahap 10.md`.
+- [x] Pencadangan rencana implementasi fix di `Docs/tahapan/10.implementation_plan_Tahap10.md`.
