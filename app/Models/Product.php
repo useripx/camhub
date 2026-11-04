@@ -87,6 +87,11 @@ class Product implements ArrayAccess
         return 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80';
     }
 
+    public function isConsignment(): bool
+    {
+        return $this->is_consignment;
+    }
+
     // ArrayAccess implementation
     public function offsetExists(mixed $offset): bool
     {

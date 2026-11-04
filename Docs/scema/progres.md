@@ -8,8 +8,8 @@
 > 3. **Ivan Farrel Nanda Kristanto** (Core Routing & Security Engineer)  
 > 4. **Krisna Mukti** (Quality Assurance & Presentation Coordinator)  
 >  
-> **STATUS PENGERJAAN:** **8 dari 13 Tahap SELESAI (61,5% Progres Selesai)**  
-> **HASIL PENGUJIAN:** **91 dari 91 Tests LULUS 100% (0 Gagal / 0 Error)**  
+> **STATUS PENGERJAAN:** **9 dari 13 Tahap SELESAI (69,2% Progres Selesai)**  
+> **HASIL PENGUJIAN:** **101 dari 101 Tests LULUS 100% (0 Gagal / 0 Error)**  
 > **STATUS SERVER:** Apache & MySQL Laragon Aktif (`http://localhost/camhub/public/`)
 
 ---
@@ -26,7 +26,7 @@
 | **06** | **Dashboard Mitra Lapak** | **SELESAI** | `test_partner_dashboard.php` (10/10 PASS) |
 | **07** | **Penyewaan & Booking Kamera (Rental)** | **SELESAI** | `test_booking.php` (10/10 PASS) |
 | **08** | **Marketplace Jual Beli Kamera (Sales)** | **SELESAI** | `test_marketplace.php` (10/10 PASS) |
-| 09 | Sistem Titip Jual (Consignment) | Belum Dimulai | - |
+| **09** | **Sistem Titip Jual & Admin Dashboard** | **SELESAI** | `test_consignment.php` (10/10 PASS) |
 | 10 | Integrasi Pembayaran & Escrow Gateway | Belum Dimulai | - |
 | 11 | Dashboard Super Administrator | Belum Dimulai | - |
 | 12 | Sistem Notifikasi & Laporan Finansial | Belum Dimulai | - |
@@ -88,9 +88,17 @@
 
 ---
 
-## ⏳ Fitur yang Belum Dikerjakan (Tahap 09 s.d 13)
+### 9. Sistem Titip Jual Kamera & Perbaikan Total Dashboard Admin (Tahap 09)
+- **Penyelarasan Dashboard Admin 100% Mockup:** Layout 2 kolom presisi sesuai `CamHub — Dashboard Admin.png`: Sidebar Navy Slate `#0c192c`, 4 kartu metrik 2x2 (*Menunggu Verifikasi KYC*, *Unit Inspeksi*, *Transaksi Hari Ini*, *Denda Pending*), dan kartu *Transaksi 7 Hari Terakhir* dengan bar chart biru dinamis `#2563eb` via `AdminDashboardController`.
+- **Alur Titip Jual Kamera (Consignment):** Formulir pengajuan pelanggan memilih toko mitra lapak (`/titip-jual/ajukan`), inspeksi fisik & persetujuan harga final dengan komisi 10% di sisi mitra lapak (`/dashboard/mitra/titip-jual`), dan pelacak status stepper di sisi pelanggan (`/titip-jual/saya`).
+- **Publikasi Otomatis ke Etalase:** Unit titip jual yang lolos otomatis terbit di katalog publik dengan penanda khusus badge **"Titip Jual"**.
+- **Tombol Logout Mitra:** Ditambahkan tombol logout terpadu yang rapi pada Dashboard Mitra Lapak sesuai masukan pengguna.
 
-1. **Tahap 09:** Sistem Titip Jual Kamera (*Consignment* dari pengguna ke toko mitra).
+---
+
+## ⏳ Fitur yang Belum Dikerjakan (Tahap 10 s.d 13)
+
+
 2. **Tahap 10:** Integrasi Pembayaran & Escrow Gateway (*Pencairan Dana Mitra & Mekanisme Dispute*).
 3. **Tahap 11:** Dashboard Super Administrator (*Manajemen Pengguna, Review KYC, & Audit Log*).
 4. **Tahap 12:** Notifikasi Sistem & Laporan Keuangan (*Cetak PDF & Export Excel*).

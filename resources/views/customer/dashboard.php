@@ -316,7 +316,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="<?= base_url('/pesanan-saya?type=consignment') ?>">
+                <a href="<?= base_url('/titip-jual/saya') ?>">
                     <span class="nav-icon">🏷️</span>
                     <span>Titip Jual Saya</span>
                 </a>
