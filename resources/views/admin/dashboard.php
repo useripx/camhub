@@ -3,90 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Administrator — CamHub</title>
+    <title>Dashboard Admin — CamHub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; }
-        body { background:#0b192e; color:#ffffff; min-height:100vh; }
-        header { background:#112240; padding:16px 40px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #1e3a5f; flex-wrap:wrap; gap:16px; }
-        .logo { font-size:20px; font-weight:800; color:#fff; text-decoration:none; }
-        .logo span { color:#fbbf24; }
-        .nav-links-dash { display:flex; align-items:center; gap:20px; list-style:none; }
-        .nav-links-dash a { color:#94a3b8; text-decoration:none; font-size:14px; font-weight:600; transition:0.2s; }
-        .nav-links-dash a:hover { color:#fbbf24; }
-        .user-nav { display:flex; align-items:center; gap:12px; }
-        .role-badge { background:#d97706; color:#fff; font-size:12px; font-weight:700; padding:4px 10px; border-radius:20px; text-transform:uppercase; }
-        .btn-nav-auth { background:#1e293b; color:#cbd5e1; text-decoration:none; padding:7px 14px; border-radius:8px; font-size:13px; font-weight:600; border:1px solid #334155; transition:0.2s; }
-        .btn-nav-auth:hover { background:#334155; color:#fff; }
-        .btn-logout { background:#ef4444; color:#fff; text-decoration:none; padding:7px 14px; border-radius:8px; font-size:13px; font-weight:600; transition:0.2s; border:none; cursor:pointer; }
-        .btn-logout:hover { background:#dc2626; }
-        main { max-width:1100px; margin:40px auto; padding:0 20px; }
-        .welcome-card { background:#132644; border:1px solid #1e3a5f; border-radius:16px; padding:32px; margin-bottom:28px; }
-        .welcome-card h1 { font-size:28px; margin-bottom:8px; }
-        .welcome-card h1 span { color:#fbbf24; }
-        .welcome-card p { color:#94a3b8; font-size:15px; }
-        .grid-stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:20px; margin-bottom:30px; }
-        .stat-card { background:#112240; border:1px solid #1e3a5f; border-radius:12px; padding:20px; }
-        .stat-label { font-size:13px; color:#94a3b8; margin-bottom:6px; }
-        .stat-value { font-size:24px; font-weight:800; color:#fbbf24; }
-        .action-row { display:flex; gap:14px; flex-wrap:wrap; }
-        .btn-action { background:#d97706; color:#fff; text-decoration:none; padding:12px 24px; border-radius:10px; font-weight:700; font-size:14px; transition:0.2s; }
-        .btn-action:hover { background:#b45309; }
-        .btn-secondary { background:#1e293b; color:#cbd5e1; text-decoration:none; padding:12px 24px; border-radius:10px; font-weight:600; font-size:14px; border:1px solid #334155; }
+        body { background:#f8fafc; color:#0f172a; min-height:100vh; display:flex; }
+        
+        /* Sidebar Styling (Sesuai CamHub — Dashboard Admin.png) */
+        .admin-sidebar {
+            width:260px;
+            background:#0c192c;
+            min-height:100vh;
+            padding:36px 28px;
+            display:flex;
+            flex-direction:column;
+            justify-content:space-between;
+            flex-shrink:0;
+        }
+        .sidebar-brand {
+            font-size:24px;
+            font-weight:800;
+            color:#ffffff;
+            text-decoration:none;
+            display:block;
+            margin-bottom:44px;
+            letter-spacing:-0.5px;
+        }
+        .sidebar-nav {
+            list-style:none;
+            display:flex;
+            flex-direction:column;
+            gap:22px;
+        }
+        .sidebar-nav a {
+            color:#94a3b8;
+            text-decoration:none;
+            font-size:15px;
+            font-weight:500;
+            display:flex;
+            align-items:center;
+            transition:color 0.2s;
+        }
+        .sidebar-nav a:hover {
+            color:#ffffff;
+        }
+        .sidebar-nav a.active {
+            color:#ffffff;
+            font-weight:700;
+        }
+
+        /* Sidebar Footer / Logout */
+        .sidebar-footer {
+            margin-top:auto;
+            padding-top:28px;
+            border-top:1px solid #1e293b;
+        }
+        .admin-profile {
+            display:flex;
+            align-items:center;
+            gap:10px;
+            margin-bottom:14px;
+        }
+        .admin-avatar {
+            width:34px;
+            height:34px;
+            border-radius:50%;
+            background:#1e3a8a;
+            color:#93c5fd;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:14px;
+            font-weight:700;
+        }
+        .admin-meta {
+            font-size:13px;
+        }
+        .admin-name {
+            color:#ffffff;
+            font-weight:700;
+        }
+        .admin-role {
+            color:#38bdf8;
+            font-size:11px;
+            font-weight:600;
+        }
+        .btn-sidebar-logout {
+            width:100%;
+            background:#1e293b;
+            color:#f87171;
+            border:1px solid #334155;
+            padding:9px 14px;
+            border-radius:8px;
+            font-size:13px;
+            font-weight:600;
+            cursor:pointer;
+            transition:all 0.2s;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:6px;
+        }
+        .btn-sidebar-logout:hover {
+            background:#dc2626;
+            color:#ffffff;
+            border-color:#dc2626;
+        }
+
+        /* Main Content Styling */
+        .admin-main {
+            flex:1;
+            padding:40px 48px;
+            max-width:1200px;
+        }
+        .page-title {
+            font-size:28px;
+            font-weight:800;
+            color:#0f172a;
+            margin-bottom:28px;
+            letter-spacing:-0.5px;
+        }
+
+        /* 4 Metrics Grid 2x2 */
+        .metrics-grid {
+            display:grid;
+            grid-template-columns:repeat(2, 1fr);
+            gap:24px;
+            margin-bottom:36px;
+        }
+        .metric-card {
+            background:#ffffff;
+            border:1px solid #e2e8f0;
+            border-radius:16px;
+            padding:26px 28px;
+            box-shadow:0 1px 3px rgba(0,0,0,0.02);
+            transition:transform 0.2s, box-shadow 0.2s;
+        }
+        .metric-card:hover {
+            transform:translateY(-2px);
+            box-shadow:0 4px 12px rgba(0,0,0,0.04);
+        }
+        .metric-label {
+            font-size:14px;
+            font-weight:500;
+            color:#64748b;
+            margin-bottom:16px;
+        }
+        .metric-value {
+            font-size:32px;
+            font-weight:800;
+            color:#0f172a;
+            line-height:1;
+        }
+
+        /* Chart Section */
+        .chart-section-title {
+            font-size:20px;
+            font-weight:700;
+            color:#0f172a;
+            margin-bottom:18px;
+            letter-spacing:-0.3px;
+        }
+        .chart-card {
+            background:#ffffff;
+            border:1px solid #e2e8f0;
+            border-radius:16px;
+            padding:44px 36px 28px 36px;
+            box-shadow:0 1px 3px rgba(0,0,0,0.02);
+        }
+        .chart-bars-container {
+            display:flex;
+            justify-content:space-around;
+            align-items:flex-end;
+            height:220px;
+            border-bottom:1px solid #e2e8f0;
+            padding-bottom:12px;
+        }
+        .bar-col {
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:10px;
+            width:48px;
+            height:100%;
+            justify-content:flex-end;
+        }
+        .bar-col .bar-fill {
+            width:34px;
+            background:#2563eb;
+            border-radius:6px 6px 0 0;
+            transition:height 0.4s ease, background 0.2s;
+            cursor:pointer;
+            position:relative;
+        }
+        .bar-col .bar-fill:hover {
+            background:#1d4ed8;
+        }
+        .bar-col .bar-label {
+            font-size:13px;
+            font-weight:500;
+            color:#64748b;
+            margin-top:10px;
+        }
+
+        @media (max-width: 900px) {
+            body { flex-direction:column; }
+            .admin-sidebar { width:100%; min-height:auto; }
+            .metrics-grid { grid-template-columns:1fr; }
+            .admin-main { padding:24px 20px; }
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <div style="display:flex; align-items:center; gap:30px;">
-        <a href="<?= base_url() ?>" class="logo">Cam<span>Hub</span></a>
-        <ul class="nav-links-dash">
-            <li><a href="<?= base_url() ?>">← Beranda Publik</a></li>
-            <li><a href="<?= base_url('/login') ?>">Halaman Login</a></li>
-            <li><a href="<?= base_url('/register') ?>">Daftar Akun Baru</a></li>
-        </ul>
-    </div>
-    <div class="user-nav">
-        <span>🛡️ <?= htmlspecialchars(auth()['full_name'] ?? 'Administrator', ENT_QUOTES, 'UTF-8') ?></span>
-        <span class="role-badge">Super Admin</span>
-        <a href="<?= base_url('/login') ?>" class="btn-nav-auth">Ganti Akun</a>
-        <form action="<?= base_url('/logout') ?>" method="POST" style="margin:0;">
-            <?= csrf_field() ?>
-            <button type="submit" class="btn-logout">Keluar (Logout)</button>
-        </form>
-    </div>
-</header>
-
-<main>
-    <div class="welcome-card">
-        <h1>Dashboard Kontrol <span>Administrator</span></h1>
-        <p>Selamat datang, <strong><?= htmlspecialchars(auth()['full_name'] ?? 'Admin', ENT_QUOTES, 'UTF-8') ?></strong> (Username: <code><?= htmlspecialchars(auth()['username'] ?? 'admin', ENT_QUOTES, 'UTF-8') ?></code>). Anda memiliki kendali penuh atas sistem, verifikasi KYC pengguna, pengawasan transaksi escrow, dan log audit keamanan.</p>
-    </div>
-
-    <div class="grid-stats">
-        <div class="stat-card">
-            <div class="stat-label">Pengguna Terdaftar</div>
-            <div class="stat-value">4 Akun Aktif</div>
+    <!-- Sidebar 100% Mockup CamHub — Dashboard Admin.png -->
+    <aside class="admin-sidebar">
+        <div>
+            <a href="<?= base_url('/dashboard/admin') ?>" class="sidebar-brand">CamHub</a>
+            <ul class="sidebar-nav">
+                <li><a href="<?= base_url('/dashboard/admin') ?>" class="active">Beranda</a></li>
+                <li><a href="<?= base_url('/dashboard/admin') ?>">Verifikasi KYC</a></li>
+                <li><a href="<?= base_url('/dashboard/admin') ?>">Jadwal Unit</a></li>
+                <li><a href="<?= base_url('/dashboard/admin') ?>">Transaksi</a></li>
+                <li><a href="<?= base_url('/dashboard/admin') ?>">Manajemen Denda</a></li>
+                <li><a href="<?= base_url('/dashboard/admin') ?>">Laporan</a></li>
+                <li><a href="<?= base_url('/dashboard/admin') ?>">Pengaturan</a></li>
+            </ul>
         </div>
-        <div class="stat-card">
-            <div class="stat-label">Antrean Verifikasi KYC</div>
-            <div class="stat-value" style="color:#f59e0b;">0 Tertunda</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Total Escrow Platform</div>
-            <div class="stat-value">Rp 0</div>
-        </div>
-    </div>
 
-    <div class="action-row">
-        <a href="<?= base_url() ?>" class="btn-action">Lihat Beranda Publik</a>
-        <a href="<?= base_url('/login') ?>" class="btn-secondary">Halaman Login (Ganti Akun)</a>
-        <a href="<?= base_url('/register') ?>" class="btn-secondary">Pendaftaran Akun Baru</a>
-        <a href="<?= base_url('/logout') ?>" class="btn-secondary" style="color:#ef4444;">Keluar Sesi</a>
-    </div>
-</main>
+        <div class="sidebar-footer">
+            <div class="admin-profile">
+                <div class="admin-avatar">A</div>
+                <div class="admin-meta">
+                    <div class="admin-name"><?= htmlspecialchars(auth()['full_name'] ?? 'Administrator', ENT_QUOTES, 'UTF-8') ?></div>
+                    <div class="admin-role">Super Admin</div>
+                </div>
+            </div>
+            <form action="<?= base_url('/logout') ?>" method="POST" style="margin:0;">
+                <?= csrf_field() ?>
+                <button type="submit" class="btn-sidebar-logout">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Keluar Sesi
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="admin-main">
+        <h1 class="page-title">Dashboard Admin</h1>
+
+        <!-- 4 Metric Cards Grid 2x2 -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Menunggu Verifikasi KYC</div>
+                <div class="metric-value"><?= (int) ($metrics['kyc_pending'] ?? 8) ?></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Unit Inspeksi</div>
+                <div class="metric-value"><?= (int) ($metrics['inspection_units'] ?? 5) ?></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Transaksi Hari Ini</div>
+                <div class="metric-value"><?= (int) ($metrics['today_transactions'] ?? 12) ?></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Denda Pending</div>
+                <div class="metric-value"><?= (int) ($metrics['pending_fines'] ?? 3) ?></div>
+            </div>
+        </div>
+
+        <!-- Transaksi 7 Hari Terakhir -->
+        <h2 class="chart-section-title">Transaksi 7 Hari Terakhir</h2>
+        <div class="chart-card">
+            <div class="chart-bars-container">
+                <?php foreach (($chartData ?? []) as $bar): ?>
+                    <div class="bar-col">
+                        <div class="bar-fill" style="height: <?= (int) ($bar['height_pct'] ?? 40) ?>%;" title="<?= htmlspecialchars($bar['day']) ?>: <?= (int) $bar['count'] ?> transaksi"></div>
+                        <div class="bar-label"><?= htmlspecialchars($bar['day']) ?></div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </main>
 
 </body>
 </html>

@@ -355,6 +355,11 @@
                     <span class="nav-icon">⚙</span> Pengaturan
                 </a>
             </li>
+            <li class="nav-item <?= ($activeMenu === 'titip-jual') ? 'active' : '' ?>">
+                <a href="<?= base_url('/dashboard/mitra/titip-jual') ?>">
+                    <span class="nav-icon">📦</span> Kelola Titip Jual
+                </a>
+            </li>
         </ul>
 
         <div class="sidebar-footer">
@@ -363,7 +368,7 @@
             </a>
             <form action="<?= base_url('/logout') ?>" method="POST" style="margin:0;">
                 <?= csrf_field() ?>
-                <button type="submit" class="btn-logout">
+                <button type="submit" class="btn-logout" style="background:#dc2626; color:#ffffff; font-weight:700; border-radius:8px; justify-content:center; padding:10px 14px; margin-top:8px; width:100%; display:flex; align-items:center; gap:8px;">
                     <span>🚪</span> Keluar Akun
                 </button>
             </form>

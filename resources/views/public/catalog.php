@@ -816,6 +816,9 @@
                                      loading="lazy">
                                 <span class="badge-status"><?= $product->stock_quantity > 0 ? 'Tersedia' : 'Disewa' ?></span>
                                 <span class="badge-cat"><?= htmlspecialchars($product->category_name ?? 'Kamera', ENT_QUOTES, 'UTF-8') ?></span>
+                                <?php if (!empty($product->is_consignment)): ?>
+                                    <span style="position:absolute; bottom:10px; left:10px; background:#fef3c7; color:#b45309; border:1px solid #fde68a; font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; z-index:2;">🏷️ Titip Jual</span>
+                                <?php endif; ?>
                             </div>
 
                             <div class="product-info">

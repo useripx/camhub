@@ -23,7 +23,7 @@
 | **06** | **Dashboard Mitra Lapak** | `tahap/06-dashboard-mitra` | **SELESAI (100% PASS)** | [`Docs/tahapan/06.implementation_plan_Tahap6.md`](tahapan/06.implementation_plan_Tahap6.md) | `tests/test_partner_dashboard.php` (10/10 PASS) |
 | **07** | **Penyewaan & Pemesanan Kamera** | `tahap/07-penyewaan-pemesanan` | **SELESAI (100% PASS)** | [`Docs/tahapan/07.implementation_plan_Tahap7.md`](tahapan/07.implementation_plan_Tahap7.md) | `tests/test_booking.php` (10/10 PASS) |
 | **08** | **Marketplace Jual Beli Kamera** | `tahap/08-marketplace-jual-beli` | **SELESAI (100% PASS)** | [`Docs/tahapan/08.implementation_plan_Tahap8.md`](tahapan/08.implementation_plan_Tahap8.md) | `tests/test_marketplace.php` (10/10 PASS) |
-| **09** | Sistem Titip Jual | `tahap/09-sistem-titip-jual` | Belum Dimulai | - | - |
+| **09** | **Sistem Titip Jual & Admin Dashboard** | `tahap/09-sistem-titip-jual` | **SELESAI (100% PASS)** | [`Docs/tahapan/09.implementation_plan_Tahap9.md`](tahapan/09.implementation_plan_Tahap9.md) | `tests/test_consignment.php` (10/10 PASS) |
 | **10** | Pembayaran & Escrow | `tahap/10-pembayaran-escrow` | Belum Dimulai | - | - |
 | **11** | Dashboard Administrator | `tahap/11-dashboard-administrator` | Belum Dimulai | - | - |
 | **12** | Notifikasi & Pelaporan | `tahap/12-notifikasi-pelaporan` | Belum Dimulai | - | - |
