@@ -21,6 +21,7 @@
             --bg-card-hover: #173056;
             --bg-subtle: rgba(255, 255, 255, 0.05);
             --bg-input: #0d1b30;
+            --bg-light: #0b1320;
             --border-color: #1e3a5f;
             --border-subtle: #162c4a;
             --text-dark: #ffffff;
@@ -28,10 +29,22 @@
             --text-primary: #ffffff;
             --text-secondary: #94a3b8;
             --text-muted: #94a3b8;
-            --primary-navy: #ffffff;
+            --primary-navy: #0b192e;
+            --hero-bg-from: #0b192e;
+            --hero-bg-to: #15294a;
+            --hero-title: #ffffff;
+            --hero-subtitle: #cbd5e1;
+            --hero-badge-text: #f59e0b;
+            --hero-badge-bg: rgba(245, 158, 11, 0.15);
+            --hero-badge-border: rgba(245, 158, 11, 0.35);
+            --search-box-bg: #112240;
+            --search-box-border: #1e3a5f;
+            --search-input-bg: #0d1b30;
+            --search-input-text: #ffffff;
+            --search-input-border: #1e3a5f;
             --accent-amber: #f59e0b;
             --accent-amber-hover: #d97706;
-            --accent-amber-light: rgba(245, 158, 11, 0.15);
+            --accent-amber-light: #fef3c7;
             --badge-green: #34d399;
             --badge-green-bg: rgba(52, 211, 153, 0.15);
             --blue-accent: #3b82f6;
@@ -50,6 +63,7 @@
             --bg-card-hover: #f1f5f9;
             --bg-subtle: #f1f5f9;
             --bg-input: #ffffff;
+            --bg-light: #f8fafc;
             --border-color: #e2e8f0;
             --border-subtle: #cbd5e1;
             --text-dark: #0f172a;
@@ -58,6 +72,18 @@
             --text-secondary: #475569;
             --text-muted: #64748b;
             --primary-navy: #0b192e;
+            --hero-bg-from: #0b192e;
+            --hero-bg-to: #15294a;
+            --hero-title: #ffffff;
+            --hero-subtitle: #94a3b8;
+            --hero-badge-text: #fef3c7;
+            --hero-badge-bg: rgba(255, 255, 255, 0.08);
+            --hero-badge-border: rgba(255, 255, 255, 0.15);
+            --search-box-bg: #ffffff;
+            --search-box-border: #e2e8f0;
+            --search-input-bg: #ffffff;
+            --search-input-text: #0f172a;
+            --search-input-border: #e2e8f0;
             --accent-amber: #d97706;
             --accent-amber-hover: #b45309;
             --accent-amber-light: #fef3c7;
@@ -80,7 +106,7 @@
         }
 
         body {
-            background-color: var(--bg-light);
+            background-color: var(--bg-page);
             color: var(--text-dark);
             min-height: 100vh;
             display: flex;
@@ -209,8 +235,8 @@
 
         /* HERO BANNER */
         .hero {
-            background: linear-gradient(135deg, var(--primary-navy) 0%, #15294a 100%);
-            color: #ffffff;
+            background: linear-gradient(135deg, var(--hero-bg-from) 0%, var(--hero-bg-to) 100%);
+            color: var(--hero-title);
             padding: 4.5rem 1.5rem 4rem;
             text-align: center;
             position: relative;
@@ -240,13 +266,13 @@
             align-items: center;
             gap: 0.4rem;
             padding: 0.35rem 0.85rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: var(--hero-badge-bg);
+            border: 1px solid var(--hero-badge-border);
             border-radius: 50px;
             font-size: 0.8rem;
             font-weight: 700;
             letter-spacing: 0.5px;
-            color: var(--accent-amber-light);
+            color: var(--hero-badge-text);
             margin-bottom: 1.25rem;
         }
 
@@ -260,7 +286,7 @@
 
         .hero-subtitle {
             font-size: 1.1rem;
-            color: #94a3b8;
+            color: var(--hero-subtitle);
             max-width: 620px;
             margin: 0 auto 2rem;
             line-height: 1.6;
@@ -268,34 +294,37 @@
 
         /* HERO SEARCH BOX */
         .hero-search-box {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-color);
+            background: var(--search-box-bg);
+            border: 1px solid var(--search-box-border);
             padding: 0.5rem;
             border-radius: 12px;
             display: flex;
             gap: 0.5rem;
             max-width: 700px;
             margin: 0 auto;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.35);
         }
 
         .hero-search-box input {
             flex: 1;
-            border: none;
+            border: 1px solid var(--search-input-border);
+            background: var(--search-input-bg);
             padding: 0.75rem 1rem;
             font-size: 0.95rem;
             outline: none;
-            color: var(--text-dark);
+            color: var(--search-input-text);
+            border-radius: 8px;
         }
 
         .hero-search-box select {
-            border: none;
-            border-left: 1px solid var(--border-color);
+            border: 1px solid var(--search-input-border);
+            border-left: 1px solid var(--search-input-border);
             padding: 0.75rem 1rem;
             font-size: 0.9rem;
             outline: none;
-            color: var(--text-dark);
-            background: var(--bg-surface);
+            color: var(--search-input-text);
+            background: var(--search-input-bg);
+            border-radius: 8px;
             cursor: pointer;
         }
 

@@ -172,6 +172,7 @@ class AdminDashboardController
     public function fines(): string
     {
         $fines = $this->adminRepo->getAllFines();
+        $rentalBookings = $this->adminRepo->getRecentRentalBookings(50);
 
         $success = $_SESSION['flash_success'] ?? null;
         $error = $_SESSION['flash_error'] ?? null;
@@ -179,6 +180,7 @@ class AdminDashboardController
 
         return view('admin.fines', [
             'fines' => $fines,
+            'rentalBookings' => $rentalBookings,
             'activeMenu' => 'denda',
             'success' => $success,
             'error' => $error
