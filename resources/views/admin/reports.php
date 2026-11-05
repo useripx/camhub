@@ -152,7 +152,7 @@
             </ul>
         </div>
 
-        <div class="sidebar-footer" style="margin-top:auto; padding-top:18px; border-top:1px solid #1e293b;">
+        <div class="sidebar-footer" style="margin-top:24px; padding-top:18px; border-top:1px solid #1e293b;">
             <button type="button" class="btn-theme-toggle" onclick="toggleCamHubTheme()" title="Beralih Mode Gelap/Terang" id="camhubThemeToggleBtn" style="width:100%; display:inline-flex; align-items:center; justify-content:center; gap:8px; background:#1e293b; color:#cbd5e1; border:1px solid #334155; padding:9px 12px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; text-align:center; margin-bottom:10px;">
                 <span class="theme-icon-wrap" id="themeIconWrap"></span>
                 <span id="themeToggleText">Mode Terang</span>
@@ -184,7 +184,7 @@
                     ]);
                 ?>
                 <a href="<?= base_url('/dashboard/admin/laporan/export?' . $exportQuery) ?>" class="btn-export">
-                    <span>📊</span> Unduh Rekap CSV / Excel
+                    Unduh Rekap CSV / Excel
                 </a>
             </div>
         </div>

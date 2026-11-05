@@ -64,7 +64,6 @@
             min-height:100vh; height:100vh; position:sticky; top:0; overflow-y:auto; padding:32px 24px 24px;
             display:flex;
             flex-direction:column;
-            justify-content:space-between;
             flex-shrink:0;
         }
         .sidebar-brand { font-size:24px; font-weight:800; color:#ffffff; text-decoration:none; display:block; margin-bottom:18px; letter-spacing:-0.5px; }
@@ -108,6 +107,58 @@
         .btn-toggle.suspend:hover { background:#fee2e2; }
         .btn-toggle.activate { color:#16a34a; border-color:#a7f3d0; }
         .btn-toggle.activate:hover { background:#dcfce7; }
+
+        .audit-action-code {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            background: rgba(3, 105, 161, 0.12);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+        }
+        html[data-theme="light"] .audit-action-code {
+            background: #f0f9ff;
+            color: #0369a1;
+            border-color: #bae6fd;
+        }
+
+        .audit-chips-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: center;
+        }
+        .audit-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            line-height: 1.4;
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: var(--text-primary);
+        }
+        .audit-chip strong {
+            color: var(--accent-blue);
+            font-weight: 700;
+        }
+        html[data-theme="dark"] .audit-chip {
+            background: rgba(59, 130, 246, 0.12);
+            border-color: rgba(59, 130, 246, 0.25);
+            color: #e2e8f0;
+        }
+        html[data-theme="light"] .audit-chip {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            color: #1e293b;
+        }
+        html[data-theme="light"] .audit-chip strong {
+            color: #2563eb;
+        }
     </style>
     <script>
         (function() {
@@ -138,7 +189,7 @@
             </ul>
         </div>
 
-        <div class="sidebar-footer" style="margin-top:auto; padding-top:18px; border-top:1px solid #1e293b;">
+        <div class="sidebar-footer" style="margin-top:24px; padding-top:18px; border-top:1px solid #1e293b;">
             <button type="button" class="btn-theme-toggle" onclick="toggleCamHubTheme()" title="Beralih Mode Gelap/Terang" id="camhubThemeToggleBtn" style="width:100%; display:inline-flex; align-items:center; justify-content:center; gap:8px; background:#1e293b; color:#cbd5e1; border:1px solid #334155; padding:9px 12px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; text-align:center; margin-bottom:10px;">
                 <span class="theme-icon-wrap" id="themeIconWrap"></span>
                 <span id="themeToggleText">Mode Terang</span>
@@ -170,7 +221,7 @@
 
         <!-- SECTION 1: MANAJEMEN AKUN PENGGUNA -->
         <div class="section-card">
-            <h2 class="section-title">👥 Manajemen Akun Pengguna Platform</h2>
+            <h2 class="section-title">Manajemen Akun Pengguna Platform</h2>
             <table class="table-custom">
                 <thead>
                     <tr>
@@ -224,35 +275,37 @@
 
         <!-- SECTION 2: AUDIT TRAIL KEAMANAN REAL-TIME -->
         <div class="section-card">
-            <h2 class="section-title">🛡️ Log Audit Keamanan & Finansial Terkini</h2>
+            <h2 class="section-title">Log Audit Keamanan & Finansial Terkini</h2>
             <table class="table-custom">
                 <thead>
                     <tr>
-                        <th>Waktu</th>
-                        <th>Aktor / Pengguna</th>
-                        <th>Aksi Terlaksana</th>
-                        <th>Target Entitas</th>
+                        <th style="width:145px;">Waktu</th>
+                        <th style="width:160px;">Aktor / Pengguna</th>
+                        <th style="width:150px;">Aksi Terlaksana</th>
+                        <th style="width:150px;">Target Entitas</th>
                         <th>Rincian Data Mutasi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($auditLogs as $log): ?>
                         <tr>
-                            <td style="white-space:nowrap; font-size:11px; color:#64748b;">
+                            <td style="white-space:nowrap; font-size:11px; color:var(--text-muted);">
                                 <?= date('d M Y, H:i:s', strtotime($log['created_at'])) ?>
                             </td>
                             <td>
                                 <?php if (!empty($log['full_name'])): ?>
                                     <strong><?= htmlspecialchars($log['full_name']) ?></strong>
-                                    <div style="font-size:11px; color:#64748b;">@<?= htmlspecialchars($log['username'] ?? '') ?></div>
+                                    <div style="font-size:11px; color:var(--text-muted);">@<?= htmlspecialchars($log['username'] ?? '') ?></div>
                                 <?php else: ?>
-                                    <span style="color:#64748b;">System / Tamu</span>
+                                    <span style="color:var(--text-muted);">System / Tamu</span>
                                 <?php endif; ?>
                             </td>
-                            <td><code style="background:#f1f5f9; padding:4px 8px; border-radius:4px; font-weight:700; color:#0369a1;"><?= htmlspecialchars($log['action']) ?></code></td>
-                            <td><?= htmlspecialchars($log['target_table']) ?> #<?= $log['target_id'] ?></td>
-                            <td style="font-family:monospace; font-size:11px; color:#475569; max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="<?= htmlspecialchars($log['changes_json'] ?? '') ?>">
-                                <?= htmlspecialchars($log['changes_json'] ?? '-') ?>
+                            <td><code class="audit-action-code"><?= htmlspecialchars($log['action']) ?></code></td>
+                            <td style="font-size:12px; font-weight:600; color:var(--text-secondary);"><?= htmlspecialchars($log['target_table']) ?> #<?= $log['target_id'] ?></td>
+                            <td title="Payload JSON Asli: <?= htmlspecialchars($log['changes_json'] ?? '') ?>">
+                                <div class="audit-chips-wrap">
+                                    <?= format_audit_changes($log['changes_json'] ?? null, $log['action'] ?? null) ?>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>

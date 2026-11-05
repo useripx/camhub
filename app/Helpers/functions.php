@@ -381,3 +381,137 @@ if (!function_exists('rate_limit_clear')) {
         unset($_SESSION[$key]);
     }
 }
+
+if (!function_exists('format_audit_changes')) {
+    /**
+     * Format payload changes_json audit log menjadi badge human-readable yang rapi
+     */
+    function format_audit_changes(?string $json, ?string $action = null): string
+    {
+        if (empty($json) || $json === '-') {
+            return '<span style="color:var(--text-muted);">-</span>';
+        }
+
+        $data = json_decode($json, true);
+        if (!is_array($data)) {
+            return '<span class="audit-chip">' . htmlspecialchars((string)$json) . '</span>';
+        }
+
+        $chips = [];
+        $action = strtoupper((string)$action);
+
+        if (str_starts_with($action, 'DISPUTE_FORCE_')) {
+            $res = $data['resolution'] ?? ($action === 'DISPUTE_FORCE_RELEASE' ? 'release' : 'refund');
+            $resLabel = $res === 'release' ? 'Release ke Mitra' : 'Refund ke Pelanggan';
+            $resColor = $res === 'release' ? 'style="background:rgba(16,185,129,0.15); border-color:rgba(16,185,129,0.3); color:#10b981;"' : 'style="background:rgba(239,68,68,0.15); border-color:rgba(239,68,68,0.3); color:#ef4444;"';
+            $chips[] = "<span class=\"audit-chip\" {$resColor}><strong>Resolusi:</strong> {$resLabel}</span>";
+            if (!empty($data['amount'])) {
+                $chips[] = '<span class="audit-chip"><strong>Nominal:</strong> Rp ' . number_format((float)$data['amount'], 0, ',', '.') . '</span>';
+            }
+            if (!empty($data['notes'])) {
+                $chips[] = '<span class="audit-chip"><strong>Catatan:</strong> ' . htmlspecialchars((string)$data['notes']) . '</span>';
+            }
+        } elseif ($action === 'RENTAL_BOOKING_CREATE') {
+            if (!empty($data['booking_code'])) {
+                $chips[] = '<span class="audit-chip"><strong>Kode:</strong> ' . htmlspecialchars((string)$data['booking_code']) . '</span>';
+            }
+            if (!empty($data['product_unit_id'])) {
+                $chips[] = '<span class="audit-chip"><strong>Unit:</strong> #' . (int)$data['product_unit_id'] . '</span>';
+            }
+            if (!empty($data['start_date']) && !empty($data['end_date'])) {
+                $chips[] = '<span class="audit-chip"><strong>Sewa:</strong> ' . date('d/m/Y', strtotime((string)$data['start_date'])) . ' - ' . date('d/m/Y', strtotime((string)$data['end_date'])) . '</span>';
+            }
+            if (!empty($data['total_amount'])) {
+                $chips[] = '<span class="audit-chip"><strong>Total:</strong> Rp ' . number_format((float)$data['total_amount'], 0, ',', '.') . '</span>';
+            }
+        } elseif ($action === 'SALES_ORDER_CREATE') {
+            if (!empty($data['order_number'])) {
+                $chips[] = '<span class="audit-chip"><strong>No. Order:</strong> ' . htmlspecialchars((string)$data['order_number']) . '</span>';
+            }
+            if (!empty($data['total_amount'])) {
+                $chips[] = '<span class="audit-chip"><strong>Total:</strong> Rp ' . number_format((float)$data['total_amount'], 0, ',', '.') . '</span>';
+            }
+            if (!empty($data['payment_method'])) {
+                $chips[] = '<span class="audit-chip"><strong>Metode:</strong> Rekber Escrow</span>';
+            }
+        } elseif ($action === 'LOGIN_SUCCESS') {
+            $roleMap = ['admin' => 'Super Admin', 'partner' => 'Mitra Lapak', 'customer' => 'Pelanggan'];
+            $roleName = $roleMap[$data['role'] ?? ''] ?? ucfirst((string)($data['role'] ?? 'Pengguna'));
+            $chips[] = '<span class="audit-chip"><strong>Peran:</strong> ' . htmlspecialchars($roleName) . '</span>';
+            if (!empty($data['user_agent'])) {
+                $ua = (string)$data['user_agent'];
+                $client = str_contains($ua, 'Browser') || str_contains($ua, 'Mozilla') ? 'Browser Web' : (str_contains($ua, 'Automated') ? 'Automated Test' : $ua);
+                $chips[] = '<span class="audit-chip"><strong>Klien:</strong> ' . htmlspecialchars($client) . '</span>';
+            }
+        } elseif ($action === 'LOGIN_FAILED') {
+            $chips[] = '<span class="audit-chip" style="background:rgba(239,68,68,0.15); border-color:rgba(239,68,68,0.3); color:#ef4444;"><strong>Gagal:</strong> ' . htmlspecialchars((string)($data['reason'] ?? 'Autentikasi Ditolak')) . '</span>';
+        } elseif ($action === 'USER_STATUS_CHANGE') {
+            if (!empty($data['username'])) {
+                $chips[] = '<span class="audit-chip"><strong>Akun:</strong> @' . htmlspecialchars((string)$data['username']) . '</span>';
+            }
+            $old = ucfirst((string)($data['old_status'] ?? '-'));
+            $new = ucfirst((string)($data['new_status'] ?? '-'));
+            $chips[] = "<span class=\"audit-chip\"><strong>Status:</strong> {$old} &rarr; {$new}</span>";
+        } elseif ($action === 'FINE_CREATE') {
+            $typeMap = ['late_return' => 'Terlambat', 'damage' => 'Kerusakan', 'missing_accessory' => 'Aksesoris Hilang'];
+            $typeName = $typeMap[$data['fine_type'] ?? ''] ?? ucfirst(str_replace('_', ' ', (string)($data['fine_type'] ?? 'Denda')));
+            $chips[] = '<span class="audit-chip"><strong>Jenis:</strong> ' . htmlspecialchars($typeName) . '</span>';
+            if (!empty($data['amount'])) {
+                $chips[] = '<span class="audit-chip"><strong>Nominal:</strong> Rp ' . number_format((float)$data['amount'], 0, ',', '.') . '</span>';
+            }
+            if (!empty($data['reason'])) {
+                $chips[] = '<span class="audit-chip"><strong>Alasan:</strong> ' . htmlspecialchars((string)$data['reason']) . '</span>';
+            }
+        } elseif ($action === 'FINE_PAID') {
+            $chips[] = '<span class="audit-chip" style="background:rgba(16,185,129,0.15); border-color:rgba(16,185,129,0.3); color:#10b981;"><strong>Status:</strong> Lunas (Paid)</span>';
+        } elseif ($action === 'WITHDRAWAL_STATUS_CHANGE') {
+            $old = ucfirst((string)($data['old_status'] ?? '-'));
+            $new = ucfirst((string)($data['new_status'] ?? '-'));
+            $chips[] = "<span class=\"audit-chip\"><strong>Status:</strong> {$old} &rarr; {$new}</span>";
+            if (!empty($data['amount'])) {
+                $chips[] = '<span class="audit-chip"><strong>Nominal:</strong> Rp ' . number_format((float)$data['amount'], 0, ',', '.') . '</span>';
+            }
+        } elseif ($action === 'KYC_APPROVE') {
+            $chips[] = '<span class="audit-chip" style="background:rgba(16,185,129,0.15); border-color:rgba(16,185,129,0.3); color:#10b981;"><strong>Keputusan:</strong> Disetujui</span>';
+            if (!empty($data['full_name'])) {
+                $chips[] = '<span class="audit-chip"><strong>Nama KTP:</strong> ' . htmlspecialchars((string)$data['full_name']) . '</span>';
+            }
+            if (!empty($data['nik_ktp'])) {
+                $chips[] = '<span class="audit-chip"><strong>NIK:</strong> ' . htmlspecialchars((string)$data['nik_ktp']) . '</span>';
+            }
+        } elseif ($action === 'KYC_REJECT') {
+            $chips[] = '<span class="audit-chip" style="background:rgba(239,68,68,0.15); border-color:rgba(239,68,68,0.3); color:#ef4444;"><strong>Keputusan:</strong> Ditolak</span>';
+            if (!empty($data['rejection_reason'])) {
+                $chips[] = '<span class="audit-chip"><strong>Alasan:</strong> ' . htmlspecialchars((string)$data['rejection_reason']) . '</span>';
+            }
+        } elseif ($action === 'KYC_SUBMIT') {
+            if (!empty($data['full_name'])) {
+                $chips[] = '<span class="audit-chip"><strong>Pengaju:</strong> ' . htmlspecialchars((string)$data['full_name']) . '</span>';
+            }
+            if (!empty($data['nik_masked'])) {
+                $chips[] = '<span class="audit-chip"><strong>NIK:</strong> ' . htmlspecialchars((string)$data['nik_masked']) . '</span>';
+            }
+        } elseif (str_starts_with($action, 'ESCROW_')) {
+            if (!empty($data['action'])) {
+                $chips[] = '<span class="audit-chip"><strong>Aksi:</strong> ' . htmlspecialchars(ucfirst((string)$data['action'])) . '</span>';
+            }
+            if (!empty($data['amount_released'])) {
+                $chips[] = '<span class="audit-chip"><strong>Nominal:</strong> Rp ' . number_format((float)$data['amount_released'], 0, ',', '.') . '</span>';
+            }
+            if (!empty($data['amount_refunded'])) {
+                $chips[] = '<span class="audit-chip"><strong>Nominal:</strong> Rp ' . number_format((float)$data['amount_refunded'], 0, ',', '.') . '</span>';
+            }
+            if (!empty($data['reason'])) {
+                $chips[] = '<span class="audit-chip"><strong>Alasan:</strong> ' . htmlspecialchars((string)$data['reason']) . '</span>';
+            }
+        } else {
+            foreach ($data as $k => $v) {
+                if (is_array($v)) $v = json_encode($v);
+                $label = ucwords(str_replace(['_', '-'], ' ', (string)$k));
+                $chips[] = '<span class="audit-chip"><strong>' . htmlspecialchars($label) . ':</strong> ' . htmlspecialchars((string)$v) . '</span>';
+            }
+        }
+
+        return !empty($chips) ? implode(' ', $chips) : '<span style="color:var(--text-muted);">-</span>';
+    }
+}

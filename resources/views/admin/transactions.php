@@ -146,7 +146,7 @@
             </ul>
         </div>
 
-        <div class="sidebar-footer" style="margin-top:auto; padding-top:18px; border-top:1px solid #1e293b;">
+        <div class="sidebar-footer" style="margin-top:24px; padding-top:18px; border-top:1px solid #1e293b;">
             <button type="button" class="btn-theme-toggle" onclick="toggleCamHubTheme()" title="Beralih Mode Gelap/Terang" id="camhubThemeToggleBtn" style="width:100%; display:inline-flex; align-items:center; justify-content:center; gap:8px; background:#1e293b; color:#cbd5e1; border:1px solid #334155; padding:9px 12px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; text-align:center; margin-bottom:10px;">
                 <span class="theme-icon-wrap" id="themeIconWrap"></span>
                 <span id="themeToggleText">Mode Terang</span>
@@ -180,7 +180,7 @@
         <div class="section-card" style="border-left: 4px solid #6d28d9;">
             <div class="section-header">
                 <div>
-                    <h2 class="section-title">⚖️ Moderasi Sengketa Transaksi (Disputed Escrows)</h2>
+                    <h2 class="section-title">Moderasi Sengketa Transaksi (Disputed Escrows)</h2>
                     <p style="font-size:13px; color:#64748b;">Daftar transaksi yang dilaporkan bermasalah oleh pelanggan dan memerlukan putusan resmi Super Admin.</p>
                 </div>
                 <span class="badge badge-disputed"><?= count($disputes) ?> Menunggu Putusan</span>
@@ -242,7 +242,7 @@
         <div class="section-card">
             <div class="section-header">
                 <div>
-                    <h2 class="section-title">🏦 Persetujuan Pencairan Saldo Mitra (Withdrawals)</h2>
+                    <h2 class="section-title">Persetujuan Pencairan Saldo Mitra (Withdrawals)</h2>
                     <p style="font-size:13px; color:#64748b;">Pengajuan transfer saldo lapak mitra ke rekening bank terdaftar.</p>
                 </div>
             </div>
@@ -311,7 +311,7 @@
         <div class="section-card">
             <div class="section-header">
                 <div>
-                    <h2 class="section-title">📊 Seluruh Transaksi Masuk Platform</h2>
+                    <h2 class="section-title">Seluruh Transaksi Masuk Platform</h2>
                     <p style="font-size:13px; color:#64748b;">Agregasi transaksi sewa kamera dan transaksi jual beli marketplace.</p>
                 </div>
             </div>
