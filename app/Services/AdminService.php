@@ -253,6 +253,18 @@ class AdminService
             return ['success' => false, 'message' => 'Nomor pesanan sewa dan nominal denda wajib valid.'];
         }
 
+        // Validasi keberadaan booking di rental_bookings untuk mencegah MySQL FK Constraint Exception
+        $stmtCheck = $this->db->prepare("SELECT id FROM rental_bookings WHERE id = :id LIMIT 1");
+        $stmtCheck->execute(['id' => $bookingId]);
+        $booking = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+        if (!$booking) {
+            return [
+                'success' => false,
+                'message' => "Gagal: Pesanan sewa dengan ID #{$bookingId} tidak ditemukan dalam sistem CamHub."
+            ];
+        }
+
         try {
             $id = $this->adminRepo->createFine($bookingId, $fineType, $amount, $reason);
 
@@ -277,6 +289,11 @@ class AdminService
                 'fine_id' => $id,
                 'message' => "Denda baru ID #{$id} sebesar Rp " . number_format($amount, 0, ',', '.') . " berhasil diterbitkan."
             ];
+        } catch (PDOException $e) {
+            if ($e->getCode() === '23000' || str_contains($e->getMessage(), '1452')) {
+                return ['success' => false, 'message' => "Gagal: ID Booking Sewa #{$bookingId} tidak valid atau tidak terdaftar di sistem."];
+            }
+            return ['success' => false, 'message' => 'Gagal menerbitkan denda: ' . $e->getMessage()];
         } catch (Exception $e) {
             return ['success' => false, 'message' => 'Gagal menerbitkan denda: ' . $e->getMessage()];
         }

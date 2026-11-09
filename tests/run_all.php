@@ -16,7 +16,8 @@ $suites = [
     "test_admin_suite.php",
     "test_browser_e2e.php",
     "test_report_notifications.php",
-    "test_hardening_production.php"
+    "test_hardening_production.php",
+    "test_fix_admin_dispute.php"
 ];
 
 $totalSuites = count($suites);
@@ -25,7 +26,7 @@ $totalTests = 0;
 $passedTests = 0;
 
 echo "========================================================\n";
-echo "   MASTER REGRESSION SUITE: 14 SUITE PENGUJIAN CAMHUB   \n";
+echo "   MASTER REGRESSION SUITE: 15 SUITE PENGUJIAN CAMHUB   \n";
 echo "========================================================\n\n";
 
 foreach ($suites as $suite) {
@@ -47,7 +48,7 @@ foreach ($suites as $suite) {
 
 echo "\n========================================================\n";
 echo "HASIL AKHIR: {$passedTests} / {$totalTests} TESTS PASSED ({$passedSuites} / {$totalSuites} SUITES OK)\n";
-echo "STATUS     : " . ($passedTests === $totalTests ? "SEMUA 141 PENGUJIAN 100% SUKSES HIJAU" : "ADA PENGUJIAN GAGAL") . "\n";
+echo "STATUS     : " . ($passedTests === $totalTests ? "SEMUA {$totalTests} PENGUJIAN 100% SUKSES HIJAU" : "ADA PENGUJIAN GAGAL") . "\n";
 echo "========================================================\n";
 
 exit($passedTests === $totalTests ? 0 : 1);

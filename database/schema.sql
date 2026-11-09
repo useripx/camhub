@@ -196,7 +196,7 @@ CREATE TABLE `sales_orders` (
     `subtotal` DECIMAL(15, 2) NOT NULL,
     `admin_fee` DECIMAL(15, 2) NOT NULL DEFAULT 5000.00,
     `total_amount` DECIMAL(15, 2) NOT NULL,
-    `order_status` ENUM('pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled') NOT NULL DEFAULT 'pending',
+    `order_status` ENUM('pending', 'paid', 'processing', 'shipped', 'delivered', 'completed', 'cancelled') NOT NULL DEFAULT 'pending',
     `shipping_address` TEXT NOT NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -1,3 +1,6 @@
+<?php
+$user = $user ?? auth();
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -7,53 +10,376 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('camhub_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; }
-        body { background:#f8fafc; color:#0f172a; min-height:100vh; }
-        .topbar { background:#0c192c; padding:18px 48px; display:flex; justify-content:space-between; align-items:center; }
-        .topbar a.brand { font-size:22px; font-weight:800; color:#fff; text-decoration:none; }
-        .topbar .nav-links a { color:#94a3b8; text-decoration:none; font-size:14px; font-weight:600; transition:color 0.2s; }
-        .topbar .nav-links a:hover { color:#fff; }
+        :root {
+            --bg-page: #0b1320;
+            --bg-surface: #112240;
+            --bg-card: #132644;
+            --bg-subtle: rgba(255, 255, 255, 0.04);
+            --bg-input: #0d1b30;
+            --border-color: #1e3a5f;
+            --border-subtle: #162c4a;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
+        }
+
+        html[data-theme="dark"], html:not([data-theme="light"]) {
+            --bg-page: #0b1320;
+            --bg-surface: #112240;
+            --bg-card: #132644;
+            --bg-subtle: rgba(255, 255, 255, 0.04);
+            --bg-input: #0d1b30;
+            --border-color: #1e3a5f;
+            --border-subtle: #162c4a;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
+        }
+
+        html[data-theme="light"] {
+            --bg-page: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-card: #ffffff;
+            --bg-subtle: #f1f5f9;
+            --bg-input: #ffffff;
+            --border-color: #e2e8f0;
+            --border-subtle: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --accent-blue: #2563eb;
+            --accent-amber: #d97706;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', system-ui, sans-serif; }
+        body { background:var(--bg-page); color:var(--text-primary); min-height:100vh; display:flex; }
         
-        .container { max-width:800px; margin:40px auto; padding:0 24px 60px; }
-        .form-card { background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; padding:36px; box-shadow:0 1px 3px rgba(0,0,0,0.03); }
-        .header-title { font-size:26px; font-weight:800; color:#0f172a; margin-bottom:8px; }
-        .header-subtitle { color:#64748b; font-size:14px; line-height:1.6; margin-bottom:28px; }
+        /* SIDEBAR (CLEAN TEXT-ONLY, NO ICONS) */
+        .sidebar {
+            width:260px;
+            background:#0c192c;
+            color:#ffffff;
+            padding:32px 24px 24px;
+            display:flex;
+            flex-direction:column;
+            flex-shrink:0;
+            height:100vh;
+            position:sticky;
+            top:0;
+            overflow-y:auto;
+        }
+        .sidebar-brand {
+            font-size:24px;
+            font-weight:800;
+            color:#ffffff;
+            text-decoration:none;
+            margin-bottom:24px;
+            display:block;
+            letter-spacing:-0.5px;
+        }
+        .sidebar-user {
+            margin-bottom:24px;
+        }
+        .user-fullname {
+            font-size:16px;
+            font-weight:700;
+            color:#ffffff;
+            line-height:1.3;
+            margin-bottom:4px;
+        }
+        .user-role-label {
+            font-size:12px;
+            color:#94a3b8;
+            font-weight:500;
+        }
+        .nav-menu {
+            list-style:none;
+            display:flex;
+            flex-direction:column;
+            gap:4px;
+        }
+        .nav-item a {
+            display:block;
+            padding:10px 14px;
+            border-radius:8px;
+            font-size:13px;
+            font-weight:600;
+            color:#94a3b8;
+            text-decoration:none;
+            transition:all 0.15s ease;
+        }
+        .nav-item a:hover {
+            background:#16243a;
+            color:#ffffff;
+        }
+        .nav-item.active a {
+            background:#1e293b;
+            color:#ffffff;
+            font-weight:700;
+            border-left:3px solid #3b82f6;
+        }
         
-        .alert-error { background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; padding:14px 18px; border-radius:10px; font-size:14px; margin-bottom:24px; }
+        .sidebar-bottom {
+            margin-top:16px;
+            padding-top:16px;
+            border-top:1px solid #1e3a5f;
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+        }
+        .btn-theme-toggle {
+            width:100%;
+            background:#16243a;
+            color:#cbd5e1;
+            border:1px solid #1e3a5f;
+            padding:10px 14px;
+            border-radius:8px;
+            font-size:13px;
+            font-weight:600;
+            cursor:pointer;
+            text-align:center;
+            transition:all 0.2s;
+        }
+        .btn-theme-toggle:hover {
+            background:#1e293b;
+            color:#ffffff;
+            border-color:#3b82f6;
+        }
+        .btn-sidebar-link {
+            display:block;
+            padding:10px 14px;
+            color:#94a3b8;
+            font-size:13px;
+            font-weight:600;
+            text-decoration:none;
+            border-radius:8px;
+            transition:0.15s;
+        }
+        .btn-sidebar-link:hover {
+            background:#16243a;
+            color:#ffffff;
+        }
+        .btn-sidebar-logout {
+            width:100%;
+            background:transparent;
+            border:none;
+            cursor:pointer;
+            padding:10px 14px;
+            color:#ef4444;
+            font-size:13px;
+            font-weight:600;
+            border-radius:8px;
+            transition:0.15s;
+            text-align:left;
+        }
+        .btn-sidebar-logout:hover {
+            background:#1e293b;
+            color:#f87171;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex:1;
+            padding:40px 48px 60px;
+            overflow-y:auto;
+            max-width:920px;
+        }
+        .breadcrumb {
+            display:flex;
+            align-items:center;
+            gap:8px;
+            font-size:13px;
+            color:var(--text-muted);
+            margin-bottom:20px;
+        }
+        .breadcrumb a {
+            color:var(--accent-blue);
+            text-decoration:none;
+            font-weight:600;
+        }
+        .breadcrumb a:hover {
+            text-decoration:underline;
+        }
+
+        .form-card {
+            background:var(--bg-card);
+            border:1px solid var(--border-color);
+            border-radius:16px;
+            padding:36px;
+            box-shadow:0 2px 10px rgba(0,0,0,0.05);
+        }
+        .header-title {
+            font-size:26px;
+            font-weight:800;
+            color:var(--text-primary);
+            margin-bottom:8px;
+            letter-spacing:-0.5px;
+        }
+        .header-subtitle {
+            color:var(--text-secondary);
+            font-size:14px;
+            line-height:1.6;
+            margin-bottom:28px;
+        }
+        
+        .alert-error {
+            background:rgba(239, 68, 68, 0.15);
+            border:1px solid rgba(239, 68, 68, 0.3);
+            color:#f87171;
+            padding:14px 18px;
+            border-radius:10px;
+            font-size:14px;
+            margin-bottom:24px;
+        }
+        html[data-theme="light"] .alert-error {
+            background:#fee2e2;
+            border-color:#fca5a5;
+            color:#991b1b;
+        }
         .alert-error ul { margin-left:20px; margin-top:6px; }
         
         .form-group { margin-bottom:22px; }
-        .form-label { display:block; font-size:14px; font-weight:700; color:#1e293b; margin-bottom:8px; }
-        .form-control { width:100%; padding:12px 16px; border:1px solid #cbd5e1; border-radius:10px; font-size:14px; color:#0f172a; transition:border 0.2s; }
-        .form-control:focus { outline:none; border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,0.1); }
-        .form-hint { font-size:12px; color:#64748b; margin-top:6px; }
+        .form-label {
+            display:block;
+            font-size:14px;
+            font-weight:700;
+            color:var(--text-primary);
+            margin-bottom:8px;
+        }
+        .form-control {
+            width:100%;
+            padding:12px 16px;
+            background:var(--bg-input);
+            border:1px solid var(--border-color);
+            border-radius:10px;
+            font-size:14px;
+            color:var(--text-primary);
+            transition:border 0.2s;
+        }
+        .form-control:focus {
+            outline:none;
+            border-color:var(--accent-blue);
+            box-shadow:0 0 0 3px rgba(37,99,235,0.15);
+        }
+        .form-hint {
+            font-size:12px;
+            color:var(--text-muted);
+            margin-top:6px;
+        }
 
-        .info-box { background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:18px; margin-bottom:28px; font-size:13px; color:#1e40af; line-height:1.6; }
-        .info-box strong { color:#1e3a8a; }
+        .info-box {
+            background:var(--bg-subtle);
+            border:1px solid var(--border-subtle);
+            border-radius:12px;
+            padding:18px;
+            margin-bottom:28px;
+            font-size:13px;
+            color:var(--text-secondary);
+            line-height:1.6;
+        }
+        .info-box strong { color:var(--text-primary); }
 
-        .btn-submit { width:100%; background:#2563eb; color:#ffffff; font-weight:700; font-size:15px; padding:14px; border:none; border-radius:10px; cursor:pointer; transition:background 0.2s; }
+        .btn-submit {
+            width:100%;
+            background:#2563eb;
+            color:#ffffff;
+            font-weight:700;
+            font-size:15px;
+            padding:14px;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+            transition:background 0.2s;
+        }
         .btn-submit:hover { background:#1d4ed8; }
-        .btn-back { display:inline-block; text-align:center; width:100%; color:#64748b; font-size:14px; font-weight:600; text-decoration:none; margin-top:14px; }
-        .btn-back:hover { color:#0f172a; }
+        .btn-back {
+            display:inline-block;
+            text-align:center;
+            width:100%;
+            color:var(--text-muted);
+            font-size:14px;
+            font-weight:600;
+            text-decoration:none;
+            margin-top:14px;
+            transition:color 0.2s;
+        }
+        .btn-back:hover { color:var(--text-primary); }
     </style>
 </head>
 <body>
 
-    <header class="topbar">
-        <a href="<?= base_url() ?>" class="brand">CamHub</a>
-        <div class="nav-links" style="display:flex; align-items:center; gap:16px;">
-            <a href="<?= base_url('/dashboard/pelanggan') ?>">← Kembali ke Dashboard</a>
+    <!-- SIDEBAR KIRI VERTIKAL (CLEAN TEXT-ONLY, NO ICONS) -->
+    <aside class="sidebar">
+        <a href="<?= base_url() ?>" class="sidebar-brand">CamHub</a>
+        
+        <div class="sidebar-user">
+            <div class="user-fullname"><?= htmlspecialchars($user['full_name'] ?? 'Pelanggan', ENT_QUOTES, 'UTF-8') ?></div>
+            <div class="user-role-label">Pelanggan</div>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="<?= base_url('/dashboard/pelanggan') ?>">Beranda</a>
+            </li>
+            <li class="nav-item">
+                <a href="<?= base_url('/pesanan-saya') ?>">Pesanan Saya</a>
+            </li>
+            <li class="nav-item">
+                <a href="<?= base_url('/pesanan-saya?type=rental') ?>">Sewa Saya</a>
+            </li>
+            <li class="nav-item">
+                <a href="<?= base_url('/pesanan-saya?type=sale') ?>">Jual Beli Saya</a>
+            </li>
+            <li class="nav-item active">
+                <a href="<?= base_url('/titip-jual/saya') ?>">Titip Jual Saya</a>
+            </li>
+            <li class="nav-item">
+                <a href="<?= base_url('/kyc/status') ?>">Dokumen KYC</a>
+            </li>
+            <li class="nav-item">
+                <a href="<?= base_url('/profil') ?>">Pengaturan</a>
+            </li>
+        </ul>
+
+        <div class="sidebar-bottom">
+            <button type="button" class="btn-theme-toggle" onclick="toggleCamHubTheme()" title="Beralih Mode Gelap/Terang">
+                <span id="themeToggleText">Mode Terang</span>
+            </button>
+
+            <a href="<?= base_url('/') ?>" class="btn-sidebar-link">
+                Lihat Beranda Publik
+            </a>
+
             <form action="<?= base_url('/logout') ?>" method="POST" style="margin:0;">
                 <?= csrf_field() ?>
-                <button type="submit" style="background:#dc2626; color:#ffffff; font-weight:700; border-radius:8px; padding:6px 12px; border:none; cursor:pointer; font-size:12px;">
-                    🚪 Keluar
+                <button type="submit" class="btn-sidebar-logout">
+                    Keluar
                 </button>
             </form>
         </div>
-    </header>
+    </aside>
 
-    <main class="container">
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+        <div class="breadcrumb">
+            <a href="<?= base_url('/dashboard/pelanggan') ?>">Dashboard</a>
+            <span>/</span>
+            <a href="<?= base_url('/titip-jual/saya') ?>">Titip Jual Saya</a>
+            <span>/</span>
+            <span>Pengajuan Baru</span>
+        </div>
+
         <div class="form-card">
             <h1 class="header-title">Pengajuan Titip Jual Kamera</h1>
             <p class="header-subtitle">Titipkan kamera Anda ke Toko Mitra terverifikasi CamHub. Unit akan melalui inspeksi fisik, dipasarkan ke katalog publik, dan pembayaran diamankan dengan rekening bersama Escrow.</p>
@@ -113,11 +439,30 @@
                 </div>
 
                 <button type="submit" class="btn-submit">Kirim Pengajuan Titip Jual</button>
-                <a href="<?= base_url('/dashboard/pelanggan') ?>" class="btn-back">Batal & Kembali ke Dashboard</a>
+                <a href="<?= base_url('/titip-jual/saya') ?>" class="btn-back">Batal & Kembali ke Titip Jual Saya</a>
             </form>
         </div>
     </main>
 
+    <script>
+        function toggleCamHubTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('camhub_theme', newTheme);
+            syncThemeToggleUI(newTheme);
+        }
+
+        function syncThemeToggleUI(theme) {
+            const text = document.getElementById('themeToggleText');
+            if (!text) return;
+            text.textContent = (theme === 'dark') ? 'Mode Terang' : 'Mode Gelap';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.documentElement.getAttribute('data-theme') || 'dark';
+            syncThemeToggleUI(active);
+        });
+    </script>
 </body>
 </html>
-

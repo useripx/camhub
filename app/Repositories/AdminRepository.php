@@ -338,6 +338,25 @@ class AdminRepository
     }
 
     /**
+     * Ambil daftar pemesanan sewa aktif / terkini untuk dropdown penerbitan denda
+     */
+    public function getRecentRentalBookings(int $limit = 50): array
+    {
+        $stmt = $this->db->prepare("
+            SELECT b.id, b.rental_status, u.full_name AS customer_name, p.name AS camera_name
+            FROM rental_bookings b
+            JOIN users u ON b.user_id = u.id
+            LEFT JOIN product_units un ON b.product_unit_id = un.id
+            LEFT JOIN products p ON un.product_id = p.id
+            ORDER BY b.id DESC
+            LIMIT :limit
+        ");
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Terbitkan denda baru untuk pesanan sewa
      */
     public function createFine(int $bookingId, string $fineType, float $amount, string $reason): int

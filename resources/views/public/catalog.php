@@ -7,20 +7,69 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('camhub_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <style>
-        :root {
+        :root, html[data-theme="dark"] {
+            --bg-page: #0b1320;
+            --bg-surface: #112240;
+            --bg-card: #132644;
+            --bg-card-hover: #173056;
+            --bg-subtle: rgba(255, 255, 255, 0.05);
+            --bg-input: #0d1b30;
+            --border-color: #1e3a5f;
+            --border-subtle: #162c4a;
+            --text-dark: #ffffff;
+            --text-title: #ffffff;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #94a3b8;
+            --primary-navy: #ffffff;
+            --accent-amber: #f59e0b;
+            --accent-amber-hover: #d97706;
+            --accent-amber-light: rgba(245, 158, 11, 0.15);
+            --badge-green: #34d399;
+            --badge-green-bg: rgba(52, 211, 153, 0.15);
+            --blue-accent: #3b82f6;
+            --btn-outline-bg: #112240;
+            --btn-outline-text: #ffffff;
+            --btn-outline-border: #1e3a5f;
+            --footer-bg: #070d17;
+            --footer-border: #1e3a5f;
+            --card-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        html[data-theme="light"] {
+            --bg-page: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f1f5f9;
+            --bg-subtle: #f1f5f9;
+            --bg-input: #ffffff;
+            --border-color: #e2e8f0;
+            --border-subtle: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-title: #0b192e;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
             --primary-navy: #0b192e;
-            --primary-navy-card: #13243d;
             --accent-amber: #d97706;
             --accent-amber-hover: #b45309;
             --accent-amber-light: #fef3c7;
-            --text-dark: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --bg-light: #f8fafc;
             --badge-green: #16a34a;
             --badge-green-bg: #dcfce7;
             --blue-accent: #2563eb;
+            --btn-outline-bg: #ffffff;
+            --btn-outline-text: #0f172a;
+            --btn-outline-border: #e2e8f0;
+            --footer-bg: #0b192e;
+            --footer-border: #1e293b;
+            --card-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
 
         * {
@@ -31,7 +80,7 @@
         }
 
         body {
-            background-color: var(--bg-light);
+            background-color: var(--bg-page);
             color: var(--text-dark);
             min-height: 100vh;
             display: flex;
@@ -40,7 +89,7 @@
 
         /* NAVBAR */
         .navbar {
-            background: #ffffff;
+            background: var(--bg-surface);
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
@@ -60,7 +109,7 @@
         .brand-logo {
             font-size: 1.35rem;
             font-weight: 800;
-            color: var(--primary-navy);
+            color: var(--text-title);
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -109,14 +158,41 @@
         }
 
         .btn-outline {
-            border-color: var(--border-color);
-            color: var(--text-dark);
-            background: #ffffff;
+            border-color: var(--btn-outline-border);
+            color: var(--btn-outline-text);
+            background: var(--btn-outline-bg);
         }
 
         .btn-outline:hover {
             border-color: var(--accent-amber);
             color: var(--accent-amber);
+        }
+
+        .btn-theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.55rem 1rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 1px solid var(--btn-outline-border);
+            background: var(--btn-outline-bg);
+            color: var(--btn-outline-text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-theme-toggle:hover {
+            border-color: var(--accent-amber);
+            color: var(--accent-amber);
+        }
+
+        .theme-icon-wrap {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-primary {
@@ -130,7 +206,7 @@
 
         /* BREADCRUMB & PAGE HEADER */
         .page-header-wrap {
-            background: #ffffff;
+            background: var(--bg-surface);
             border-bottom: 1px solid var(--border-color);
             padding: 1.75rem 1.5rem;
         }
@@ -159,7 +235,7 @@
         .catalog-title {
             font-size: 1.85rem;
             font-weight: 800;
-            color: var(--primary-navy);
+            color: var(--text-title);
             letter-spacing: -0.3px;
         }
 
@@ -206,7 +282,7 @@
         .filter-title {
             font-size: 0.92rem;
             font-weight: 700;
-            color: var(--primary-navy);
+            color: var(--text-title);
             margin-bottom: 0.85rem;
             display: flex;
             align-items: center;
@@ -335,7 +411,7 @@
         }
 
         .results-count strong {
-            color: var(--primary-navy);
+            color: var(--text-title);
         }
 
         .sort-control {
@@ -366,7 +442,7 @@
         }
 
         .product-card {
-            background: #ffffff;
+            background: var(--bg-surface);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             overflow: hidden;
@@ -442,7 +518,7 @@
         .product-name {
             font-size: 1.05rem;
             font-weight: 700;
-            color: var(--primary-navy);
+            color: var(--text-title);
             margin-bottom: 0.4rem;
             line-height: 1.3;
         }
@@ -569,12 +645,13 @@
         }
 
         .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
-        .empty-title { font-size: 1.25rem; font-weight: 700; color: var(--primary-navy); margin-bottom: 0.5rem; }
+        .empty-title { font-size: 1.25rem; font-weight: 700; color: var(--text-title); margin-bottom: 0.5rem; }
         .empty-desc { font-size: 0.9rem; max-width: 450px; margin: 0 auto 1.5rem; line-height: 1.5; }
 
         /* FOOTER */
         .footer {
-            background: var(--primary-navy);
+            background: var(--footer-bg);
+            border-top: 1px solid var(--footer-border);
             color: #cbd5e1;
             padding: 3rem 1.5rem 1.5rem;
             margin-top: auto;
@@ -633,9 +710,25 @@
             </nav>
 
             <div class="nav-actions">
+                <button type="button" class="btn btn-theme-toggle" onclick="toggleCamHubTheme()" title="Beralih Mode Gelap/Terang" id="camhubThemeToggleBtn">
+                    <span class="theme-icon-wrap" id="themeIconWrap"></span>
+                    <span id="themeToggleText">Mode Terang</span>
+                </button>
                 <?php if (auth_check()): ?>
-                    <a href="<?= base_url('dashboard/' . (auth()['role_name'] === 'admin' ? 'admin' : (auth()['role_name'] === 'partner' ? 'mitra' : 'pelanggan'))) ?>" class="btn btn-outline">
-                        👤 Dashboard
+                    <?php
+                        $authRole = auth()['role_name'] ?? auth()['role'] ?? 'customer';
+                        $dashSegment = match(strtolower((string)$authRole)) {
+                            'admin' => 'admin',
+                            'partner', 'mitra' => 'mitra',
+                            default => 'pelanggan'
+                        };
+                        $displayName = auth()['full_name'] ?? auth()['username'] ?? 'Akun Saya';
+                    ?>
+                    <a href="<?= base_url('dashboard/' . $dashSegment) ?>" class="btn btn-outline" title="Buka Dashboard">
+                        <?= htmlspecialchars($displayName, ENT_QUOTES, 'UTF-8') ?>
+                    </a>
+                    <a href="<?= base_url('logout') ?>" class="btn btn-outline" style="color:#ef4444; border-color: rgba(239, 68, 68, 0.3);">
+                        Keluar
                     </a>
                 <?php else: ?>
                     <a href="<?= base_url('login') ?>" class="btn btn-outline">Masuk (Login)</a>
@@ -951,6 +1044,37 @@
             url.searchParams.set('page', '1');
             window.location.href = url.toString();
         }
+    </script>
+    <script>
+        const SUN_ICON = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+
+        const MOON_ICON = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+
+        function toggleCamHubTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('camhub_theme', newTheme);
+            syncThemeToggleUI(newTheme);
+        }
+
+        function syncThemeToggleUI(theme) {
+            const text = document.getElementById('themeToggleText');
+            const iconWrap = document.getElementById('themeIconWrap');
+            if (!text) return;
+            if (theme === 'dark') {
+                text.textContent = 'Mode Terang';
+                if (iconWrap) iconWrap.innerHTML = SUN_ICON;
+            } else {
+                text.textContent = 'Mode Gelap';
+                if (iconWrap) iconWrap.innerHTML = MOON_ICON;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.documentElement.getAttribute('data-theme') || 'dark';
+            syncThemeToggleUI(active);
+        });
     </script>
 </body>
 </html>

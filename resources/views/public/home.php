@@ -7,20 +7,95 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('camhub_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <style>
-        :root {
+        :root, html[data-theme="dark"] {
+            --bg-page: #0b1320;
+            --bg-surface: #112240;
+            --bg-card: #132644;
+            --bg-card-hover: #173056;
+            --bg-subtle: rgba(255, 255, 255, 0.05);
+            --bg-input: #0d1b30;
+            --bg-light: #0b1320;
+            --border-color: #1e3a5f;
+            --border-subtle: #162c4a;
+            --text-dark: #ffffff;
+            --text-title: #ffffff;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #94a3b8;
             --primary-navy: #0b192e;
-            --primary-navy-card: #13243d;
+            --hero-bg-from: #0b192e;
+            --hero-bg-to: #15294a;
+            --hero-title: #ffffff;
+            --hero-subtitle: #cbd5e1;
+            --hero-badge-text: #f59e0b;
+            --hero-badge-bg: rgba(245, 158, 11, 0.15);
+            --hero-badge-border: rgba(245, 158, 11, 0.35);
+            --search-box-bg: #112240;
+            --search-box-border: #1e3a5f;
+            --search-input-bg: #0d1b30;
+            --search-input-text: #ffffff;
+            --search-input-border: #1e3a5f;
+            --accent-amber: #f59e0b;
+            --accent-amber-hover: #d97706;
+            --accent-amber-light: #fef3c7;
+            --badge-green: #34d399;
+            --badge-green-bg: rgba(52, 211, 153, 0.15);
+            --blue-accent: #3b82f6;
+            --btn-outline-bg: #112240;
+            --btn-outline-text: #ffffff;
+            --btn-outline-border: #1e3a5f;
+            --footer-bg: #070d17;
+            --footer-border: #1e3a5f;
+            --card-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        html[data-theme="light"] {
+            --bg-page: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f1f5f9;
+            --bg-subtle: #f1f5f9;
+            --bg-input: #ffffff;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --border-subtle: #cbd5e1;
+            --text-dark: #0f172a;
+            --text-title: #0b192e;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --primary-navy: #0b192e;
+            --hero-bg-from: #0b192e;
+            --hero-bg-to: #15294a;
+            --hero-title: #ffffff;
+            --hero-subtitle: #94a3b8;
+            --hero-badge-text: #fef3c7;
+            --hero-badge-bg: rgba(255, 255, 255, 0.08);
+            --hero-badge-border: rgba(255, 255, 255, 0.15);
+            --search-box-bg: #ffffff;
+            --search-box-border: #e2e8f0;
+            --search-input-bg: #ffffff;
+            --search-input-text: #0f172a;
+            --search-input-border: #e2e8f0;
             --accent-amber: #d97706;
             --accent-amber-hover: #b45309;
             --accent-amber-light: #fef3c7;
-            --text-dark: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --bg-light: #f8fafc;
             --badge-green: #16a34a;
             --badge-green-bg: #dcfce7;
             --blue-accent: #2563eb;
+            --btn-outline-bg: #ffffff;
+            --btn-outline-text: #0f172a;
+            --btn-outline-border: #e2e8f0;
+            --footer-bg: #0b192e;
+            --footer-border: #1e293b;
+            --card-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
 
         * {
@@ -31,7 +106,7 @@
         }
 
         body {
-            background-color: var(--bg-light);
+            background-color: var(--bg-page);
             color: var(--text-dark);
             min-height: 100vh;
             display: flex;
@@ -40,12 +115,13 @@
 
         /* HEADER / NAVBAR */
         .navbar {
-            background: #ffffff;
+            background: var(--bg-surface);
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 50;
             padding: 0.85rem 1.5rem;
+            transition: background 0.2s, border-color 0.2s;
         }
 
         .nav-container {
@@ -60,7 +136,7 @@
         .brand-logo {
             font-size: 1.35rem;
             font-weight: 800;
-            color: var(--primary-navy);
+            color: var(--text-title);
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -111,14 +187,41 @@
         }
 
         .btn-outline {
-            border-color: var(--border-color);
-            color: var(--text-dark);
-            background: #ffffff;
+            border-color: var(--btn-outline-border);
+            color: var(--btn-outline-text);
+            background: var(--btn-outline-bg);
         }
 
         .btn-outline:hover {
             border-color: var(--accent-amber);
             color: var(--accent-amber);
+        }
+
+        .btn-theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.55rem 1rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 1px solid var(--btn-outline-border);
+            background: var(--btn-outline-bg);
+            color: var(--btn-outline-text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-theme-toggle:hover {
+            border-color: var(--accent-amber);
+            color: var(--accent-amber);
+        }
+
+        .theme-icon-wrap {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-primary {
@@ -132,8 +235,8 @@
 
         /* HERO BANNER */
         .hero {
-            background: linear-gradient(135deg, var(--primary-navy) 0%, #15294a 100%);
-            color: #ffffff;
+            background: linear-gradient(135deg, var(--hero-bg-from) 0%, var(--hero-bg-to) 100%);
+            color: var(--hero-title);
             padding: 4.5rem 1.5rem 4rem;
             text-align: center;
             position: relative;
@@ -163,13 +266,13 @@
             align-items: center;
             gap: 0.4rem;
             padding: 0.35rem 0.85rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: var(--hero-badge-bg);
+            border: 1px solid var(--hero-badge-border);
             border-radius: 50px;
             font-size: 0.8rem;
             font-weight: 700;
             letter-spacing: 0.5px;
-            color: var(--accent-amber-light);
+            color: var(--hero-badge-text);
             margin-bottom: 1.25rem;
         }
 
@@ -183,7 +286,7 @@
 
         .hero-subtitle {
             font-size: 1.1rem;
-            color: #94a3b8;
+            color: var(--hero-subtitle);
             max-width: 620px;
             margin: 0 auto 2rem;
             line-height: 1.6;
@@ -191,33 +294,37 @@
 
         /* HERO SEARCH BOX */
         .hero-search-box {
-            background: #ffffff;
+            background: var(--search-box-bg);
+            border: 1px solid var(--search-box-border);
             padding: 0.5rem;
             border-radius: 12px;
             display: flex;
             gap: 0.5rem;
             max-width: 700px;
             margin: 0 auto;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.35);
         }
 
         .hero-search-box input {
             flex: 1;
-            border: none;
+            border: 1px solid var(--search-input-border);
+            background: var(--search-input-bg);
             padding: 0.75rem 1rem;
             font-size: 0.95rem;
             outline: none;
-            color: var(--text-dark);
+            color: var(--search-input-text);
+            border-radius: 8px;
         }
 
         .hero-search-box select {
-            border: none;
-            border-left: 1px solid var(--border-color);
+            border: 1px solid var(--search-input-border);
+            border-left: 1px solid var(--search-input-border);
             padding: 0.75rem 1rem;
             font-size: 0.9rem;
             outline: none;
-            color: var(--text-muted);
-            background: transparent;
+            color: var(--search-input-text);
+            background: var(--search-input-bg);
+            border-radius: 8px;
             cursor: pointer;
         }
 
@@ -255,7 +362,7 @@
         .section-title {
             font-size: 1.6rem;
             font-weight: 800;
-            color: var(--primary-navy);
+            color: var(--text-title);
             letter-spacing: -0.3px;
         }
 
@@ -289,7 +396,7 @@
         }
 
         .category-card {
-            background: #ffffff;
+            background: var(--bg-surface);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 1.25rem;
@@ -332,7 +439,7 @@
         }
 
         .product-card {
-            background: #ffffff;
+            background: var(--bg-surface);
             border: 1px solid var(--border-color);
             border-radius: 14px;
             overflow: hidden;
@@ -413,7 +520,7 @@
         .product-title {
             font-size: 1.15rem;
             font-weight: 700;
-            color: var(--primary-navy);
+            color: var(--text-title);
             margin-bottom: 0.5rem;
             line-height: 1.3;
         }
@@ -492,7 +599,7 @@
 
         /* VALUE PROPOSITION / FEATURES */
         .features-banner {
-            background: #ffffff;
+            background: var(--bg-surface);
             border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
             padding: 3rem 1.5rem;
@@ -528,7 +635,7 @@
         .feature-title {
             font-size: 1rem;
             font-weight: 700;
-            color: var(--primary-navy);
+            color: var(--text-title);
             margin-bottom: 0.25rem;
         }
 
@@ -566,7 +673,8 @@
 
         /* FOOTER */
         .footer {
-            background: var(--primary-navy);
+            background: var(--footer-bg);
+            border-top: 1px solid var(--footer-border);
             color: #cbd5e1;
             padding: 3.5rem 1.5rem 1.5rem;
             margin-top: auto;
@@ -662,11 +770,24 @@
             </nav>
 
             <div class="nav-actions">
+                <button type="button" class="btn btn-theme-toggle" onclick="toggleCamHubTheme()" title="Beralih Mode Gelap/Terang" id="camhubThemeToggleBtn">
+                    <span class="theme-icon-wrap" id="themeIconWrap"></span>
+                    <span id="themeToggleText">Mode Terang</span>
+                </button>
                 <?php if (auth_check()): ?>
-                    <a href="<?= base_url('dashboard/' . (auth()['role_name'] === 'admin' ? 'admin' : (auth()['role_name'] === 'partner' ? 'mitra' : 'pelanggan'))) ?>" class="btn btn-outline">
-                        👤 Dashboard (<?= htmlspecialchars(auth()['username'] ?? 'Akun', ENT_QUOTES, 'UTF-8') ?>)
+                    <?php
+                        $authRole = auth()['role_name'] ?? auth()['role'] ?? 'customer';
+                        $dashSegment = match(strtolower((string)$authRole)) {
+                            'admin' => 'admin',
+                            'partner', 'mitra' => 'mitra',
+                            default => 'pelanggan'
+                        };
+                        $displayName = auth()['full_name'] ?? auth()['username'] ?? 'Akun Saya';
+                    ?>
+                    <a href="<?= base_url('dashboard/' . $dashSegment) ?>" class="btn btn-outline" title="Buka Dashboard">
+                        <?= htmlspecialchars($displayName, ENT_QUOTES, 'UTF-8') ?>
                     </a>
-                    <a href="<?= base_url('logout') ?>" class="btn btn-outline" style="color:#ef4444;">
+                    <a href="<?= base_url('logout') ?>" class="btn btn-outline" style="color:#ef4444; border-color: rgba(239, 68, 68, 0.3);">
                         Keluar
                     </a>
                 <?php else: ?>
@@ -890,5 +1011,36 @@
         </div>
     </footer>
 
+    <script>
+        const SUN_ICON = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+
+        const MOON_ICON = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+
+        function toggleCamHubTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('camhub_theme', newTheme);
+            syncThemeToggleUI(newTheme);
+        }
+
+        function syncThemeToggleUI(theme) {
+            const text = document.getElementById('themeToggleText');
+            const iconWrap = document.getElementById('themeIconWrap');
+            if (!text) return;
+            if (theme === 'dark') {
+                text.textContent = 'Mode Terang';
+                if (iconWrap) iconWrap.innerHTML = SUN_ICON;
+            } else {
+                text.textContent = 'Mode Gelap';
+                if (iconWrap) iconWrap.innerHTML = MOON_ICON;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const active = document.documentElement.getAttribute('data-theme') || 'dark';
+            syncThemeToggleUI(active);
+        });
+    </script>
 </body>
 </html>
